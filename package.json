@@ -1,0 +1,26 @@
+{
+    "name": "gettext-parser",
+    "description": "Gettext function",
+    "version": "0.1.0",
+    "author" : "Andris Reinman",
+    "homepage": "http://github.com/andris9/gettext",
+    "repository" : {
+        "type" : "git",
+        "url" : "http://github.com/andris9/gettext.git"
+    },
+    "scripts":{
+        "test": "nodeunit test/"
+    },
+    "main" : "./index",
+    "license" : "MIT",
+    "dependencies": {
+        "encoding":"*"
+    },
+    "optionalDependencies":{
+        "iconv": "*"
+    },
+    "devDependencies": {
+        "nodeunit": "*"
+    },
+    "keywords": ["i18n", "l10n", "gettext", "mo", "po"]
+}
