@@ -88,7 +88,7 @@ Example
 }
 ```
 
-Notice that the structure has both a header object and a `""` translation with the header string. When compiling the object to *mo* or *po*, the header is object is used. Header string in the `""` translation is just for reference (includes the original unmodified data) but will not be used for compiling. So if you need to add or alter header values, use only the `header` object.
+Notice that the structure has both a `headers` object and a `""` translation with the header string. When compiling the structure to a *mo* or a *po* file, the `headers` object is used to define the header. Header string in the `""` translation is just for reference (includes the original unmodified data) but will not be used for compiling. So if you need to add or alter header values, use only the `headers` object.
 
 ## License
 
