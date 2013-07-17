@@ -3,7 +3,7 @@ gettext-parser
 
 Parse and compile gettext po and mo files with node.js, nothing more, nothing less.
 
-The module should work as expected but I'm currently short on tests (there is none) and docs (there's only this short README).
+The module should work as expected already but I'm currently short on tests (there is none) and docs (there's only this short README but no code comments etc.).
 
 This module is slightly based on my other gettext related module [node-gettext](https://github.com/andris9/node-gettext). The plan is to remove all parsing and compiling logic from node-gettext to here and leave only translation related functions (domains, plural handling, lookups etc.). 
 
@@ -17,12 +17,12 @@ Include the library:
 
 Available methods:
 
-  * `gettextParser.po.parse(buf)` where `buf` is a **po** file as a Buffer or an unicode string. Returns gettext-parser specific translation object (see below)
-  * `gettextParser.po.compile(obj)` where `obj` is a translation object, returns a Buffer  
-  * `gettextParser.mo.parse(buf)` where `buf` is a **mo** file as a Buffer. Returns translation object
-  * `gettextParser.mo.compile(obj)` where `obj` is a translation object, returns a **mo** file as a  Buffer
+  * `gettextParser.po.parse(buf)` where `buf` is a *po* file as a Buffer or an unicode string. Returns gettext-parser specific translation object (see below)
+  * `gettextParser.po.compile(obj)` where `obj` is a translation object, returns a *po* file as a Buffer  
+  * `gettextParser.mo.parse(buf)` where `buf` is a *mo* file as a Buffer (this is biinary format, so do not use strings). Returns translation object
+  * `gettextParser.mo.compile(obj)` where `obj` is a translation object, returns a *mo* file as a  Buffer
 
-**NB** if you are compiling a previously parsed translation object, you can override the output charset with the `charset` property (applies both for mo and po format).
+**NB** if you are compiling a previously parsed translation object, you can override the output charset with the `charset` property (applies both for compiling *mo* and *po* files).
 
     var obj = gettextParser.po.parse(inputBuf);
     obj.charset = "windows-1257";
@@ -87,6 +87,8 @@ Example
     }
 }
 ```
+
+Notice that the structure has both a header object and a `""` translation with the header string. When compiling the object to *mo* or *po*, the header is object is used. Header string in the `""` translation is just for reference (includes the original unmodified data) but will not be used for compiling. So if you need to add or alter header values, use only the `header` object.
 
 ## License
 
