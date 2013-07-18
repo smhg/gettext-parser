@@ -40,7 +40,7 @@ be found from the `charset` property.
 
 ### Headers
 
-Headers can be found from the `headers` object, all keys are lowercase and the value for a key is a string.
+Headers can be found from the `headers` object, all keys are lowercase and the value for a key is a string. This value will also be used when compiling.
 
 ### Translations
 

@@ -4,7 +4,7 @@ var gettextParser = require(".."),
 module.exports["UTF-8"] = {
     setUp: function(callback){
         this.mo = fs.readFileSync(__dirname + "/fixtures/utf8.mo");
-        this.json = JSON.parse(fs.readFileSync(__dirname + "/fixtures/utf8-parsed-mo.json", "utf-8"));
+        this.json = JSON.parse(fs.readFileSync(__dirname + "/fixtures/utf8-mo.json", "utf-8"));
         callback();
     },
 
@@ -18,7 +18,7 @@ module.exports["UTF-8"] = {
 module.exports["Latin13"] = {
     setUp: function(callback){
         this.mo = fs.readFileSync(__dirname + "/fixtures/latin13.mo");
-        this.json = JSON.parse(fs.readFileSync(__dirname + "/fixtures/latin13-parsed-mo.json", "utf-8"));
+        this.json = JSON.parse(fs.readFileSync(__dirname + "/fixtures/latin13-mo.json", "utf-8"));
         callback();
     },
 
