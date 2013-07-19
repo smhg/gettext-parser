@@ -24,7 +24,7 @@
                     "translator": "gettext-parser test file.\nCopyright (C) 2012 Andris Reinman\nThis file is distributed under the same license as the gettext-parser package.\nANDRIS REINMAN <andris@node.ee>, 2012.\n"
                 },
                 "msgstr": [
-                    "Project-Id-Version: gettext-parser\nReport-Msgid-Bugs-To: andris@node.ee\nPot-Creation-Date: 2012-05-18 14:28:00+03:00\nPo-Revision-Date: 2012-05-18 14:44+0300\nLast-Translator: Andris Reinman <andris@kreata.ee>\nLanguage-Team: gettext-parser <andris@node.ee>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=iso-8859-13\nContent-Transfer-Encoding: 8bit\nLanguage: \nPlural-Forms: nplurals=2; plural=(n!=1);\nX-Poedit-Language: Estonian\nX-Poedit-Country: ESTONIA\nX-Poedit-Sourcecharset: iso-8859-13"
+                    "Project-Id-Version: gettext-parser\nReport-Msgid-Bugs-To: andris@node.ee\nPot-Creation-Date: 2012-05-18 14:28:00+03:00\nPo-Revision-Date: 2012-05-18 14:44+0300\nLast-Translator: Andris Reinman <andris@kreata.ee>\nLanguage-Team: gettext-parser <andris@node.ee>\nMIME-Version: 1.0\nContent-Type: text/plain; charset=iso-8859-13\nContent-Transfer-Encoding: 8bit\nLanguage: \nPlural-Forms: nplurals=2; plural=(n!=1);\nX-Poedit-Language: Estonian\nX-Poedit-Country: ESTONIA\nX-Poedit-Sourcecharset: iso-8859-13\n"
                 ]
             },
             "o1": {

@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Poedit-Language: Estonian\n"
 "X-Poedit-Country: ESTONIA\n"
-"X-Poedit-Sourcecharset: utf-8"
+"X-Poedit-Sourcecharset: utf-8\n"
 
 # Normal string
 msgid "o1"
