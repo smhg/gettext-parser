@@ -9,7 +9,6 @@ module.exports["UTF-8"] = {
     },
     compile: function(test){
         var compiled = gettextParser.mo.compile(this.json);
-        fs.writeFileSync("/Users/andris/Desktop/utf8.mo", compiled);
         test.deepEqual(Array.prototype.slice.call(compiled), Array.prototype.slice.call(this.mo));
         test.done();
     }
@@ -23,7 +22,6 @@ module.exports["Latin13"] = {
     },
     compile: function(test){
         var compiled = gettextParser.mo.compile(this.json);
-        fs.writeFileSync("/Users/andris/Desktop/latin13.mo", compiled);
         test.deepEqual(Array.prototype.slice.call(compiled), Array.prototype.slice.call(this.mo));
         test.done();
     }

@@ -10,7 +10,6 @@ module.exports["UTF-8"] = {
 
     parse: function(test){
         var parsed = gettextParser.mo.parse(this.mo);
-        fs.writeFileSync("/Users/andris/Desktop/utf8-mo.json", parsed);
         test.deepEqual(parsed, this.json);
         test.done();
     }
@@ -25,7 +24,6 @@ module.exports["Latin13"] = {
 
     parse: function(test){
         var parsed = gettextParser.mo.parse(this.mo);
-        fs.writeFileSync("/Users/andris/Desktop/latin13-mo.json", parsed);
         test.deepEqual(parsed, this.json);
         test.done();
     }
