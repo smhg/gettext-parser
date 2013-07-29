@@ -18,9 +18,9 @@ Include the library:
 
 Available methods:
 
-  * `gettextParser.po.parse(buf)` where `buf` is a *po* file as a Buffer or an unicode string. Returns gettext-parser specific translation object (see below)
+  * `gettextParser.po.parse(buf[, defaultCharset])` where `buf` is a *po* file as a Buffer or an unicode string. `defaultCharset` is the charset to use if charset is not defined or is the default `"CHARSET"`. Returns gettext-parser specific translation object (see below)
   * `gettextParser.po.compile(obj)` where `obj` is a translation object, returns a *po* file as a Buffer  
-  * `gettextParser.mo.parse(buf)` where `buf` is a *mo* file as a Buffer (*mo* is binary format, so do not use strings). Returns translation object
+  * `gettextParser.mo.parse(buf[, defaultCharset])` where `buf` is a *mo* file as a Buffer (*mo* is binary format, so do not use strings). `defaultCharset` is the charset to use if charset is not defined or is the default `"CHARSET"`. Returns translation object
   * `gettextParser.mo.compile(obj)` where `obj` is a translation object, returns a *mo* file as a  Buffer
 
 **NB** if you are compiling a previously parsed translation object, you can override the output charset with the `charset` property (applies both for compiling *mo* and *po* files).
