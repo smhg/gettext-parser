@@ -74,7 +74,7 @@ Example
 		},
 
     	"another context":{
-			"example":{
+			"%s example":{
 				"msgctx": "another context",
 				"msgid": "%s example",
 				"msgid_plural": "%s examples", 
