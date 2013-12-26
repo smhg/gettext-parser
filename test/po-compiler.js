@@ -14,7 +14,7 @@ module.exports["UTF-8"] = {
     }
 }
 
-module.exports["Latin-8"] = {
+module.exports["Latin13"] = {
     setUp: function(callback){
         this.json = JSON.parse(fs.readFileSync(__dirname + "/fixtures/latin13-po.json", "utf-8"));
         this.po = fs.readFileSync(__dirname + "/fixtures/latin13.po");
