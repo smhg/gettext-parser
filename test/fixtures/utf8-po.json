@@ -68,6 +68,15 @@
                 "msgstr": [
                     "test"
                 ]
+            },
+            "\"\\'\t": {
+                "msgid": "\"\\'\t",
+                "comments": {
+                    "translator": "String with escapes"
+                },
+                "msgstr": [
+                    "\"\\'\t"
+                ]
             }
         },
         "c1": {

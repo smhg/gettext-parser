@@ -29,7 +29,7 @@ module.exports["UTF-8 as string"] = {
     }
 }
 
-module.exports["Latin-13"] = {
+module.exports["Latin13"] = {
     setUp: function(callback){
         this.po = fs.readFileSync(__dirname + "/fixtures/latin13.po");
         this.json = JSON.parse(fs.readFileSync(__dirname + "/fixtures/latin13-po.json", "utf-8"));

@@ -50,6 +50,10 @@ msgstr "t3-žš"
 msgid "test"
 msgstr "test"
 
+# String with escapes
+msgid "\"\\'\t"
+msgstr "\"\\'\t"
+
 # Normal string in a context
 msgctxt "c1"
 msgid "co1"
