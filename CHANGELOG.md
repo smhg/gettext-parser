@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.0 2015-01-21
+
+  * Bumped version to 1.0.0 to be compatible with semver
+  * Changed tests from nodeunit to mocha
+  * Unified code style in files and added jshint task to check it
+  * Added Grunt support to check style and run tests on `npm test`
+
 ## v0.2.0 2013-12-30
 
   * Bumped version to 0.2.0

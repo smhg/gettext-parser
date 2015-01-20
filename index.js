@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 
 module.exports = {
-	po: {
-		parse: require("./lib/poparser"),
-		compile: require("./lib/pocompiler")
-	},
+    po: {
+        parse: require('./lib/poparser'),
+        compile: require('./lib/pocompiler')
+    },
 
-	mo: {
-		parse: require("./lib/moparser"),
-		compile: require("./lib/mocompiler")
-	}
+    mo: {
+        parse: require('./lib/moparser'),
+        compile: require('./lib/mocompiler')
+    }
 };
