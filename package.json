@@ -14,14 +14,14 @@
   "main": "./index",
   "license": "MIT",
   "dependencies": {
-    "encoding": "~0.1.11"
+    "encoding": "^0.1.11"
   },
   "devDependencies": {
-    "chai": "~1.10.0",
-    "grunt": "~0.4.5",
-    "grunt-contrib-jshint": "~0.10.0",
-    "grunt-mocha-test": "~0.12.7",
-    "mocha": "~2.1.0"
+    "chai": "^1.10.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "^2.1.0"
   },
   "keywords": [
     "i18n",
