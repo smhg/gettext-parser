@@ -1,8 +1,11 @@
 'use strict';
 
+var poParser = require('./lib/poparser');
+
 module.exports = {
     po: {
-        parse: require('./lib/poparser'),
+        parse: poParser.parse,
+        createParseStream: poParser.stream,
         compile: require('./lib/pocompiler')
     },
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.0 2015-01-21
+
+  * Added `po.createParseStream` method for parsing PO files from a Stream source
+  * Updated documentation
+
 ## v1.0.0 2015-01-21
 
   * Bumped version to 1.0.0 to be compatible with semver
