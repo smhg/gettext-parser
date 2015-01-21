@@ -1,5 +1,9 @@
 # Changelog
 
+## vX.X.X 2015-01-21
+
+  * Add stream API to `gettext-parser.po.parse`
+
 ## v1.0.0 2015-01-21
 
   * Bumped version to 1.0.0 to be compatible with semver
