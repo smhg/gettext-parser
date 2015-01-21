@@ -35,5 +35,23 @@ describe('PO Parser', function() {
             expect(parsed).to.deep.equal(json);
         });
     });
+    
+    describe('Stream handler', function(){
+        it('should parse', function(done){
+          this.timeout(0); // disable timeout on this one
+          
+          var poStream = fs.createReadStream(__dirname + '/fixtures/hugeUtf8.po');
+          var json = JSON.parse(fs.readFileSync(__dirname + '/fixtures/hugeUtf8-po.json', 'utf-8'));
+          poStream.pipe(gettextParser.po.parse.stream('utf-8')).on('data', function(parsed){
+            expect(parsed).to.deep.equal(json);
+            var fd = fs.openSync('translation.json', 'w');
+            fs.writeSync(fd, JSON.stringify(parsed));
+            done();
+          }).on('error', function(error){
+            console.log('error');
+            done(error);
+          });
+        });
+    });
 
 });

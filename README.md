@@ -21,6 +21,7 @@ Include the library:
 Available methods:
 
   * `gettextParser.po.parse(buf[, defaultCharset])` where `buf` is a *po* file as a Buffer or an unicode string. `defaultCharset` is the charset to use if charset is not defined or is the default `"CHARSET"`. Returns gettext-parser specific translation object (see below)
+  * `gettextParser.po.parse.stream([defaultCharset])` where `defaultCharset` is the charset to use if charset is not defined or is the default `"CHARSET"`. Returns [stream.Transform](http://nodejs.org/api/stream.html#stream_class_stream_transform_1) that should be piped to a ReadStream to generate a gettext-parser specific translation object (see below)
   * `gettextParser.po.compile(obj)` where `obj` is a translation object, returns a *po* file as a Buffer
   * `gettextParser.mo.parse(buf[, defaultCharset])` where `buf` is a *mo* file as a Buffer (*mo* is binary format, so do not use strings). `defaultCharset` is the charset to use if charset is not defined or is the default `"CHARSET"`. Returns translation object
   * `gettextParser.mo.compile(obj)` where `obj` is a translation object, returns a *mo* file as a  Buffer
@@ -94,6 +95,24 @@ Example
 Notice that the structure has both a `headers` object and a `""` translation with the header string. When compiling the structure to a *mo* or a *po* file, the `headers` object is used to define the header. Header string in the `""` translation is just for reference (includes the original unmodified data) but will not be used when compiling. So if you need to add or alter header values, use only the `headers` object.
 
 If you need to convert *gettext-parser* formatted translation object to something else, eg. for *jed*, check out [po2json](https://github.com/mikeedwards/po2json).
+
+## Stream API
+
+_gettext-parser_ can handle stream. This API is advised if your files are big (> 1000 keys).
+
+Example
+
+```js
+var fs = require('fs');
+var gettextParser = require('gettext-parser');
+var stringify = require('stringify-stream');
+
+fs.createReadStream('path/to/file.po')
+  .pipe(gettextParser.po.parse.stream('utf-8'))
+  .pipe(stringify())
+  .pipe(fs.createWriteStream('translation.json'));
+  
+```
 
 ## License
 
