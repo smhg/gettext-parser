@@ -4,7 +4,7 @@ var chai = require('chai');
 var sharedFuncs = require('../lib/shared');
 
 var expect = chai.expect;
-chai.Assertion.includeStack = true;
+chai.config.includeStack = true;
 
 describe('Folding tests', function() {
 

@@ -5,7 +5,7 @@ var gettextParser = require('..');
 var fs = require('fs');
 
 var expect = chai.expect;
-chai.Assertion.includeStack = true;
+chai.config.includeStack = true;
 
 describe('MO Parser', function() {
 
