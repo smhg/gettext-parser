@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.1 2015-06-04
+
+  * Fixed hash table location value in compiled mo files
+
 ## v1.1.0 2015-01-21
 
   * Added `po.createParseStream` method for parsing PO files from a Stream source
