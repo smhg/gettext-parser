@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.2 2015-10-07
+
+  * Maintenance release
+
 ## v1.1.1 2015-06-04
 
   * Fixed hash table location value in compiled mo files
