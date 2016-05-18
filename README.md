@@ -178,18 +178,17 @@ Example
         "msgid": "",
         "msgstr": ["Content-Type: text/plain; charset=iso-8859-1\n..."]
       }
-    }
-  },
-
-  "another context": {
-    "%s example": {
-      "msgctx": "another context",
-      "msgid": "%s example",
-      "msgid_plural": "%s examples",
-      "msgstr": ["% näide", "%s näidet"],
-      "comments": {
-        "translator": "This is regular comment",
-        "reference": "/path/to/file:123"
+    },
+    "another context": {
+      "%s example": {
+        "msgctx": "another context",
+        "msgid": "%s example",
+        "msgid_plural": "%s examples",
+        "msgstr": ["% näide", "%s näidet"],
+        "comments": {
+          "translator": "This is regular comment",
+          "reference": "/path/to/file:123"
+        }
       }
     }
   }
