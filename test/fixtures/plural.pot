@@ -1,0 +1,33 @@
+# gettext-parser test file.
+# Copyright (C) 2012 Andris Reinman
+# This file is distributed under the same license as the gettext-parser package.
+# ANDRIS REINMAN <andris@node.ee>, 2012.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: gettext-parser\n"
+"Report-Msgid-Bugs-To: andris@node.ee\n"
+"POT-Creation-Date: 2012-05-18 14:28:00+03:00\n"
+"PO-Revision-Date: 2012-05-18 14:37+0300\n"
+"Last-Translator: Andris Reinman <andris@kreata.ee>\n"
+"Language-Team: gettext-parser <andris@node.ee>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Poedit-Language: Estonian\n"
+"X-Poedit-Country: ESTONIA\n"
+"X-Poedit-Sourcecharset: utf-8\n"
+
+# Normal string
+msgid "o1"
+msgstr ""
+
+# Plural string
+msgid "o2-1"
+msgid_plural ""
+"o2-2\n"
+"o2-3\n"
+"o2-4"
+msgstr[0] ""
