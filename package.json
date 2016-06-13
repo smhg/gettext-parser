@@ -1,7 +1,7 @@
 {
   "name": "gettext-parser",
   "description": "Parse and compile gettext po and mo files to/from json, nothing more, nothing less",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "author": "Andris Reinman",
   "homepage": "http://github.com/andris9/gettext-parser",
   "repository": {
@@ -14,15 +14,15 @@
   "main": "./index",
   "license": "MIT",
   "dependencies": {
-    "encoding": "^0.1.11"
+    "encoding": "^0.1.12"
   },
   "devDependencies": {
-    "chai": "^3.3.0",
-    "grunt": "^0.4.5",
+    "chai": "^3.5.0",
+    "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
-    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-contrib-jshint": "^1.0.0",
     "grunt-mocha-test": "^0.12.7",
-    "mocha": "^2.3.3"
+    "mocha": "^2.5.3"
   },
   "keywords": [
     "i18n",
