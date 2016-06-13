@@ -27,4 +27,13 @@ describe('PO Compiler', function() {
             expect(compiled).to.deep.equal(po);
         });
     });
+
+    describe('Plurals', function() {
+        it('should compile correct plurals in POT files', function() {
+            var json = JSON.parse(fs.readFileSync(__dirname + '/fixtures/plural-pot.json', 'utf-8'));
+            var pot = fs.readFileSync(__dirname + '/fixtures/plural.pot');
+            var compiled = gettextParser.po.compile(json);
+            expect(compiled).to.deep.equal(pot);
+        });
+    });
 });
