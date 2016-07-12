@@ -19,15 +19,15 @@
   "main": "./index",
   "license": "MIT",
   "dependencies": {
-    "encoding": "^0.1.12"
+    "encoding": "0.1.12"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "grunt": "^1.0.1",
-    "grunt-cli": "^1.2.0",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-mocha-test": "^0.12.7",
-    "mocha": "^2.5.3"
+    "chai": "3.5.0",
+    "grunt": "1.0.1",
+    "grunt-cli": "1.2.0",
+    "grunt-contrib-jshint": "1.0.0",
+    "grunt-mocha-test": "0.12.7",
+    "mocha": "2.5.3"
   },
   "keywords": [
     "i18n",
