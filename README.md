@@ -1,5 +1,3 @@
-> **NB!** This project is **unmaintained!** If anyone wants to take over please write to andris.reinman@gmail.com to get ownership of this repo and npm package
-
 gettext-parser
 ==============
 
