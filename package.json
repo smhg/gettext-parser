@@ -3,10 +3,15 @@
   "description": "Parse and compile gettext po and mo files to/from json, nothing more, nothing less",
   "version": "1.2.0",
   "author": "Andris Reinman",
-  "homepage": "http://github.com/andris9/gettext-parser",
+  "contributors": [
+    {
+      "name": "Sam Hauglustaine"
+    }
+  ],
+  "homepage": "http://github.com/smhg/gettext-parser",
   "repository": {
     "type": "git",
-    "url": "http://github.com/andris9/gettext-parser.git"
+    "url": "http://github.com/smhg/gettext-parser.git"
   },
   "scripts": {
     "test": "grunt"
