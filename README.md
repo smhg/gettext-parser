@@ -155,7 +155,7 @@ Translations can be found from the `translations` object which in turn holds con
 
 Context objects include all the translations, where `msgid` value is the key. The value is an object with the following possible properties:
 
-  * **msgctx** context for this translation, if not present the default context applies
+  * **msgctxt** context for this translation, if not present the default context applies
   * **msgid** string to be translated
   * **msgid_plural** the plural form of the original string (might not be present)
   * **msgstr** an array of translations
