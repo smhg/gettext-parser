@@ -151,11 +151,11 @@ Headers can be found from the `headers` object, all keys are lowercase and the v
 
 ### Translations
 
-Translations can be found from the `translations` object which in turn holds context objects for `msgctx`. Default context can be found from `translations[""]`.
+Translations can be found from the `translations` object which in turn holds context objects for `msgctxt`. Default context can be found from `translations[""]`.
 
 Context objects include all the translations, where `msgid` value is the key. The value is an object with the following possible properties:
 
-  * **msgctx** context for this translation, if not present the default context applies
+  * **msgctxt** context for this translation, if not present the default context applies
   * **msgid** string to be translated
   * **msgid_plural** the plural form of the original string (might not be present)
   * **msgstr** an array of translations
@@ -181,7 +181,7 @@ Example
     },
     "another context": {
       "%s example": {
-        "msgctx": "another context",
+        "msgctxt": "another context",
         "msgid": "%s example",
         "msgid_plural": "%s examples",
         "msgstr": ["% näide", "%s näidet"],
