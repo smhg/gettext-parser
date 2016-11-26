@@ -14,7 +14,9 @@
     "url": "http://github.com/smhg/gettext-parser.git"
   },
   "scripts": {
-    "test": "grunt"
+    "test": "grunt",
+    "preversion": "npm test",
+    "postversion": "git push && git push --tags"
   },
   "main": "./index",
   "license": "MIT",
