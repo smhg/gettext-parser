@@ -8,7 +8,6 @@
         "semi": ["error", "always"],
         "one-var": "off",
         "no-path-concat": "off",
-        "no-useless-escape": "off",
-        "camelcase": "off"
+        "no-useless-escape": "off"
     }
 }
