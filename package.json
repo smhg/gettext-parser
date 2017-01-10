@@ -15,8 +15,8 @@
   },
   "scripts": {
     "lint": "eslint lib/*.js test/*.js index.js",
-    "test": "grunt",
-    "preversion": "npm test",
+    "test": "mocha",
+    "preversion": "npm run lint && npm test",
     "postversion": "git push && git push --tags"
   },
   "main": "./index",
@@ -30,9 +30,6 @@
     "eslint-config-standard": "6.2.1",
     "eslint-plugin-promise": "3.4.0",
     "eslint-plugin-standard": "2.0.1",
-    "grunt": "1.0.1",
-    "grunt-cli": "1.2.0",
-    "grunt-mocha-test": "0.13.2",
     "mocha": "3.2.0"
   },
   "keywords": [
