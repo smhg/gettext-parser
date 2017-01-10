@@ -6,16 +6,9 @@
     ],
     "rules": {
         "semi": ["error", "always"],
-        "indent": ["error", 4, {"SwitchCase": 1}],
-        "eol-last": "off",
-        "space-before-function-paren": "off",
         "one-var": "off",
         "no-path-concat": "off",
-        "no-extra-parens": "off",
-        "padded-blocks": "off",
         "no-useless-escape": "off",
-        "dot-location": "off",
-        "camelcase": "off",
-        "no-multiple-empty-lines": "off"
+        "camelcase": "off"
     }
 }
