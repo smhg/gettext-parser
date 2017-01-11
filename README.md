@@ -3,8 +3,6 @@ gettext-parser [![Build Status](https://secure.travis-ci.org/smhg/gettext-parser
 
 Parse and compile gettext *po* and *mo* files with node.js, nothing more, nothing less.
 
-This module is slightly based on another gettext related module [node-gettext](https://github.com/andris9/node-gettext). The plan is to move all parsing and compiling logic from node-gettext to here and leave only translation related functions (domains, plural handling, lookups etc.).
-
 ## Usage
 
 Include the library:
