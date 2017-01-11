@@ -5,9 +5,6 @@
         "promise"
     ],
     "rules": {
-        "semi": ["error", "always"],
-        "one-var": "off",
-        "no-path-concat": "off",
-        "no-useless-escape": "off"
+        "semi": ["error", "always"]
     }
 }
