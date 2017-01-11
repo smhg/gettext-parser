@@ -2,7 +2,6 @@ gettext-parser
 ==============
 
 [![Build Status](https://secure.travis-ci.org/smhg/gettext-parser.png)](http://travis-ci.org/smhg/gettext-parser)
-[![NPM version](https://badge.fury.io/js/gettext-parser.png)](http://badge.fury.io/js/gettext-parser)
 
 Parse and compile gettext *po* and *mo* files with node.js, nothing more, nothing less.
 
