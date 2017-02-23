@@ -36,4 +36,13 @@ describe('PO Compiler', function () {
       expect(compiled).to.deep.equal(pot);
     });
   });
+
+  describe('Sorting', function () {
+    it('should sort output entries by msgid', function () {
+      var json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/sort-test.json'), 'utf-8'));
+      var pot = fs.readFileSync(path.join(__dirname, 'fixtures/sort-test.pot'));
+      var compiled = gettextParser.po.compile(json, { sortByMsgid: true });
+      expect(compiled.toString()).to.deep.equal(pot.toString());
+    });
+  });
 });

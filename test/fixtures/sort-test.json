@@ -1,0 +1,29 @@
+{
+    "charset": "utf-8",
+    "headers": {
+    },
+    "translations": {
+        "": {
+            "": {
+                "msgid": "",
+                "msgstr": [""]
+            },
+            "bbbb": {
+                "msgid": "bbbb",
+                "msgstr": [ "bbbb"]
+            },
+            "aaaa": {
+                "msgid": "aaaa",
+                "msgstr": [ "aaaa"]
+            },
+            "dddd": {
+                "msgid": "dddd",
+                "msgstr": [ "dddd"]
+            },
+            "cccc": {
+                "msgid": "cccc",
+                "msgstr": [ "cccc"]
+            }
+        }
+    }
+}
