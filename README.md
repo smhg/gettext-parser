@@ -57,11 +57,13 @@ po.on('data', function(data){
 
 If you have a translation object you can convert this to a valid PO file with
 
-    gettextParser.po.compile(data) → Buffer
+    gettextParser.po.compile(data[, compileOptions]) → Buffer
 
 Where
 
   * **data** is a translation object either got from parsing a PO/MO file or composed by other means
+  * **compileOptions** compile options.
+    * sortByMsgid (boolean) - entries will be sorted by msgid in the resulting .po(.pot) file.
 
 **Example**
 
