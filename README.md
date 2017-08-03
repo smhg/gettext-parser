@@ -57,11 +57,13 @@ po.on('data', function(data){
 
 If you have a translation object you can convert this to a valid PO file with
 
-    gettextParser.po.compile(data) → Buffer
+    gettextParser.po.compile(data[, options]) → Buffer
 
 Where
 
   * **data** is a translation object either got from parsing a PO/MO file or composed by other means
+  * **options** is a configuration object with possible values
+    * **foldLength** is the length at which to fold message strings into newlines (default: 76). Set to 0 or false to disable folding.
 
 **Example**
 
