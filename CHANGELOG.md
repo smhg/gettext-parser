@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.3.0] - 2017-08-03
+- Added line folding length option to `po.compile` (thx @SleepWalker).
+- Updated code to use new buffer API.
+
 ## [1.2.2] - 2017-01-11
 - Use semistandard coding style.
 - Removed unreachable code (thx @jelly).
