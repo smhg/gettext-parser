@@ -1,7 +1,7 @@
 {
   "name": "gettext-parser",
   "description": "Parse and compile gettext po and mo files to/from json, nothing more, nothing less",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "author": "Andris Reinman",
   "contributors": [
     {
