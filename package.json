@@ -1,7 +1,7 @@
 {
   "name": "gettext-parser",
   "description": "Parse and compile gettext po and mo files to/from json, nothing more, nothing less",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": "Andris Reinman",
   "contributors": [
     {
@@ -14,20 +14,26 @@
     "url": "http://github.com/smhg/gettext-parser.git"
   },
   "scripts": {
-    "test": "grunt"
+    "lint": "eslint lib/*.js test/*.js index.js",
+    "test": "mocha",
+    "preversion": "npm run lint && npm test",
+    "postversion": "git push && git push --tags"
   },
   "main": "./index",
   "license": "MIT",
   "dependencies": {
-    "encoding": "0.1.12"
+    "encoding": "^0.1.12",
+    "safe-buffer": "^5.1.1"
   },
   "devDependencies": {
-    "chai": "3.5.0",
-    "grunt": "1.0.1",
-    "grunt-cli": "1.2.0",
-    "grunt-contrib-jshint": "1.0.0",
-    "grunt-mocha-test": "0.12.7",
-    "mocha": "2.5.3"
+    "chai": "^3.5.0",
+    "eslint": "^4.3.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^3.5.0"
   },
   "keywords": [
     "i18n",

@@ -1,12 +1,7 @@
-gettext-parser
+gettext-parser [![Build Status](https://secure.travis-ci.org/smhg/gettext-parser.png)](http://travis-ci.org/smhg/gettext-parser)
 ==============
 
-[![Build Status](https://secure.travis-ci.org/smhg/gettext-parser.png)](http://travis-ci.org/smhg/gettext-parser)
-[![NPM version](https://badge.fury.io/js/gettext-parser.png)](http://badge.fury.io/js/gettext-parser)
-
 Parse and compile gettext *po* and *mo* files with node.js, nothing more, nothing less.
-
-This module is slightly based on another gettext related module [node-gettext](https://github.com/andris9/node-gettext). The plan is to move all parsing and compiling logic from node-gettext to here and leave only translation related functions (domains, plural handling, lookups etc.).
 
 ## Usage
 
@@ -62,11 +57,13 @@ po.on('data', function(data){
 
 If you have a translation object you can convert this to a valid PO file with
 
-    gettextParser.po.compile(data) → Buffer
+    gettextParser.po.compile(data[, options]) → Buffer
 
 Where
 
   * **data** is a translation object either got from parsing a PO/MO file or composed by other means
+  * **options** is a configuration object with possible values
+    * **foldLength** is the length at which to fold message strings into newlines (default: 76). Set to 0 or false to disable folding.
 
 **Example**
 
@@ -151,11 +148,11 @@ Headers can be found from the `headers` object, all keys are lowercase and the v
 
 ### Translations
 
-Translations can be found from the `translations` object which in turn holds context objects for `msgctx`. Default context can be found from `translations[""]`.
+Translations can be found from the `translations` object which in turn holds context objects for `msgctxt`. Default context can be found from `translations[""]`.
 
 Context objects include all the translations, where `msgid` value is the key. The value is an object with the following possible properties:
 
-  * **msgctx** context for this translation, if not present the default context applies
+  * **msgctxt** context for this translation, if not present the default context applies
   * **msgid** string to be translated
   * **msgid_plural** the plural form of the original string (might not be present)
   * **msgstr** an array of translations
@@ -181,7 +178,7 @@ Example
     },
     "another context": {
       "%s example": {
-        "msgctx": "another context",
+        "msgctxt": "another context",
         "msgid": "%s example",
         "msgid_plural": "%s examples",
         "msgstr": ["% näide", "%s näidet"],
