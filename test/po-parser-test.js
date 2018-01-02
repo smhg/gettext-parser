@@ -56,4 +56,13 @@ describe('PO Parser', function () {
       expect(parsed).to.deep.equal(json);
     });
   });
+
+  describe('unescaped double quotes', function () {
+    it('should correctly parse unescaped double quotes', function () {
+      var po = fs.readFileSync(path.join(__dirname, '/fixtures/unescaped_double_quotes.po'));
+      var json = JSON.parse(fs.readFileSync(path.join(__dirname, '/fixtures/unescaped_double_quotes.json'), 'utf-8'));
+      var parsed = gettextParser.po.parse(po);
+      expect(parsed).to.deep.equal(json);
+    });
+  });
 });
