@@ -21,6 +21,7 @@ describe('Folding tests', function () {
 
     expect(line).to.equal(folded.join(''));
     expect(folded).to.deep.equal(['abc \\n', 'def \\n', 'ghi']);
+    expect(folded.length).to.equal(3);
   });
 
   it('Long line', function () {
@@ -34,5 +35,6 @@ describe('Folding tests', function () {
     ];
     var folded = sharedFuncs.foldLine(expected.join(''));
     expect(folded).to.deep.equal(expected);
+    expect(folded.length).to.equal(7);
   });
 });
