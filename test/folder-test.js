@@ -47,12 +47,39 @@ describe('Folding tests', function () {
     expect(folded.length).to.equal(3);
   });
 
+  it('Force fold ignoring leading spaces', function () {
+    var line = '    abc def ghi';
+    var folded = sharedFuncs.foldLine(line, 5);
+
+    expect(line).to.equal(folded.join(''));
+    expect(folded).to.deep.equal(['    a', 'bc ', 'def ', 'ghi']);
+    expect(folded.length).to.equal(4);
+  });
+
   it('Force fold special character', function () {
     var line = 'abcdef--ghi';
     var folded = sharedFuncs.foldLine(line, 5);
 
     expect(line).to.equal(folded.join(''));
     expect(folded).to.deep.equal(['abcde', 'f--', 'ghi']);
+    expect(folded.length).to.equal(3);
+  });
+
+  it('Force fold last special character', function () {
+    var line = 'ab--cdef--ghi';
+    var folded = sharedFuncs.foldLine(line, 10);
+
+    expect(line).to.equal(folded.join(''));
+    expect(folded).to.deep.equal(['ab--cdef--', 'ghi']);
+    expect(folded.length).to.equal(2);
+  });
+
+  it('Force fold only if at least one non-special character', function () {
+    var line = '--abcdefghi';
+    var folded = sharedFuncs.foldLine(line, 5);
+
+    expect(line).to.equal(folded.join(''));
+    expect(folded).to.deep.equal(['--abc', 'defgh', 'i']);
     expect(folded.length).to.equal(3);
   });
 });
