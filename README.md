@@ -64,6 +64,7 @@ Where
   * **data** is a translation object either got from parsing a PO/MO file or composed by other means
   * **options** is a configuration object with possible values
     * **foldLength** is the length at which to fold message strings into newlines (default: 76). Set to 0 or false to disable folding.
+    * **sortByMsgid** (boolean) - entries will be sorted by msgid in the resulting .po(.pot) file.
 
 **Example**
 
