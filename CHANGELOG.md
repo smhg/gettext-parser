@@ -2,7 +2,7 @@
 
 ## [1.4.0] - 2018-02-19
 - Fixed catastrophic backtracking vulnerability in line folding regex (thx @davisjam).
-- Added sort option for PO compilation (thx #AlexMost).
+- Added sort option for PO compilation (thx @AlexMost).
 
 ## [1.3.0] - 2017-08-03
 - Added line folding length option to `po.compile` (thx @SleepWalker).
