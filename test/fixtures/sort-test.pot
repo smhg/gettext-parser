@@ -1,0 +1,14 @@
+msgid ""
+msgstr "Content-Type: text/plain;\n"
+
+msgid "aaaa"
+msgstr "aaaa"
+
+msgid "bbbb"
+msgstr "bbbb"
+
+msgid "cccc"
+msgstr "cccc"
+
+msgid "dddd"
+msgstr "dddd"
