@@ -1,16 +1,19 @@
 # Change Log
 
+## [1.3.1] - 2018-02-20
+- Fix catastrophic backtracking vulnerability in patch version to reach more users.
+
 ## [1.4.0] - 2018-02-19
-- Fixed catastrophic backtracking vulnerability in line folding regex (thx @davisjam).
-- Added sort option for PO compilation (thx @AlexMost).
+- Fix catastrophic backtracking vulnerability in line folding regex (thx @davisjam).
+- Add sort option for PO compilation (thx @AlexMost).
 
 ## [1.3.0] - 2017-08-03
-- Added line folding length option to `po.compile` (thx @SleepWalker).
-- Updated code to use new buffer API.
+- Add line folding length option to `po.compile` (thx @SleepWalker).
+- Update code to use new buffer API.
 
 ## [1.2.2] - 2017-01-11
 - Use semistandard coding style.
-- Removed unreachable code (thx @jelly).
+- Remove unreachable code (thx @jelly).
 - Replace grunt with npm scripts.
 - Replace jshint with eslint.
 
@@ -26,26 +29,27 @@
 - Update dependencies.
 
 ## [1.1.1] - 2015-06-04
-- Fixed hash table location value in compiled mo files
+- Fix hash table location value in compiled mo files
 
 ## [1.1.0] - 2015-01-21
-- Added `po.createParseStream` method for parsing PO files from a Stream source
-- Updated documentation
+- Add `po.createParseStream` method for parsing PO files from a Stream source
+- Update documentation
 
 ## [1.0.0] - 2015-01-21
-- Bumped version to 1.0.0 to be compatible with semver
-- Changed tests from nodeunit to mocha
-- Unified code style in files and added jshint task to check it
-- Added Grunt support to check style and run tests on `npm test`
+- Bump version to 1.0.0 to be compatible with semver
+- Change tests from nodeunit to mocha
+- Unify code style in files and added jshint task to check it
+- Add Grunt support to check style and run tests on `npm test`
 
 ## [0.2.0] - 2013-12-30
-- Removed node-iconv dependency
-- Fixed a global variable leak (`line` was not defined in `pocompiler._addPOString`)
-- Some code maintenance (applied jshint rules, added "use strict" statements)
-- Updated e-mail address in .travis.yml
-- Added CHANGELOG file
+- Remove node-iconv dependency
+- Fix a global variable leak (`line` was not defined in `pocompiler._addPOString`)
+- Apply some code maintenance (applied jshint rules, added "use strict" statements)
+- Update e-mail address in .travis.yml
+- Add CHANGELOG file
 
-[1.4.0]: https://github.com/smhg/gettext-parser/compare/v1.3.0...v1.4.0
+[1.4.0]: https://github.com/smhg/gettext-parser/compare/v1.3.1...v1.4.0
+[1.3.1]: https://github.com/smhg/gettext-parser/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/smhg/gettext-parser/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/smhg/gettext-parser/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/smhg/gettext-parser/compare/v1.2.0...v1.2.1
