@@ -1,0 +1,36 @@
+{
+    "charset": "utf-8",
+    "headers": {
+    },
+    "translations": {
+        "ctxt1": {
+            "aaaa": {
+                "msgid": "aaaa",
+                "msgstr": [ "aaaa"],
+                "msgctxt": "ctxt1"
+            }
+        },
+        "": {
+            "": {
+                "msgid": "",
+                "msgstr": [""],
+                "msgctxt": ""
+            },
+            "bbbb": {
+                "msgid": "bbbb",
+                "msgstr": [ "bbbb"],
+                "msgctxt": ""
+            },
+            "aaaa": {
+                "msgid": "aaaa",
+                "msgstr": [ "aaaa"],
+                "msgctxt": ""
+            },
+            "cccc": {
+                "msgid": "cccc",
+                "msgstr": [ "cccc"],
+                "msgctxt": ""
+            }
+        }
+    }
+}

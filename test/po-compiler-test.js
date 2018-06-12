@@ -63,5 +63,16 @@ describe('PO Compiler', function () {
       var compiled = gettextParser.po.compile(json, { sortByMsgid: true });
       expect(compiled.toString()).to.deep.equal(pot.toString());
     });
+
+    it('should sort entries with the same msgid but different msgctxt consistently', function () {
+      var json1 = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/sort-with-msgctxt-test-1.json'), 'utf-8'));
+      var json2 = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/sort-with-msgctxt-test-2.json'), 'utf-8'));
+      var pot = fs.readFileSync(path.join(__dirname, 'fixtures/sort-with-msgctxt-test.pot'));
+      var compiled1 = gettextParser.po.compile(json1, { sortByMsgid: true });
+      var compiled2 = gettextParser.po.compile(json2, { sortByMsgid: true });
+      expect(compiled1.toString()).to.deep.equal(compiled2.toString());
+      expect(compiled1.toString()).to.deep.equal(pot.toString());
+      expect(compiled2.toString()).to.deep.equal(pot.toString());
+    });
   });
 });
