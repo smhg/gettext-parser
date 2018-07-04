@@ -57,11 +57,38 @@ describe('PO Compiler', function () {
   });
 
   describe('Sorting', function () {
-    it('should sort output entries by msgid', function () {
+    it('should sort output entries by msgid when `sort` is `true`', function () {
       var json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/sort-test.json'), 'utf-8'));
       var pot = fs.readFileSync(path.join(__dirname, 'fixtures/sort-test.pot'));
-      var compiled = gettextParser.po.compile(json, { sortByMsgid: true });
+      var compiled = gettextParser.po.compile(json, { sort: true });
       expect(compiled.toString()).to.deep.equal(pot.toString());
+    });
+
+    it('should sort entries using a custom `sort` function', function () {
+      function compareMsgidAndMsgctxt (entry1, entry2) {
+        if (entry1.msgid > entry2.msgid) {
+          return 1;
+        }
+        if (entry2.msgid > entry1.msgid) {
+          return -1;
+        }
+        if (entry1.msgctxt > entry2.msgctxt) {
+          return 1;
+        }
+        if (entry2.msgctxt > entry1.msgctxt) {
+          return -1;
+        }
+        return 0;
+      }
+
+      var json1 = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/sort-with-msgctxt-test-1.json'), 'utf-8'));
+      var json2 = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/sort-with-msgctxt-test-2.json'), 'utf-8'));
+      var pot = fs.readFileSync(path.join(__dirname, 'fixtures/sort-with-msgctxt-test.pot'));
+      var compiled1 = gettextParser.po.compile(json1, { sort: compareMsgidAndMsgctxt });
+      var compiled2 = gettextParser.po.compile(json2, { sort: compareMsgidAndMsgctxt });
+      expect(compiled1.toString()).to.deep.equal(compiled2.toString());
+      expect(compiled1.toString()).to.deep.equal(pot.toString());
+      expect(compiled2.toString()).to.deep.equal(pot.toString());
     });
   });
 });
