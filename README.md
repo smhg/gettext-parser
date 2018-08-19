@@ -31,6 +31,12 @@ var po = gettextParser.po.parse(input);
 console.log(po.translations['']); // output translations for the default context
 ```
 
+**Parsing from command-line**
+
+```
+gettext-parser po en.po -o en.json
+```
+
 ### Parse PO as a Stream
 
 PO files can also be parsed from a stream source. After all input is processed the parser emits a single 'data' event which contains the parsed translation object.
@@ -96,6 +102,12 @@ Method returns gettext-parser specific translation object (see below)
 var input = require('fs').readFileSync('en.mo');
 var mo = gettextParser.mo.parse(input);
 console.log(mo.translations['']); // output translations for the default context
+```
+
+**Parsing from command-line**
+
+```
+gettext-parser mo en.mo -o en.json
 ```
 
 ### Compile MO from a translation object
