@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+
+var gettextParser = require('../');
+var fs = require('fs');
+var parser = null;
+
+var argv = require('yargs')
+    .usage('Usage: $0 <command> [options] <file>')
+    .command('po <file>', 'Parse po file', () => {parser = 'po';})
+    .command('mo <file>', 'Parse mo file', () => {parser = 'mo';})
+    .demandCommand()
+    .options({ 
+        'h': {alias: 'help', describe: 'Show help'},
+        'o': {alias: 'output', describe: 'Output File, If not specified the parsed data will be printed to stdout', type: 'string'},
+    })
+    .strict()
+    .argv;
+
+var input = fs.readFileSync(argv.file);
+var parsed_translation = null;
+if(parser == 'po'){
+    parsed_translation = gettextParser.po.parse(input);
+} else if(parser == 'mo'){
+    parsed_translation = gettextParser.mo.parse(input);
+}
+
+if(argv.o){
+    console.log('Output file has been specified.');
+    var output = argv.o;
+    fs.writeFile(output, JSON.stringify(parsed_translation), function(err) {
+        if(err) {
+            return console.log(err);
+        }
+        console.log(`Parsed translation has been saved to: ${output}`);
+    });
+}else {
+    process.stdout.write(JSON.stringify(parsed_translation) + '\n');
+}
