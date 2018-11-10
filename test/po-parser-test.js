@@ -1,58 +1,58 @@
 'use strict';
 
-var chai = require('chai');
-var gettextParser = require('..');
-var fs = require('fs');
-var path = require('path');
+const chai = require('chai');
+const gettextParser = require('..');
+const fs = require('fs');
+const path = require('path');
 
-var expect = chai.expect;
+const expect = chai.expect;
 chai.config.includeStack = true;
 
-describe('PO Parser', function () {
-  describe('UTF-8', function () {
-    it('should parse', function () {
-      var po = fs.readFileSync(path.join(__dirname, 'fixtures/utf8.po'));
-      var json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf-8'));
-      var parsed = gettextParser.po.parse(po);
+describe('PO Parser', () => {
+  describe('UTF-8', () => {
+    it('should parse', () => {
+      const po = fs.readFileSync(path.join(__dirname, 'fixtures/utf8.po'));
+      const json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf-8'));
+      const parsed = gettextParser.po.parse(po);
       expect(parsed).to.deep.equal(json);
     });
   });
 
-  describe('UTF-8 as a string', function () {
-    it('should parse', function () {
-      var po = fs.readFileSync(path.join(__dirname, 'fixtures/utf8.po'), 'utf-8');
-      var json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf-8'));
-      var parsed = gettextParser.po.parse(po);
+  describe('UTF-8 as a string', () => {
+    it('should parse', () => {
+      const po = fs.readFileSync(path.join(__dirname, 'fixtures/utf8.po'), 'utf-8');
+      const json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf-8'));
+      const parsed = gettextParser.po.parse(po);
       expect(parsed).to.deep.equal(json);
     });
   });
 
-  describe('Stream input', function () {
-    it('should parse', function (done) {
-      var po = fs.createReadStream(path.join(__dirname, 'fixtures/utf8.po'), {
+  describe('Stream input', () => {
+    it('should parse', done => {
+      const po = fs.createReadStream(path.join(__dirname, 'fixtures/utf8.po'), {
         highWaterMark: 1 // ensure that any utf-8 sequences will be broken when streaming
       });
-      var json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf-8'));
+      const json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf-8'));
 
-      var parsed;
-      var stream = po.pipe(gettextParser.po.createParseStream({
+      let parsed;
+      const stream = po.pipe(gettextParser.po.createParseStream({
         initialTreshold: 800 // home many bytes to cache for parsing the header
       }));
-      stream.on('data', function (data) {
+      stream.on('data', data => {
         parsed = data;
       });
-      stream.on('end', function () {
+      stream.on('end', () => {
         expect(parsed).to.deep.equal(json);
         done();
       });
     });
   });
 
-  describe('Latin-13', function () {
-    it('should parse', function () {
-      var po = fs.readFileSync(path.join(__dirname, 'fixtures/latin13.po'));
-      var json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/latin13-po.json'), 'utf-8'));
-      var parsed = gettextParser.po.parse(po);
+  describe('Latin-13', () => {
+    it('should parse', () => {
+      const po = fs.readFileSync(path.join(__dirname, 'fixtures/latin13.po'));
+      const json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/latin13-po.json'), 'utf-8'));
+      const parsed = gettextParser.po.parse(po);
       expect(parsed).to.deep.equal(json);
     });
   });
