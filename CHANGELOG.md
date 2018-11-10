@@ -1,5 +1,8 @@
 # Change Log
 
+## [2.1.0] - 2018-11-10
+- Add wider node support by using `readable-stream` module (thx @coolstuffit and @RignonNoel)
+
 ## [2.0.0] - 2018-07-04
 - Rename `sortByMsgId` parameter to `sort` (BREAKING)
 - Change `sort` parameter to accept custom compare function (thx @probertson)
@@ -52,6 +55,7 @@
 - Update e-mail address in .travis.yml
 - Add CHANGELOG file
 
+[2.1.0]: https://github.com/smhg/gettext-parser/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/smhg/gettext-parser/compare/v1.4.0...v2.0.0
 [1.4.0]: https://github.com/smhg/gettext-parser/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/smhg/gettext-parser/compare/v1.3.0...v1.3.1
