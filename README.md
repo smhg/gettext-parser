@@ -3,6 +3,8 @@ gettext-parser [![Build Status](https://secure.travis-ci.org/smhg/gettext-parser
 
 Parse and compile gettext *po* and *mo* files with node.js, nothing more, nothing less.
 
+> *Please note:* starting with version 3 only latest LTS and latest stable node versions are supported. **Use version 2 with older node versions.**
+
 ## Usage
 
 Include the library:
