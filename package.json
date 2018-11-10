@@ -23,6 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "encoding": "^0.1.12",
+    "readable-stream": "^2.0.0",
     "safe-buffer": "^5.1.2"
   },
   "devDependencies": {
