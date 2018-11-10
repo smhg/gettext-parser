@@ -42,7 +42,7 @@ describe('PO Compiler', function () {
       var json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf-8'));
       var po = fs.readFileSync(path.join(__dirname, 'fixtures/utf8-no-folding.po'));
 
-      var compiled = gettextParser.po.compile(json, {foldLength: 0});
+      var compiled = gettextParser.po.compile(json, { foldLength: 0 });
       expect(compiled.toString()).to.deep.equal(po.toString());
       expect(compiled).to.deep.equal(po);
     });
@@ -51,7 +51,7 @@ describe('PO Compiler', function () {
       var json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf-8'));
       var po = fs.readFileSync(path.join(__dirname, 'fixtures/utf8-folding-100.po'));
 
-      var compiled = gettextParser.po.compile(json, {foldLength: 100});
+      var compiled = gettextParser.po.compile(json, { foldLength: 100 });
       expect(compiled).to.deep.equal(po);
     });
   });
