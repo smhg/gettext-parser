@@ -60,12 +60,12 @@ describe('PO Parser', () => {
   describe('parsing errors', () => {
     it('should throw (unescaped quote)', () => {
       const po = fs.readFileSync(path.join(__dirname, 'fixtures/error-unescaped-quote.po'));
-      expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(/Parsing error: Invalid key name/);
+      expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(/Error parsing PO data: Invalid key name/);
     });
 
     it('should throw (double-escaped quote)', () => {
       const po = fs.readFileSync(path.join(__dirname, 'fixtures/error-double-escaped-quote.po'));
-      expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(/Parsing error: Invalid key name/);
+      expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(/Error parsing PO data: Invalid key name/);
     });
   });
 });
