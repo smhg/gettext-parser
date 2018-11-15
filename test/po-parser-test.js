@@ -58,14 +58,29 @@ describe('PO Parser', () => {
   });
 
   describe('parsing errors', () => {
+    const invalidKeyError = /Error parsing PO data: Invalid key name/;
+
     it('should throw (unescaped quote)', () => {
       const po = fs.readFileSync(path.join(__dirname, 'fixtures/error-unescaped-quote.po'));
-      expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(/Error parsing PO data: Invalid key name/);
+      expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(invalidKeyError);
     });
 
     it('should throw (double-escaped quote)', () => {
       const po = fs.readFileSync(path.join(__dirname, 'fixtures/error-double-escaped-quote.po'));
-      expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(/Error parsing PO data: Invalid key name/);
+      expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(invalidKeyError);
+    });
+
+    it('shold throw (stream)', done => {
+      const poStream = fs.createReadStream(path.join(__dirname, 'fixtures/error-unescaped-quote.po'), {
+        highWaterMark: 1 // ensure that any utf-8 sequences will be broken when streaming
+      });
+      const stream = poStream.pipe(gettextParser.po.createParseStream({
+        initialTreshold: 800 // home many bytes to cache for parsing the header
+      }));
+      stream.on('error', error => {
+        expect(error.message).to.match(invalidKeyError);
+        done();
+      });
     });
   });
 });
