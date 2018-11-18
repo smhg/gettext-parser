@@ -70,7 +70,7 @@ describe('PO Parser', () => {
       expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(invalidKeyError);
     });
 
-    it('shold throw (stream)', done => {
+    it('should throw (stream with unescaped quote)', done => {
       const poStream = fs.createReadStream(path.join(__dirname, 'fixtures/error-unescaped-quote.po'), {
         highWaterMark: 1 // ensure that any utf-8 sequences will be broken when streaming
       });
