@@ -1,0 +1,21 @@
+# gettext-parser test file.
+msgid ""
+msgstr ""
+"Project-Id-Version: gettext-parser\n"
+"Report-Msgid-Bugs-To: andris@node.ee\n"
+"POT-Creation-Date: 2012-05-18 14:28:00+03:00\n"
+"PO-Revision-Date: 2012-05-18 14:37+0300\n"
+"Last-Translator: Andris Reinman <andris@kreata.ee>\n"
+"Language-Team: gettext-parser <andris@node.ee>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Poedit-Language: Estonian\n"
+"X-Poedit-Country: ESTONIA\n"
+"X-Poedit-Sourcecharset: utf-8\n"
+
+# Double-escaped double quote
+msgid "o2"
+msgstr "t2\\"-4\\""
