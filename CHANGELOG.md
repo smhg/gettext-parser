@@ -1,5 +1,8 @@
 # Change Log
 
+## [3.1.0] - 2018-11-19
+- Add error when PO contains unescaped double quotes (thx @probertson)
+
 ## [3.0.0] - 2018-11-10
 - Remove support for old node versions
 
@@ -58,6 +61,7 @@
 - Update e-mail address in .travis.yml
 - Add CHANGELOG file
 
+[3.1.0]: https://github.com/smhg/gettext-parser/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/smhg/gettext-parser/compare/v2.1.0...v3.0.0
 [2.1.0]: https://github.com/smhg/gettext-parser/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/smhg/gettext-parser/compare/v1.4.0...v2.0.0
