@@ -4,14 +4,24 @@ const chai = require('chai');
 const { promisify } = require('util');
 const path = require('path');
 const readFile = promisify(require('fs').readFile);
-const { generateHeader } = require('../lib/shared');
+const { formatCharset, generateHeader } = require('../lib/shared');
 
 const expect = chai.expect;
 chai.config.includeStack = true;
 
 describe('Shared functions', () => {
+  describe('formatCharset', () => {
+    it('should default to iso-8859-1', () => {
+      expect(formatCharset()).to.equal('iso-8859-1');
+    });
+
+    it('should normalize UTF8 to utf-8', () => {
+      expect(formatCharset('UTF8')).to.equal('utf-8');
+    });
+  });
+
   describe('generateHeader', () => {
-    it('should return an empty string by default', async () => {
+    it('should return an empty string by default', () => {
       expect(generateHeader()).to.equal('');
     });
 
