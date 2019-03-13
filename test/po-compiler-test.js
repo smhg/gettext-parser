@@ -129,15 +129,17 @@ describe('PO Compiler', () => {
       const [json1, json2, pot] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/sort-with-msgctxt-test-1.json'), 'utf8'),
         readFile(path.join(__dirname, 'fixtures/sort-with-msgctxt-test-2.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/sort-with-msgctxt-test.pot'))
+        readFile(path.join(__dirname, 'fixtures/sort-with-msgctxt-test.pot'), 'utf8')
       ]);
 
-      const compiled1 = compile(JSON.parse(json1), { sort: compareMsgidAndMsgctxt });
-      const compiled2 = compile(JSON.parse(json2), { sort: compareMsgidAndMsgctxt });
+      const compiled1 = compile(JSON.parse(json1), { sort: compareMsgidAndMsgctxt })
+        .toString('utf8');
+      const compiled2 = compile(JSON.parse(json2), { sort: compareMsgidAndMsgctxt })
+        .toString('utf8');
 
-      expect(compiled1.toString()).to.deep.equal(compiled2.toString());
-      expect(compiled1.toString()).to.deep.equal(pot.toString());
-      expect(compiled2.toString()).to.deep.equal(pot.toString());
+      expect(compiled1).to.deep.equal(compiled2);
+      expect(compiled1).to.deep.equal(pot);
+      expect(compiled2).to.deep.equal(pot);
     });
   });
 });

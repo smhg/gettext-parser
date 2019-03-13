@@ -22,6 +22,7 @@
   "main": "./index",
   "license": "MIT",
   "dependencies": {
+    "content-type": "^1.0.4",
     "encoding": "^0.1.12",
     "readable-stream": "^3.2.0",
     "safe-buffer": "^5.1.2"

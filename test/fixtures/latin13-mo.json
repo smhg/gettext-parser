@@ -7,11 +7,11 @@
         "po-revision-date": "2012-05-18 14:44+0300",
         "last-translator": "Andris Reinman <andris@kreata.ee>",
         "language-team": "gettext-parser <andris@node.ee>",
-        "mime-version": "1.0",
+        "language": "",
         "content-type": "text/plain; charset=iso-8859-13",
         "content-transfer-encoding": "8bit",
-        "language": "",
         "plural-forms": "nplurals=2; plural=(n!=1);",
+        "mime-version": "1.0",
         "x-poedit-language": "Estonian",
         "x-poedit-country": "ESTONIA",
         "x-poedit-sourcecharset": "iso-8859-13"
