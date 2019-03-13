@@ -32,7 +32,7 @@ msgstr[1] "t2-2"
 
 # Normal string with special chars
 msgid "o3-õäöü"
-msgstr "t3-şğ"
+msgstr "t3-š"
 
 # Normal comment line 1
 # Normal comment line 2

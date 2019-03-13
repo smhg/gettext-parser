@@ -41,12 +41,12 @@ describe('PO Compiler', () => {
   describe('Latin-13', () => {
     it('should compile', async () => {
       const [json, po] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/latin13.po'), 'utf8')
+        readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'latin1'),
+        readFile(path.join(__dirname, 'fixtures/latin13.po'), 'latin1')
       ]);
 
       const compiled = compile(JSON.parse(json))
-        .toString('utf8');
+        .toString('latin1');
 
       expect(compiled).to.deep.equal(po);
     });

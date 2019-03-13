@@ -45,8 +45,8 @@ msgstr "t3-žš"
 #. Editors note line 2
 #, line 1
 #, line 2
-#| line 3
-#| line 4
+#| msgid "previous-line1"
+#| "previous-line2"
 msgid "test"
 msgstr "test"
 

@@ -47,13 +47,13 @@
                     "t2-2"
                 ]
             },
-            "o3-ÃµÃ¤Ã¶Ã¼": {
-                "msgid": "o3-ÃµÃ¤Ã¶Ã¼",
+            "o3-õäöü": {
+                "msgid": "o3-õäöü",
                 "comments": {
                     "translator": "Normal string with special chars"
                 },
                 "msgstr": [
-                    "t3-Å¾Å¡"
+                    "t3-žš"
                 ]
             },
             "test": {
@@ -63,7 +63,7 @@
                     "extracted": "Editors note line 1\nEditors note line 2",
                     "reference": "/absolute/path:13\n/absolute/path:14",
                     "flag": "line 1\nline 2",
-                    "previous": "line 3\nline 4"
+                    "previous": "msgid \"previous-line1\"\n\"previous-line2\""
                 },
                 "msgstr": [
                     "test"

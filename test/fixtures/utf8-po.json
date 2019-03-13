@@ -63,7 +63,7 @@
                     "extracted": "Editors note line 1\nEditors note line 2",
                     "reference": "/absolute/path:13\n/absolute/path:14",
                     "flag": "line 1\nline 2",
-                    "previous": "line 3\nline 4"
+                    "previous": "msgid \"previous-line1\"\n\"previous-line2\""
                 },
                 "msgstr": [
                     "test"

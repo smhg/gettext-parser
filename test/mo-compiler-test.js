@@ -1,30 +1,38 @@
 'use strict';
 
 const chai = require('chai');
-const gettextParser = require('..');
-const fs = require('fs');
+const { promisify } = require('util');
 const path = require('path');
+const readFile = promisify(require('fs').readFile);
+const { mo: { compile } } = require('..');
 
 const expect = chai.expect;
 chai.config.includeStack = true;
 
 describe('MO Compiler', () => {
   describe('UTF-8', () => {
-    it('should compile', () => {
-      const json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/utf8-mo.json'), 'utf-8'));
-      const mo = fs.readFileSync(path.join(__dirname, 'fixtures/utf8.mo'));
+    it('should compile', async () => {
+      const [json, mo] = await Promise.all([
+        readFile(path.join(__dirname, 'fixtures/utf8-mo.json'), 'utf8'),
+        readFile(path.join(__dirname, 'fixtures/utf8.mo'))
+      ]);
 
-      const compiled = gettextParser.mo.compile(json);
-      expect(compiled).to.deep.equal(mo);
+      const compiled = compile(JSON.parse(json));
+
+      expect(compiled.toString('utf8')).to.deep.equal(mo.toString('utf8'));
     });
   });
 
   describe('Latin-13', () => {
-    it('should compile', () => {
-      const json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/latin13-mo.json'), 'utf-8'));
-      const mo = fs.readFileSync(path.join(__dirname, 'fixtures/latin13.mo'));
-      const compiled = gettextParser.mo.compile(json);
-      expect(compiled).to.deep.equal(mo);
+    it('should compile', async () => {
+      const [json, mo] = await Promise.all([
+        readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'latin1'),
+        readFile(path.join(__dirname, 'fixtures/latin13.mo'))
+      ]);
+
+      const compiled = compile(JSON.parse(json));
+
+      expect(compiled.toString('utf8')).to.deep.equal(mo.toString('utf8'));
     });
   });
 });
