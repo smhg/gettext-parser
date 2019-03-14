@@ -1,5 +1,11 @@
 # Change Log
 
+## [4.0.0-alpha.0] - 2019-03-15
+- Update code to ES6
+
+## [3.1.1] - 2019-03-14
+- Update code to ES6
+
 ## [3.1.0] - 2018-11-19
 - Add error when PO contains unescaped double quotes (thx @probertson)
 
@@ -61,6 +67,8 @@
 - Update e-mail address in .travis.yml
 - Add CHANGELOG file
 
+[4.0.0-alpha.0]: https://github.com/smhg/gettext-parser/compare/v3.1.1...4.0.0-alpha.0
+[3.1.1]: https://github.com/smhg/gettext-parser/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/smhg/gettext-parser/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/smhg/gettext-parser/compare/v2.1.0...v3.0.0
 [2.1.0]: https://github.com/smhg/gettext-parser/compare/v2.0.0...v2.1.0
