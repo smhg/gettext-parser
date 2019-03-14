@@ -11,14 +11,14 @@ msgstr ""
 "PO-Revision-Date: 2012-05-18 14:37+0300\n"
 "Last-Translator: Andris Reinman <andris@kreata.ee>\n"
 "Language-Team: gettext-parser <andris@node.ee>\n"
-"MIME-Version: 1.0\n"
+"Language: \n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Poedit-Language: Estonian\n"
-"X-Poedit-Country: ESTONIA\n"
-"X-Poedit-Sourcecharset: utf-8\n"
+"mime-version: 1.0\n"
+"x-poedit-language: Estonian\n"
+"x-poedit-country: ESTONIA\n"
+"x-poedit-sourcecharset: utf-8\n"
 
 # Normal string
 msgid "o1"
@@ -45,8 +45,8 @@ msgstr "t3-žš"
 #. Editors note line 2
 #, line 1
 #, line 2
-#| line 3
-#| line 4
+#| msgid "previous-line1"
+#| "previous-line2"
 msgid "test"
 msgstr "test"
 

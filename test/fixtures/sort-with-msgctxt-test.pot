@@ -1,5 +1,5 @@
 msgid ""
-msgstr "Content-Type: text/plain;\n"
+msgstr "Content-Type: text/plain\n"
 
 msgid "aaaa"
 msgstr "aaaa"

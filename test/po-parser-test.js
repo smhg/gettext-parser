@@ -41,6 +41,7 @@ describe('PO Parser', () => {
       const po = fs.createReadStream(path.join(__dirname, 'fixtures/utf8.po'), {
         highWaterMark: 1 // ensure that any utf-8 sequences will be broken when streaming
       });
+
       const json = fs.readFileSync(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8');
 
       let parsed;
