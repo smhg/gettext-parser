@@ -3,8 +3,8 @@
 const chai = require('chai');
 const { promisify } = require('util');
 const path = require('path');
-const readFile = promisify(require('fs').readFile);
 const { formatCharset, generateHeader, foldLine } = require('../lib/shared');
+const readFile = promisify(require('fs').readFile);
 
 const expect = chai.expect;
 chai.config.includeStack = true;

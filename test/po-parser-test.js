@@ -1,8 +1,6 @@
-'use strict';
-
 const chai = require('chai');
-const path = require('path');
 const { promisify } = require('util');
+const path = require('path');
 const fs = require('fs');
 const gettextParser = require('..');
 
@@ -14,23 +12,27 @@ chai.config.includeStack = true;
 describe('PO Parser', () => {
   describe('UTF-8', () => {
     it('should parse', async () => {
-      const po = await readFile(path.join(__dirname, 'fixtures/utf8.po'));
-      const json = JSON.parse(await readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf-8'));
+      const [po, json] = await Promise.all([
+        readFile(path.join(__dirname, 'fixtures/utf8.po')),
+        readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8')
+      ]);
 
       const parsed = gettextParser.po.parse(po);
 
-      expect(parsed).to.deep.equal(json);
+      expect(parsed).to.deep.equal(JSON.parse(json));
     });
   });
 
   describe('UTF-8 as a string', () => {
     it('should parse', async () => {
-      const po = await readFile(path.join(__dirname, 'fixtures/utf8.po'), 'utf-8');
-      const json = JSON.parse(await readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf-8'));
+      const [po, json] = await Promise.all([
+        readFile(path.join(__dirname, 'fixtures/utf8.po'), 'utf8'),
+        readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8')
+      ]);
 
       const parsed = gettextParser.po.parse(po);
 
-      expect(parsed).to.deep.equal(json);
+      expect(parsed).to.deep.equal(JSON.parse(json));
     });
   });
 
@@ -40,7 +42,7 @@ describe('PO Parser', () => {
         highWaterMark: 1 // ensure that any utf-8 sequences will be broken when streaming
       });
 
-      const json = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf-8'));
+      const json = fs.readFileSync(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8');
 
       let parsed;
 
@@ -53,7 +55,7 @@ describe('PO Parser', () => {
       });
 
       stream.on('end', () => {
-        expect(parsed).to.deep.equal(json);
+        expect(parsed).to.deep.equal(JSON.parse(json));
         done();
       });
     });
@@ -61,12 +63,14 @@ describe('PO Parser', () => {
 
   describe('Latin-13', () => {
     it('should parse', async () => {
-      const po = await readFile(path.join(__dirname, 'fixtures/latin13.po'));
-      const json = JSON.parse(await readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'latin1'));
+      const [po, json] = await Promise.all([
+        readFile(path.join(__dirname, 'fixtures/latin13.po')),
+        readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'latin1')
+      ]);
 
       const parsed = gettextParser.po.parse(po);
 
-      expect(parsed).to.deep.equal(json);
+      expect(parsed).to.deep.equal(JSON.parse(json));
     });
   });
 

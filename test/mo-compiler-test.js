@@ -1,10 +1,8 @@
-'use strict';
-
 const chai = require('chai');
 const { promisify } = require('util');
 const path = require('path');
-const readFile = promisify(require('fs').readFile);
 const { mo: { compile } } = require('..');
+const readFile = promisify(require('fs').readFile);
 
 const expect = chai.expect;
 chai.config.includeStack = true;

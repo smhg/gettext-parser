@@ -1,10 +1,8 @@
-'use strict';
-
 const chai = require('chai');
 const { promisify } = require('util');
 const path = require('path');
-const readFile = promisify(require('fs').readFile);
 const { mo: { parse } } = require('..');
+const readFile = promisify(require('fs').readFile);
 
 const expect = chai.expect;
 chai.config.includeStack = true;
@@ -14,7 +12,7 @@ describe('MO Parser', () => {
     it('should parse', async () => {
       const [mo, json] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/utf8.mo')),
-        readFile(path.join(__dirname, 'fixtures/utf8-mo.json'), 'utf-8')
+        readFile(path.join(__dirname, 'fixtures/utf8-mo.json'), 'utf8')
       ]);
 
       const parsed = parse(mo);

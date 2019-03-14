@@ -1,10 +1,8 @@
-'use strict';
-
 const chai = require('chai');
 const { promisify } = require('util');
 const path = require('path');
-const readFile = promisify(require('fs').readFile);
 const { po: { compile } } = require('..');
+const readFile = promisify(require('fs').readFile);
 
 const expect = chai.expect;
 chai.config.includeStack = true;
@@ -34,7 +32,7 @@ describe('PO Compiler', () => {
       const compiled = compile(JSON.parse(json))
         .toString('utf8');
 
-      expect(compiled).to.deep.equal(po);
+      expect(compiled).to.equal(po);
     });
   });
 
@@ -48,7 +46,7 @@ describe('PO Compiler', () => {
       const compiled = compile(JSON.parse(json))
         .toString('latin1');
 
-      expect(compiled).to.deep.equal(po);
+      expect(compiled).to.equal(po);
     });
   });
 
@@ -62,7 +60,7 @@ describe('PO Compiler', () => {
       const compiled = compile(JSON.parse(json))
         .toString('utf8');
 
-      expect(compiled).to.deep.equal(pot);
+      expect(compiled).to.equal(pot);
     });
   });
 
@@ -76,7 +74,7 @@ describe('PO Compiler', () => {
       const compiled = compile(JSON.parse(json), { foldLength: 0 })
         .toString('utf8');
 
-      expect(compiled).to.deep.equal(po);
+      expect(compiled).to.equal(po);
     });
 
     it('should compile with different folding', async () => {
@@ -88,7 +86,7 @@ describe('PO Compiler', () => {
       const compiled = compile(JSON.parse(json), { foldLength: 100 })
         .toString('utf8');
 
-      expect(compiled).to.deep.equal(po);
+      expect(compiled).to.equal(po);
     });
   });
 
@@ -102,7 +100,7 @@ describe('PO Compiler', () => {
       const compiled = compile(JSON.parse(json), { sort: true })
         .toString('utf8');
 
-      expect(compiled).to.deep.equal(pot);
+      expect(compiled).to.equal(pot);
     });
 
     it('should sort entries using a custom `sort` function', async () => {
@@ -137,9 +135,9 @@ describe('PO Compiler', () => {
       const compiled2 = compile(JSON.parse(json2), { sort: compareMsgidAndMsgctxt })
         .toString('utf8');
 
-      expect(compiled1).to.deep.equal(compiled2);
-      expect(compiled1).to.deep.equal(pot);
-      expect(compiled2).to.deep.equal(pot);
+      expect(compiled1).to.equal(compiled2);
+      expect(compiled1).to.equal(pot);
+      expect(compiled2).to.equal(pot);
     });
   });
 });
