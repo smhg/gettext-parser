@@ -26,12 +26,13 @@ describe('PO Compiler', () => {
     it('should compile', async () => {
       const [json, po] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/utf8.po'))
+        readFile(path.join(__dirname, 'fixtures/utf8.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json));
+      const compiled = compile(JSON.parse(json))
+        .toString('utf8');
 
-      expect(compiled).to.deep.equal(po);
+      expect(compiled).to.equal(po);
     });
   });
 
@@ -39,12 +40,13 @@ describe('PO Compiler', () => {
     it('should compile', async () => {
       const [json, po] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/latin13.po'))
+        readFile(path.join(__dirname, 'fixtures/latin13.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json));
+      const compiled = compile(JSON.parse(json))
+        .toString('utf8');
 
-      expect(compiled).to.deep.equal(po);
+      expect(compiled).to.equal(po);
     });
   });
 
@@ -52,12 +54,13 @@ describe('PO Compiler', () => {
     it('should compile correct plurals in POT files', async () => {
       const [json, pot] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/plural-pot.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/plural.pot'))
+        readFile(path.join(__dirname, 'fixtures/plural.pot'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json));
+      const compiled = compile(JSON.parse(json))
+        .toString('utf8');
 
-      expect(compiled).to.deep.equal(pot);
+      expect(compiled).to.equal(pot);
     });
   });
 
@@ -65,24 +68,25 @@ describe('PO Compiler', () => {
     it('should compile without folding', async () => {
       const [json, po] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/utf8-no-folding.po'))
+        readFile(path.join(__dirname, 'fixtures/utf8-no-folding.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { foldLength: 0 });
+      const compiled = compile(JSON.parse(json), { foldLength: 0 })
+        .toString('utf8');
 
-      expect(compiled.toString()).to.deep.equal(po.toString());
-      expect(compiled).to.deep.equal(po);
+      expect(compiled).to.equal(po);
     });
 
     it('should compile with different folding', async () => {
       const [json, po] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/utf8-folding-100.po'))
+        readFile(path.join(__dirname, 'fixtures/utf8-folding-100.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { foldLength: 100 });
+      const compiled = compile(JSON.parse(json), { foldLength: 100 })
+        .toString('utf8');
 
-      expect(compiled).to.deep.equal(po);
+      expect(compiled).to.equal(po);
     });
   });
 
@@ -90,12 +94,13 @@ describe('PO Compiler', () => {
     it('should sort output entries by msgid when `sort` is `true`', async () => {
       const [json, pot] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/sort-test.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/sort-test.pot'))
+        readFile(path.join(__dirname, 'fixtures/sort-test.pot'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { sort: true });
+      const compiled = compile(JSON.parse(json), { sort: true })
+        .toString('utf8');
 
-      expect(compiled.toString()).to.deep.equal(pot.toString());
+      expect(compiled).to.equal(pot);
     });
 
     it('should sort entries using a custom `sort` function', async () => {
@@ -122,15 +127,17 @@ describe('PO Compiler', () => {
       const [json1, json2, pot] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/sort-with-msgctxt-test-1.json'), 'utf8'),
         readFile(path.join(__dirname, 'fixtures/sort-with-msgctxt-test-2.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/sort-with-msgctxt-test.pot'))
+        readFile(path.join(__dirname, 'fixtures/sort-with-msgctxt-test.pot'), 'utf8')
       ]);
 
-      const compiled1 = compile(JSON.parse(json1), { sort: compareMsgidAndMsgctxt });
-      const compiled2 = compile(JSON.parse(json2), { sort: compareMsgidAndMsgctxt });
+      const compiled1 = compile(JSON.parse(json1), { sort: compareMsgidAndMsgctxt })
+        .toString('utf8');
+      const compiled2 = compile(JSON.parse(json2), { sort: compareMsgidAndMsgctxt })
+        .toString('utf8');
 
-      expect(compiled1.toString()).to.deep.equal(compiled2.toString());
-      expect(compiled1.toString()).to.deep.equal(pot.toString());
-      expect(compiled2.toString()).to.deep.equal(pot.toString());
+      expect(compiled1).to.equal(compiled2);
+      expect(compiled1).to.equal(pot);
+      expect(compiled2).to.equal(pot);
     });
   });
 });
