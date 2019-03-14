@@ -8,6 +8,20 @@ const expect = chai.expect;
 chai.config.includeStack = true;
 
 describe('PO Compiler', () => {
+  describe('Headers', () => {
+    it('should compile', async () => {
+      const [json, po] = await Promise.all([
+        readFile(path.join(__dirname, 'fixtures/headers.json'), 'utf8'),
+        readFile(path.join(__dirname, 'fixtures/headers.po'), 'utf8')
+      ]);
+
+      const compiled = compile(JSON.parse(json))
+        .toString('utf8');
+
+      expect(compiled).to.equal(po);
+    });
+  });
+
   describe('UTF-8', () => {
     it('should compile', async () => {
       const [json, po] = await Promise.all([
