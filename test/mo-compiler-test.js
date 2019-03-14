@@ -25,15 +25,12 @@ describe('MO Compiler', () => {
     it('should compile', async () => {
       const [json, mo] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/latin13.mo'), 'latin1'),
-        readFile(path.join(__dirname, 'fixtures/latin13.po'), 'latin1')
+        readFile(path.join(__dirname, 'fixtures/latin13.mo'))
       ]);
 
-      // gettext-parser only handles utf8 input (output will be the specified charset)
-      const compiled = compile(JSON.parse(json))
-        .toString('latin1');
+      const compiled = compile(JSON.parse(json));
 
-      expect(compiled).to.deep.equal(mo);
+      expect(compiled.toString('utf8')).to.equal(mo.toString('utf8'));
     });
   });
 });
