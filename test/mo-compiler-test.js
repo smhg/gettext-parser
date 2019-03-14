@@ -11,7 +11,7 @@ describe('MO Compiler', () => {
   describe('UTF-8', () => {
     it('should compile', async () => {
       const [json, mo] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/utf8-mo.json'), 'utf8'),
+        readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8'),
         readFile(path.join(__dirname, 'fixtures/utf8.mo'))
       ]);
 
@@ -24,13 +24,16 @@ describe('MO Compiler', () => {
   describe('Latin-13', () => {
     it('should compile', async () => {
       const [json, mo] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'latin1'),
-        readFile(path.join(__dirname, 'fixtures/latin13.mo'))
+        readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'utf8'),
+        readFile(path.join(__dirname, 'fixtures/latin13.mo'), 'latin1'),
+        readFile(path.join(__dirname, 'fixtures/latin13.po'), 'latin1')
       ]);
 
-      const compiled = compile(JSON.parse(json));
+      // gettext-parser only handles utf8 input (output will be the specified charset)
+      const compiled = compile(JSON.parse(json))
+        .toString('latin1');
 
-      expect(compiled.toString('utf8')).to.deep.equal(mo.toString('utf8'));
+      expect(compiled).to.deep.equal(mo);
     });
   });
 });

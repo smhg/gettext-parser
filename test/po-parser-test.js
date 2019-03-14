@@ -65,7 +65,7 @@ describe('PO Parser', () => {
     it('should parse', async () => {
       const [po, json] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/latin13.po')),
-        readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'latin1')
+        readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'utf8')
       ]);
 
       const parsed = gettextParser.po.parse(po);

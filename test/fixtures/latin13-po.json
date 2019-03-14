@@ -47,13 +47,13 @@
                     "t2-2"
                 ]
             },
-            "o3-õäöü": {
-                "msgid": "o3-õäöü",
+            "o3-ÃµÃ¤Ã¶Ã¼": {
+                "msgid": "o3-ÃµÃ¤Ã¶Ã¼",
                 "comments": {
                     "translator": "Normal string with special chars"
                 },
                 "msgstr": [
-                    "t3-žš"
+                    "t3-Å¾Å¡"
                 ]
             },
             "test": {

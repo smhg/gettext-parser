@@ -25,7 +25,7 @@ describe('MO Parser', () => {
     it('should parse', async () => {
       const [mo, json] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/latin13.mo')),
-        readFile(path.join(__dirname, 'fixtures/latin13-mo.json'), 'latin1')
+        readFile(path.join(__dirname, 'fixtures/latin13-mo.json'), 'utf8')
       ]);
 
       const parsed = parse(mo);

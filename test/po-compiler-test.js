@@ -39,7 +39,8 @@ describe('PO Compiler', () => {
   describe('Latin-13', () => {
     it('should compile', async () => {
       const [json, po] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'latin1'),
+      // gettext-parser can only handle utf8 input (output will be the specified charset)
+        readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'utf8'),
         readFile(path.join(__dirname, 'fixtures/latin13.po'), 'latin1')
       ]);
 
