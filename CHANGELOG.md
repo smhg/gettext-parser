@@ -1,7 +1,10 @@
 # Change Log
 
+## [4.0.0-alpha.1] - 2019-03-17
+- Fix header title casing same when parsing (compiling fixed in 4.0.0-alpha.0)
+
 ## [4.0.0-alpha.0] - 2019-03-15
-- Update code to ES6
+- Fix header tiltle casing when compiling (now enforced for fixed list and left unchanged for all others).
 
 ## [3.1.1] - 2019-03-14
 - Update code to ES6
@@ -67,6 +70,7 @@
 - Update e-mail address in .travis.yml
 - Add CHANGELOG file
 
+[4.0.0-alpha.1]: https://github.com/smhg/gettext-parser/compare/v4.0.0-alpha.0...v4.0.0-alpha.1
 [4.0.0-alpha.0]: https://github.com/smhg/gettext-parser/compare/v3.1.1...v4.0.0-alpha.0
 [3.1.1]: https://github.com/smhg/gettext-parser/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/smhg/gettext-parser/compare/v3.0.0...v3.1.0
