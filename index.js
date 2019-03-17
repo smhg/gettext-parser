@@ -1,11 +1,9 @@
-'use strict';
-
-var poParser = require('./lib/poparser');
+const { parse, stream } = require('./lib/poparser');
 
 module.exports = {
   po: {
-    parse: poParser.parse,
-    createParseStream: poParser.stream,
+    parse,
+    createParseStream: stream,
     compile: require('./lib/pocompiler')
   },
 
