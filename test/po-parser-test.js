@@ -10,6 +10,19 @@ const expect = chai.expect;
 chai.config.includeStack = true;
 
 describe('PO Parser', () => {
+  describe('headers', () => {
+    it('should detect charset in header', async () => {
+      const [po, json] = await Promise.all([
+        readFile(path.join(__dirname, 'fixtures/headers-charset.po')),
+        readFile(path.join(__dirname, 'fixtures/headers-charset.json'), 'utf8')
+      ]);
+
+      const parsed = gettextParser.po.parse(po);
+
+      expect(parsed).to.deep.equal(JSON.parse(json));
+    });
+  });
+
   describe('UTF-8', () => {
     it('should parse', async () => {
       const [po, json] = await Promise.all([
