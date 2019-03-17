@@ -9,10 +9,10 @@ chai.config.includeStack = true;
 
 describe('PO Compiler', () => {
   describe('Headers', () => {
-    it('should compile', async () => {
+    it('should keep tile casing', async () => {
       const [json, po] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/headers.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/headers.po'), 'utf8')
+        readFile(path.join(__dirname, 'fixtures/headers-case.json'), 'utf8'),
+        readFile(path.join(__dirname, 'fixtures/headers-case.po'), 'utf8')
       ]);
 
       const compiled = compile(JSON.parse(json))

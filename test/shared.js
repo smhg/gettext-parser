@@ -26,7 +26,7 @@ describe('Shared functions', () => {
     });
 
     it('should convert a header object into a string', async () => {
-      const json = await readFile(path.join(__dirname, 'fixtures/headers.json'), 'utf8');
+      const json = await readFile(path.join(__dirname, 'fixtures/headers-case.json'), 'utf8');
       const { headers } = JSON.parse(json);
 
       const headerKeys = Object.keys(headers);
