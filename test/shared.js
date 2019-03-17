@@ -3,7 +3,7 @@
 const chai = require('chai');
 const { promisify } = require('util');
 const path = require('path');
-const { formatCharset, generateHeader, foldLine } = require('../lib/shared');
+const { formatCharset, parseHeader, generateHeader, foldLine } = require('../lib/shared');
 const readFile = promisify(require('fs').readFile);
 
 const expect = chai.expect;
@@ -17,6 +17,32 @@ describe('Shared functions', () => {
 
     it('should normalize UTF8 to utf-8', () => {
       expect(formatCharset('UTF8')).to.equal('utf-8');
+    });
+  });
+
+  describe('parseHeader', () => {
+    it('should return an empty object by default', () => {
+      expect(parseHeader()).to.deep.equal({});
+    });
+
+    it('should convert a header string into an object', async () => {
+      const str = `Project-Id-Version: project 1.0.2
+POT-Creation-Date: 2012-05-18 14:28:00+03:00
+content-type: text/plain; charset=utf-8
+Plural-Forms: nplurals=2; plural=(n!=1);
+mime-version: 1.0
+X-Poedit-SourceCharset: UTF-8`;
+
+      const headers = parseHeader(str);
+
+      expect(headers).to.have.all.keys(
+        'Project-Id-Version',
+        'POT-Creation-Date',
+        'Content-Type',
+        'Plural-Forms',
+        'mime-version',
+        'X-Poedit-SourceCharset'
+      );
     });
   });
 
