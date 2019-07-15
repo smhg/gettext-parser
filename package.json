@@ -25,8 +25,8 @@
   "dependencies": {
     "content-type": "^1.0.4",
     "encoding": "^0.1.12",
-    "readable-stream": "^3.3.0",
-    "safe-buffer": "^5.1.2"
+    "readable-stream": "^3.4.0",
+    "safe-buffer": "^5.2.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
