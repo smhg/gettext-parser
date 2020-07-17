@@ -24,19 +24,19 @@
   "license": "MIT",
   "dependencies": {
     "content-type": "^1.0.4",
-    "encoding": "^0.1.12",
+    "encoding": "^0.1.13",
     "readable-stream": "^3.6.0",
-    "safe-buffer": "^5.2.0"
+    "safe-buffer": "^5.2.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "eslint": "^6.8.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-node": "^11.0.0",
+    "eslint": "^7.4.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
-    "mocha": "^7.1.0"
+    "mocha": "^8.0.1"
   },
   "keywords": [
     "i18n",
