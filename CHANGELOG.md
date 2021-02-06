@@ -1,5 +1,7 @@
 # Change Log
 
+**Note:** since version 4.0.0, the changelog moved to the GitHub [releases](https://github.com/smhg/gettext-parser/releases) page.
+
 ## [4.0.0-alpha.1] - 2019-03-17
 - Fix header title casing same when parsing (compiling fixed in 4.0.0-alpha.0)
 
