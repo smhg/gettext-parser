@@ -29,13 +29,13 @@
     "safe-buffer": "^5.2.1"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "eslint": "^7.18.0",
+    "chai": "4.3.4",
+    "eslint": "7.26.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "mocha": "^8.2.1"
+    "mocha": "8.4.0"
   },
   "keywords": [
     "i18n",
