@@ -1,4 +1,4 @@
-gettext-parser [![Build Status](https://secure.travis-ci.org/smhg/gettext-parser.png)](http://travis-ci.org/smhg/gettext-parser)
+gettext-parser [![ci](https://github.com/smhg/gettext-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/smhg/gettext-parser/actions/workflows/ci.yml)
 ==============
 
 Parse and compile gettext *po* and *mo* files with node.js, nothing more, nothing less.
