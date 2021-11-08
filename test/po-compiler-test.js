@@ -1,8 +1,9 @@
-const chai = require('chai');
+const { EOL } = require('os');
 const { promisify } = require('util');
 const path = require('path');
-const { po: { compile } } = require('..');
 const readFile = promisify(require('fs').readFile);
+const chai = require('chai');
+const { po: { compile } } = require('..');
 
 const expect = chai.expect;
 chai.config.includeStack = true;
@@ -15,7 +16,7 @@ describe('PO Compiler', () => {
         readFile(path.join(__dirname, 'fixtures/headers-case.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json))
+      const compiled = compile(JSON.parse(json), { eol: EOL })
         .toString('utf8');
 
       expect(compiled).to.equal(po);
@@ -29,7 +30,7 @@ describe('PO Compiler', () => {
         readFile(path.join(__dirname, 'fixtures/utf8.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json))
+      const compiled = compile(JSON.parse(json), { eol: EOL })
         .toString('utf8');
 
       expect(compiled).to.equal(po);
@@ -44,7 +45,7 @@ describe('PO Compiler', () => {
         readFile(path.join(__dirname, 'fixtures/latin13.po'), 'latin1')
       ]);
 
-      const compiled = compile(JSON.parse(json))
+      const compiled = compile(JSON.parse(json), { eol: EOL })
         .toString('latin1');
 
       expect(compiled).to.equal(po);
@@ -58,7 +59,7 @@ describe('PO Compiler', () => {
         readFile(path.join(__dirname, 'fixtures/plural.pot'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json))
+      const compiled = compile(JSON.parse(json), { eol: EOL })
         .toString('utf8');
 
       expect(compiled).to.equal(pot);
@@ -72,7 +73,7 @@ describe('PO Compiler', () => {
         readFile(path.join(__dirname, 'fixtures/utf8-no-folding.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { foldLength: 0 })
+      const compiled = compile(JSON.parse(json), { foldLength: 0, eol: EOL })
         .toString('utf8');
 
       expect(compiled).to.equal(po);
@@ -84,7 +85,7 @@ describe('PO Compiler', () => {
         readFile(path.join(__dirname, 'fixtures/utf8-folding-100.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { foldLength: 100 })
+      const compiled = compile(JSON.parse(json), { foldLength: 100, eol: EOL })
         .toString('utf8');
 
       expect(compiled).to.equal(po);
@@ -98,7 +99,7 @@ describe('PO Compiler', () => {
         readFile(path.join(__dirname, 'fixtures/sort-test.pot'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { sort: true })
+      const compiled = compile(JSON.parse(json), { sort: true, eol: EOL })
         .toString('utf8');
 
       expect(compiled).to.equal(pot);
@@ -131,9 +132,9 @@ describe('PO Compiler', () => {
         readFile(path.join(__dirname, 'fixtures/sort-with-msgctxt-test.pot'), 'utf8')
       ]);
 
-      const compiled1 = compile(JSON.parse(json1), { sort: compareMsgidAndMsgctxt })
+      const compiled1 = compile(JSON.parse(json1), { sort: compareMsgidAndMsgctxt, eol: EOL })
         .toString('utf8');
-      const compiled2 = compile(JSON.parse(json2), { sort: compareMsgidAndMsgctxt })
+      const compiled2 = compile(JSON.parse(json2), { sort: compareMsgidAndMsgctxt, eol: EOL })
         .toString('utf8');
 
       expect(compiled1).to.equal(compiled2);
