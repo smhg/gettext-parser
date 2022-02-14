@@ -56,6 +56,15 @@
                     "t3-žš"
                 ]
             },
+            "o4": {
+                "msgid": "o4",
+                "comments": {
+                    "translator": "Long message"
+                },
+                "msgstr": [
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                ]
+            },
             "test": {
                 "msgid": "test",
                 "comments": {
