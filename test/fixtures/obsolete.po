@@ -1,0 +1,22 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgid "Test msgid"
+msgstr "Test msgstr"
+
+# Obsolete comment
+#~ msgid "Obsolete message"
+#~ msgstr ""
+#~ "Message obsolete.\n"
+#~ "Lines are properly handled, even for obsolete translations."
+
+#~ msgid "Obsolete plural"
+#~ msgid_plural "Obsolete plural-2"
+#~ msgstr[0] "One"
+#~ msgstr[1] "Two"
+
+# Obsolete message with context
+#, fuzzy
+#~ msgctxt "Obsolete context"
+#~ msgid "Obsolete message"
+#~ msgstr "One line string"

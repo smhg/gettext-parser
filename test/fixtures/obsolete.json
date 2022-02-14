@@ -1,0 +1,57 @@
+{
+    "charset": "utf-8",
+    "headers": {
+        "Content-Type": "text/plain; charset=utf-8"
+    },
+    "translations": {
+        "": {
+            "": {
+                "msgid": "",
+                "msgstr": [
+                    "Content-Type: text/plain; charset=utf-8\n"
+                ]
+            },
+            "Test msgid": {
+                "msgid": "Test msgid",
+                "msgstr": [
+                    "Test msgstr"
+                ]
+            }
+        }
+    },
+    "obsolete": {
+        "": {
+            "Obsolete message": {
+                "msgid": "Obsolete message",
+                "comments": {
+                    "translator": "Obsolete comment"
+                },
+                "msgstr": [
+                    "Message obsolete.\nLines are properly handled, even for obsolete translations."
+                ]
+            },
+            "Obsolete plural": {
+                "msgid": "Obsolete plural",
+                "comments": {},
+                "msgid_plural": "Obsolete plural-2",
+                "msgstr": [
+                    "One",
+                    "Two"
+                ]
+            }
+        },
+        "Obsolete context": {
+            "Obsolete message": {
+                "msgid": "Obsolete message",
+                "msgctxt": "Obsolete context",
+                "comments": {
+                    "translator": "Obsolete message with context",
+                    "flag": "fuzzy"
+                },
+                "msgstr": [
+                    "One line string"
+                ]
+            }
+        }
+    }
+}
