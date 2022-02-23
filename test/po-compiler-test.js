@@ -70,10 +70,10 @@ describe('PO Compiler', () => {
     it('should compile without folding', async () => {
       const [json, po] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/utf8-no-folding.po'), 'utf8')
+        readFile(path.join(__dirname, 'fixtures/folding/utf8-no-folding.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { foldLength: 0, eol: EOL })
+      const compiled = compile(JSON.parse(json), { folding: false, foldLength: 0, eol: EOL })
         .toString('utf8');
 
       expect(compiled).to.equal(po);
@@ -82,10 +82,10 @@ describe('PO Compiler', () => {
     it('should compile with different folding', async () => {
       const [json, po] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/utf8-folding-100.po'), 'utf8')
+        readFile(path.join(__dirname, 'fixtures/folding/utf8-folding-100.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { foldLength: 100, eol: EOL })
+      const compiled = compile(JSON.parse(json), { folding: true, foldLength: 100, eol: EOL })
         .toString('utf8');
 
       expect(compiled).to.equal(po);
@@ -146,11 +146,11 @@ describe('PO Compiler', () => {
   describe('Skip escaping characters', () => {
     it('should compile without escaping characters', async () => {
       const [json, po] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/utf8-no-folding.po'), 'utf8')
+        readFile(path.join(__dirname, 'fixtures/utf8-skip-escape-characters.json'), 'utf8'),
+        readFile(path.join(__dirname, 'fixtures/utf8-skip-escape-characters.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { escapeCharacters: false })
+      const compiled = compile(JSON.parse(json), { escapeCharacters: false, folding: 0, eol: EOL })
         .toString('utf8');
 
       expect(compiled).to.equal(po);
