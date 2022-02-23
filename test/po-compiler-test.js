@@ -143,7 +143,7 @@ describe('PO Compiler', () => {
     });
   });
 
-  describe('Message folding', () => {
+  describe('Skip escaping characters', () => {
     it('should compile without escaping characters', async () => {
       const [json, po] = await Promise.all([
         readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8'),
