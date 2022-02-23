@@ -85,7 +85,7 @@ describe('PO Compiler', () => {
         readFile(path.join(__dirname, 'fixtures/folding/utf8-folding-100.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { folding: true, foldLength: 100, eol: EOL })
+      const compiled = compile(JSON.parse(json), { foldLength: 100, eol: EOL })
         .toString('utf8');
 
       expect(compiled).to.equal(po);
@@ -150,7 +150,7 @@ describe('PO Compiler', () => {
         readFile(path.join(__dirname, 'fixtures/utf8-skip-escape-characters.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { escapeCharacters: false, folding: 0, eol: EOL })
+      const compiled = compile(JSON.parse(json), { escapeCharacters: false, folding: false, eol: EOL })
         .toString('utf8');
 
       expect(compiled).to.equal(po);
