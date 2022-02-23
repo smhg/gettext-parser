@@ -150,7 +150,7 @@ describe('PO Compiler', () => {
         readFile(path.join(__dirname, 'fixtures/utf8-skip-escape-characters.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { escapeCharacters: false, folding: false, eol: EOL })
+      const compiled = compile(JSON.parse(json), { escapeCharacters: false, foldLength: 0 })
         .toString('utf8');
 
       expect(compiled).to.equal(po);
