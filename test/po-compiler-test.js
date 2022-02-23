@@ -146,11 +146,11 @@ describe('PO Compiler', () => {
   describe('Skip escaping characters', () => {
     it('should compile without escaping characters', async () => {
       const [json, po] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/utf8-no-folding.po'), 'utf8')
+        readFile(path.join(__dirname, 'fixtures/utf8-skip-escape-characters.json'), 'utf8'),
+        readFile(path.join(__dirname, 'fixtures/utf8-skip-escape-characters.po'), 'utf8')
       ]);
 
-      const compiled = compile(JSON.parse(json), { escapeCharacters: false })
+      const compiled = compile(JSON.parse(json), { escapeCharacters: false, foldLength: 0 })
         .toString('utf8');
 
       expect(compiled).to.equal(po);
