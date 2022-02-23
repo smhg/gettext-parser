@@ -142,4 +142,18 @@ describe('PO Compiler', () => {
       expect(compiled2).to.equal(pot);
     });
   });
+
+  describe('Message folding', () => {
+    it('should compile without escaping characters', async () => {
+      const [json, po] = await Promise.all([
+        readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8'),
+        readFile(path.join(__dirname, 'fixtures/utf8-no-folding.po'), 'utf8')
+      ]);
+
+      const compiled = compile(JSON.parse(json), { escapeCharacters: false })
+        .toString('utf8');
+
+      expect(compiled).to.equal(po);
+    });
+  });
 });
