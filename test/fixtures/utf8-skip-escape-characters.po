@@ -4,7 +4,7 @@
 # ANDRIS REINMAN <andris@node.ee>, 2012.
 # 
 msgid ""
-msgstr "Project-Id-Version: gettext-parser\nReport-Msgid-Bugs-To: andris@node.ee\nPOT-Creation-Date: 2012-05-18 14:28:00+03:00\nPO-Revision-Date: 2012-05-18 14:37+0300\nLast-Translator: Andris Reinman <andris@kreata.ee>\nLanguage-Team: gettext-parser <andris@node.ee>\nLanguage: \nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n!=1);\nmime-version: 1.0\nx-poedit-language: Estonian\nx-poedit-country: ESTONIA\nx-poedit-sourcecharset: utf-8\n"
+msgstr "Project-Id-Version: gettext-parser\nReport-Msgid-Bugs-To: andris@node.ee\nPOT-Creation-Date: 2012-05-18 14:28:00+03:00\nPO-Revision-Date: 2012-05-18 14:37+0300\nLast-Translator: Andris Reinman <andris@kreata.ee>\nLanguage-Team: gettext-parser <andris@node.ee>\nContent-Type: text/plain; charset=utf-8\n"
 
 # Plural string
 msgid "o2-1"
