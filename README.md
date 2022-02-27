@@ -66,9 +66,9 @@ Where
   * **data** is a translation object either got from parsing a PO/MO file or composed by other means
   * **options** is a configuration object with possible values
     * **foldLength** is the length at which to fold message strings into newlines (default: 76). Set to 0 or false to disable folding.
-    * **sort** (boolean) - (default `false`) if `true`, entries will be sorted by msgid in the resulting .po(.pot) file.
+    * **sort** (boolean|Function) - (default `false`) if `true`, entries will be sorted by msgid in the resulting .po(.pot) file.
       If a comparator function is provided, that function will be used to sort entries in the output. The function is called with two arguments, each of which is a single message entry with the structure described below. The function should follow the standard rules for functions passed to `Array.sort()`: return `0` if the entries are interchangeable in sort order; return a number less than 0 if the first entry should come before the second one; and return a number greater than 0 if the second entry should come before the first one.
-    * **escapeCharacters** (boolean|Function) - (default `true`) if `false`, will skip escape newlines and quotes characters functionality.
+    * **escapeCharacters** (boolean) - (default `true`) if `false`, will skip escape newlines and quotes characters functionality.
 
 **Example**
 
