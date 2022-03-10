@@ -142,4 +142,18 @@ describe('PO Compiler', () => {
       expect(compiled2).to.equal(pot);
     });
   });
+
+  describe('Skip escaping characters', () => {
+    it('should compile without escaping characters', async () => {
+      const [json, po] = await Promise.all([
+        readFile(path.join(__dirname, 'fixtures/utf8-skip-escape-characters.json'), 'utf8'),
+        readFile(path.join(__dirname, 'fixtures/utf8-skip-escape-characters.po'), 'utf8')
+      ]);
+
+      const compiled = compile(JSON.parse(json), { escapeCharacters: false, foldLength: 0, eol: EOL })
+        .toString('utf8');
+
+      expect(compiled).to.equal(po);
+    });
+  });
 });
