@@ -4,6 +4,7 @@ msgstr "Content-Type: text/plain; charset=utf-8\n"
 msgid "Test msgid"
 msgstr "Test msgstr"
 
+# This line is not an ~ obsolete message
 # Obsolete comment
 #~ msgid "Obsolete message"
 #~ msgstr ""

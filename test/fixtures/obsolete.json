@@ -24,7 +24,7 @@
             "Obsolete message": {
                 "msgid": "Obsolete message",
                 "comments": {
-                    "translator": "Obsolete comment"
+                    "translator": "This line is not an ~ obsolete message\nObsolete comment"
                 },
                 "msgstr": [
                     "Message obsolete.\nLines are properly handled, even for obsolete translations."
