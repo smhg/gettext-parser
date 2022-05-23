@@ -76,8 +76,9 @@ Where
 var data = {
     ...
 };
+var output_filepath = 'output.po';
 var output = gettextParser.po.compile(data);
-require('fs').writeFileSync(output);
+require('fs').writeFileSync(output_filepath, output);
 ```
 
 ### Parse MO files
@@ -117,8 +118,9 @@ Where
 var data = {
     ...
 };
+var output_filepath = 'output.po';
 var output = gettextParser.mo.compile(data);
-require('fs').writeFileSync(output);
+require('fs').writeFileSync(output_filepath, output);
 ```
 
 ### Notes
