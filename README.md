@@ -77,7 +77,7 @@ var data = {
     ...
 };
 var output = gettextParser.po.compile(data);
-require('fs').writeFileSync(output);
+require('fs').writeFileSync('filename.po', output);
 ```
 
 ### Parse MO files
@@ -118,7 +118,7 @@ var data = {
     ...
 };
 var output = gettextParser.mo.compile(data);
-require('fs').writeFileSync(output);
+require('fs').writeFileSync('filename.mo', output);
 ```
 
 ### Notes
