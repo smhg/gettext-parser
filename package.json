@@ -25,12 +25,12 @@
   "dependencies": {
     "content-type": "^1.0.4",
     "encoding": "^0.1.13",
-    "readable-stream": "^3.6.0",
+    "readable-stream": "^4.1.0",
     "safe-buffer": "^5.2.1"
   },
   "devDependencies": {
     "chai": "^4.3.6",
-    "eslint": "^8.16.0",
+    "eslint": "^8.21.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
