@@ -1,12 +1,23 @@
-const { parse, stream } = require('./lib/poparser');
+const {
+  parse: poParse,
+  stream: poStream
+} = require('./lib/poparser');
+const poCompile = require('./lib/pocompiler');
+const moParse = require('./lib/moparser');
+const moCompile = require('./lib/mocompiler');
 
-module.exports.po = {
-  parse,
-  createParseStream: stream,
-  compile: require('./lib/pocompiler')
+const po = {
+  parse: poParse,
+  createParseStream: poStream,
+  compile: poCompile
 };
 
-module.exports.mo = {
-  parse: require('./lib/moparser'),
-  compile: require('./lib/mocompiler')
+const mo = {
+  parse: moParse,
+  compile: moCompile
+};
+
+module.exports = {
+  po,
+  mo
 };

@@ -1,18 +1,19 @@
-const chai = require('chai');
-const { promisify } = require('util');
-const path = require('path');
+const {
+  expect,
+  config
+} = require('chai');
+const { join } = require('path');
 const { mo: { compile } } = require('..');
-const readFile = promisify(require('fs').readFile);
+const { readFile } = require('fs').promises;
 
-const expect = chai.expect;
-chai.config.includeStack = true;
+config.includeStack = true;
 
 describe('MO Compiler', () => {
   describe('UTF-8', () => {
     it('should compile', async () => {
       const [json, mo] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/utf8.mo'))
+        readFile(join(__dirname, 'fixtures/utf8-po.json'), 'utf8'),
+        readFile(join(__dirname, 'fixtures/utf8.mo'))
       ]);
 
       const compiled = compile(JSON.parse(json));
@@ -24,8 +25,8 @@ describe('MO Compiler', () => {
   describe('Latin-13', () => {
     it('should compile', async () => {
       const [json, mo] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/latin13.mo'))
+        readFile(join(__dirname, 'fixtures/latin13-po.json'), 'utf8'),
+        readFile(join(__dirname, 'fixtures/latin13.mo'))
       ]);
 
       const compiled = compile(JSON.parse(json));

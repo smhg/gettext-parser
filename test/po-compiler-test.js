@@ -1,12 +1,13 @@
 const { EOL } = require('os');
-const { promisify } = require('util');
 const path = require('path');
-const readFile = promisify(require('fs').readFile);
-const chai = require('chai');
+const { readFile } = require('fs').promises;
+const {
+  config,
+  expect
+} = require('chai');
 const { po: { compile } } = require('..');
 
-const expect = chai.expect;
-chai.config.includeStack = true;
+config.includeStack = true;
 
 describe('PO Compiler', () => {
   describe('Headers', () => {
@@ -40,7 +41,7 @@ describe('PO Compiler', () => {
   describe('Latin-13', () => {
     it('should compile', async () => {
       const [json, po] = await Promise.all([
-      // gettext-parser can only handle utf8 input (output will be the specified charset)
+        // gettext-parser can only handle utf8 input (output will be the specified charset)
         readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'utf8'),
         readFile(path.join(__dirname, 'fixtures/latin13.po'), 'latin1')
       ]);

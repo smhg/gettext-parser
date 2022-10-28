@@ -1,43 +1,45 @@
 const { EOL } = require('os');
-const chai = require('chai');
-const { promisify } = require('util');
+const {
+  expect,
+  config
+} = require('chai');
 const path = require('path');
-const fs = require('fs');
-const gettextParser = require('..');
+const { readFile } = require('fs').promises;
+const {
+  po,
+  mo
+} = require('..');
 
-const readFile = promisify(fs.readFile);
-
-const expect = chai.expect;
-chai.config.includeStack = true;
+config.includeStack = true;
 
 describe('Obsolete', async () => {
-  const [po, mo, jsonString] = await Promise.all([
+  const [poFile, moFile, jsonString] = await Promise.all([
     readFile(path.join(__dirname, 'fixtures/obsolete.po')),
     readFile(path.join(__dirname, 'fixtures/obsolete.mo')),
     readFile(path.join(__dirname, 'fixtures/obsolete.json'), 'utf8')
   ]);
 
   const json = JSON.parse(jsonString);
-  const poString = po.toString('utf8');
-  const moString = mo.toString('utf8');
+  const poString = poFile.toString('utf8');
+  const moString = moFile.toString('utf8');
 
   describe('PO Parser', () => {
     it('should parse obsolete messages', async () => {
-      const parsed = gettextParser.po.parse(po);
+      const parsed = po.parse(poFile);
 
       expect(parsed).to.deep.equal(json);
     });
   });
   describe('PO Compiler', () => {
     it('should compile obsolete messages', async () => {
-      const compiled = gettextParser.po.compile(json, { eol: EOL }).toString('utf8');
+      const compiled = po.compile(json, { eol: EOL }).toString('utf8');
 
       expect(compiled).to.be.equal(poString);
     });
   });
   describe('MO Compiler', () => {
     it('should ignore obsolete messages', async () => {
-      const compiled = gettextParser.mo.compile(json).toString('utf8');
+      const compiled = mo.compile(json).toString('utf8');
 
       expect(compiled).to.be.equal(moString);
     });

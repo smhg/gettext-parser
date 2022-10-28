@@ -1,23 +1,26 @@
-const chai = require('chai');
-const { promisify } = require('util');
-const path = require('path');
-const fs = require('fs');
-const gettextParser = require('..');
+const {
+  expect,
+  config
+} = require('chai');
+const { join } = require('path');
+const {
+  createReadStream,
+  readFileSync
+} = require('fs');
+const { readFile } = require('fs').promises;
+const { po } = require('..');
 
-const readFile = promisify(fs.readFile);
-
-const expect = chai.expect;
-chai.config.includeStack = true;
+config.includeStack = true;
 
 describe('PO Parser', () => {
   describe('headers', () => {
     it('should detect charset in header', async () => {
-      const [po, json] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/headers-charset.po')),
-        readFile(path.join(__dirname, 'fixtures/headers-charset.json'), 'utf8')
+      const [poFile, json] = await Promise.all([
+        readFile(join(__dirname, 'fixtures/headers-charset.po')),
+        readFile(join(__dirname, 'fixtures/headers-charset.json'), 'utf8')
       ]);
 
-      const parsed = gettextParser.po.parse(po);
+      const parsed = po.parse(poFile);
 
       expect(parsed).to.deep.equal(JSON.parse(json));
     });
@@ -25,12 +28,12 @@ describe('PO Parser', () => {
 
   describe('UTF-8', () => {
     it('should parse', async () => {
-      const [po, json] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/utf8.po')),
-        readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8')
+      const [poFile, json] = await Promise.all([
+        readFile(join(__dirname, 'fixtures/utf8.po')),
+        readFile(join(__dirname, 'fixtures/utf8-po.json'), 'utf8')
       ]);
 
-      const parsed = gettextParser.po.parse(po);
+      const parsed = po.parse(poFile);
 
       expect(parsed).to.deep.equal(JSON.parse(json));
     });
@@ -38,12 +41,12 @@ describe('PO Parser', () => {
 
   describe('UTF-8 as a string', () => {
     it('should parse', async () => {
-      const [po, json] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/utf8.po'), 'utf8'),
-        readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8')
+      const [poFile, json] = await Promise.all([
+        readFile(join(__dirname, 'fixtures/utf8.po'), 'utf8'),
+        readFile(join(__dirname, 'fixtures/utf8-po.json'), 'utf8')
       ]);
 
-      const parsed = gettextParser.po.parse(po);
+      const parsed = po.parse(poFile);
 
       expect(parsed).to.deep.equal(JSON.parse(json));
     });
@@ -51,15 +54,15 @@ describe('PO Parser', () => {
 
   describe('Stream input', () => {
     it('should parse', done => {
-      const po = fs.createReadStream(path.join(__dirname, 'fixtures/utf8.po'), {
+      const poStream = createReadStream(join(__dirname, 'fixtures/utf8.po'), {
         highWaterMark: 1 // ensure that any utf-8 sequences will be broken when streaming
       });
 
-      const json = fs.readFileSync(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8');
+      const json = readFileSync(join(__dirname, 'fixtures/utf8-po.json'), 'utf8');
 
       let parsed;
 
-      const stream = po.pipe(gettextParser.po.createParseStream({
+      const stream = poStream.pipe(po.createParseStream({
         initialTreshold: 800 // home many bytes to cache for parsing the header
       }));
 
@@ -76,12 +79,12 @@ describe('PO Parser', () => {
 
   describe('Latin-13', () => {
     it('should parse', async () => {
-      const [po, json] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/latin13.po')),
-        readFile(path.join(__dirname, 'fixtures/latin13-po.json'), 'utf8')
+      const [poFile, json] = await Promise.all([
+        readFile(join(__dirname, 'fixtures/latin13.po')),
+        readFile(join(__dirname, 'fixtures/latin13-po.json'), 'utf8')
       ]);
 
-      const parsed = gettextParser.po.parse(po);
+      const parsed = po.parse(poFile);
 
       expect(parsed).to.deep.equal(JSON.parse(json));
     });
@@ -91,23 +94,23 @@ describe('PO Parser', () => {
     const invalidKeyError = /Error parsing PO data: Invalid key name/;
 
     it('should throw (unescaped quote)', async () => {
-      const po = await readFile(path.join(__dirname, 'fixtures/error-unescaped-quote.po'));
+      const poFile = await readFile(join(__dirname, 'fixtures/error-unescaped-quote.po'));
 
-      expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(invalidKeyError);
+      expect(po.parse.bind(null, poFile)).to.throw(invalidKeyError);
     });
 
     it('should throw (double-escaped quote)', async () => {
-      const po = await readFile(path.join(__dirname, 'fixtures/error-double-escaped-quote.po'));
+      const poFile = await readFile(join(__dirname, 'fixtures/error-double-escaped-quote.po'));
 
-      expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(invalidKeyError);
+      expect(po.parse.bind(null, poFile)).to.throw(invalidKeyError);
     });
 
     it('should throw (stream with unescaped quote)', done => {
-      const poStream = fs.createReadStream(path.join(__dirname, 'fixtures/error-unescaped-quote.po'), {
+      const poStream = createReadStream(join(__dirname, 'fixtures/error-unescaped-quote.po'), {
         highWaterMark: 1 // ensure that any utf-8 sequences will be broken when streaming
       });
 
-      const stream = poStream.pipe(gettextParser.po.createParseStream({
+      const stream = poStream.pipe(po.createParseStream({
         initialTreshold: 800 // home many bytes to cache for parsing the header
       }));
 
