@@ -37,7 +37,7 @@ describe('PO Parser', () => {
   describe('UTF-8', () => {
     it('should parse', async () => {
       const [po, json] = await Promise.all([
-        readFile(path.join(__dirname, 'fixtures/utf8.po'), 'utf8'),
+        readFile(path.join(__dirname, 'fixtures/utf8.po')),
         readFile(path.join(__dirname, 'fixtures/utf8-po.json'), 'utf8')
       ]);
 
@@ -98,7 +98,7 @@ describe('PO Parser', () => {
     });
   });
 
-  describe.only('parsing errors', () => {
+  describe('parsing errors', () => {
     const invalidKeyError = /Error parsing PO data: Invalid key name/;
 
     it('should throw (unescaped quote)', async () => {
@@ -158,7 +158,7 @@ describe('PO Parser', () => {
       expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(/Duplicate msgid error: entry "o1-1" in "c2"/);
     });
 
-    it.only('should throw (an entry with multiple "msgid_plural")', async () => {
+    it('should throw (an entry with multiple "msgid_plural")', async () => {
       const po = await readFile(path.join(__dirname, 'fixtures/validate-redundant-msgid-plural.po'));
 
       expect(gettextParser.po.parse.bind(gettextParser.po, po)).to.throw(/Multiple msgid_plural error: entry "o1-1"/);
