@@ -1,0 +1,8 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: project 1.0.2\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Mime-Version: 1.0\n"
+"X-Poedit-SourceCharset: UTF-8\n"
