@@ -14,6 +14,5 @@ module.exports = {
   },
   'rules': {
     'semi': ['error', 'always'],
-    'camelcase': 'off'
   }
 }
