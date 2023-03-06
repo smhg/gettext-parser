@@ -3,7 +3,7 @@
 const chai = require('chai');
 const { promisify } = require('util');
 const path = require('path');
-const { formatCharset, parseHeader, generateHeader, foldLine, parseNPluralFromHeadersSafely } = require('../lib/shared');
+const { formatCharset, parseHeader, generateHeader, foldLine, parseNPluralFromHeadersSafely, unshiftOptionalArgs } = require('../lib/shared');
 const readFile = promisify(require('fs').readFile);
 
 const expect = chai.expect;
@@ -192,6 +192,64 @@ X-Poedit-SourceCharset: UTF-8`;
       const nplurals = parseNPluralFromHeadersSafely(headers);
 
       expect(nplurals).to.equal(1);
+    });
+  });
+
+  describe('unshiftOptionalArgs', () => {
+    it('should redistribute optional argument list - all arguments are present', () => {
+      const types = ['number', 'boolean', 'string'];
+      const args = [0, false, 'foo'];
+      const actual = unshiftOptionalArgs(types, args);
+
+      expect(actual).to.deep.equal([...args]);
+    });
+
+    it('should redistribute optional argument list - all arguments are missing', () => {
+      const types = ['number', 'boolean', 'string'];
+      const args = [];
+      const actual = unshiftOptionalArgs(types, args);
+
+      expect(actual).to.deep.equal([undefined, undefined, undefined]);
+    });
+
+    it('should redistribute optional argument list - missing first argument', () => {
+      const types = ['number', 'boolean', 'string'];
+      const args = [false, 'foo'];
+      const actual = unshiftOptionalArgs(types, args);
+
+      expect(actual).to.deep.equal([undefined, false, 'foo']);
+    });
+
+    it('should redistribute optional argument list - missing last argument', () => {
+      const types = ['number', 'boolean', 'string'];
+      const args = [0, false];
+      const actual = unshiftOptionalArgs(types, args);
+
+      expect(actual).to.deep.equal([0, false, undefined]);
+    });
+
+    it('should redistribute optional argument list - missing intermediate argument', () => {
+      const types = ['number', 'boolean', 'string'];
+      const args = [0, 'foo'];
+      const actual = unshiftOptionalArgs(types, args);
+
+      expect(actual).to.deep.equal([0, undefined, 'foo']);
+    });
+
+    it('should redistribute optional argument list - two concequtive argments are of the same type, first argument is undefined', () => {
+      const types = ['boolean', 'boolean'];
+      const args = [undefined, false];
+      const actual = unshiftOptionalArgs(types, args);
+
+      expect(actual).to.deep.equal([undefined, false]);
+    });
+
+    it('should redistribute optional argument list - two concequtive argments are of the same type, second argument is undefined', () => {
+      const types = ['boolean', 'boolean'];
+      const args = [false];
+      const actual = unshiftOptionalArgs(types, args);
+
+      expect(actual).to.deep.equal([false, undefined]);
     });
   });
 });
