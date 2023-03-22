@@ -3,7 +3,6 @@ const { promisify } = require('util');
 const path = require('path');
 const fs = require('fs');
 const gettextParser = require('..');
-const { normalizeParseArgs, normalizeStreamArgs } = require('../lib/poparser');
 
 const readFile = promisify(fs.readFile);
 
@@ -11,76 +10,6 @@ const expect = chai.expect;
 chai.config.includeStack = true;
 
 describe('PO Parser', () => {
-  describe('normalizeParseArgs', () => {
-    [
-      {
-        input: ['foo'],
-        expected: { buffer: 'foo', defaultCharset: undefined, validation: undefined }
-      },
-      {
-        input: ['foo', 'bar'],
-        expected: { buffer: 'foo', defaultCharset: 'bar' }
-      },
-      {
-        input: ['foo', { defaultCharset: 'bar' }],
-        expected: { buffer: 'foo', defaultCharset: 'bar', validation: undefined }
-      },
-      {
-        input: ['foo', { validation: true }],
-        expected: { buffer: 'foo', defaultCharset: undefined, validation: true }
-      },
-      {
-        input: ['foo', { defaultCharset: 'bar', validation: true }],
-        expected: { buffer: 'foo', defaultCharset: 'bar', validation: true }
-      }
-    ].forEach(({ input, expected }) => {
-      it(`should return normalized arguments for argument list of ${JSON.stringify(input)}`, () => {
-        expect(normalizeParseArgs(...input)).to.deep.equal(expected);
-      });
-    });
-  });
-
-  describe('normalizeStreamArgs', () => {
-    [
-      {
-        input: [],
-        expected: { transformOptions: {} }
-      },
-      {
-        input: ['foo'],
-        expected: { defaultCharset: 'foo', transformOptions: {} }
-      },
-      {
-        input: ['foo', { initialTreshold: 123 }],
-        expected: { defaultCharset: 'foo', transformOptions: { initialTreshold: 123 } }
-      },
-      {
-        input: [{ initialTreshold: 123 }],
-        expected: { transformOptions: { initialTreshold: 123 } }
-      },
-      {
-        input: [{ validation: true }],
-        expected: { defaultCharset: undefined, validation: true, transformOptions: {} }
-      },
-      {
-        input: [{ defaultCharset: 'foo' }],
-        expected: { defaultCharset: 'foo', validation: undefined, transformOptions: {} }
-      },
-      {
-        input: [{ defaultCharset: 'foo', validation: true }],
-        expected: { defaultCharset: 'foo', validation: true, transformOptions: {} }
-      },
-      {
-        input: [{ defaultCharset: 'foo', validation: true }, { initialTreshold: 123 }],
-        expected: { defaultCharset: 'foo', validation: true, transformOptions: { initialTreshold: 123 } }
-      }
-    ].forEach(({ input, expected }) => {
-      it(`should return normalized arguments for argument list of ${JSON.stringify(input)}`, () => {
-        expect(normalizeStreamArgs(...input)).to.deep.equal(expected);
-      });
-    });
-  });
-
   describe('headers', () => {
     it('should detect charset in header', async () => {
       const [po, json] = await Promise.all([
