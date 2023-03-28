@@ -11,23 +11,23 @@ Include the library:
 
     var gettextParser = require("gettext-parser");
 
-
 ### Parse PO files
 
 Parse a PO file with
 
-    gettextParser.po.parse(input[, defaultCharset][, validation]) → Object
+    gettextParser.po.parse(input[, options]) → Object
 
 Where
 
   * **input** is a *po* file as a Buffer or an unicode string. Charset is converted to unicode from other encodings only if the input is a Buffer, otherwise the charset information is discarded
-  * **defaultCharset** is the charset to use if charset is not defined or is the default `"CHARSET"` (applies only if *input* is a Buffer)
-  * **validation** is a flag to turn on PO source file validation. The validation makes sure that:
+  * **options** is an optional objects with the following optinal properties:
+    * **defaultCharset** is the charset to use if charset is not defined or is the default `"CHARSET"` (applies only if *input* is a Buffer)
+    * **validation** is a flag to turn on PO source file validation. The validation makes sure that:
 
-    * there is exactly zero or one `msgid_plural` definition per translation entry; a `Multiple msgid_plural error` error gets thrown otherwise.
-    * there are no duplicate entries with exact `msgid` values; a `Duplicate msgid error` error gets thrown otherwise.
-    * the number of plural forms matches exactly the number from `nplurals` defined in `Plural-Forms` header for entries that have plural forms; a `Plural forms range error` error gets thrown otherwise.
-    * the number of `msgstr` matches exacty the one (if `msgid_plural` is not defined) or the number from `nplurals` (if `msgid_plural` is defined); a `Translation string range error` error gets thrown otherwise.
+      * there is exactly zero or one `msgid_plural` definition per translation entry; a `Multiple msgid_plural error` error gets thrown otherwise.
+      * there are no duplicate entries with exact `msgid` values; a `Duplicate msgid error` error gets thrown otherwise.
+      * the number of plural forms matches exactly the number from `nplurals` defined in `Plural-Forms` header for entries that have plural forms; a `Plural forms range error` error gets thrown otherwise.
+      * the number of `msgstr` matches exacty the one (if `msgid_plural` is not defined) or the number from `nplurals` (if `msgid_plural` is defined); a `Translation string range error` error gets thrown otherwise.
 
 Method returns gettext-parser specific translation object (see below)
 
@@ -43,13 +43,12 @@ console.log(po.translations['']); // output translations for the default context
 
 PO files can also be parsed from a stream source. After all input is processed the parser emits a single 'data' event which contains the parsed translation object.
 
-    gettextParser.po.createParseStream([defaultCharset][, streamOptions][, validation]) → Transform Stream
+    gettextParser.po.createParseStream([options][, transformOptions]) → Transform Stream
 
 Where
 
-  * **defaultCharset** is the charset to use if charset is not defined or is the default `"CHARSET"`
-  * **streamOptions** are the standard stream options
-  * **validation** is a flag to turn on PO source file validation. See [Parse PO files](#parse-po-files) section for details
+  * **options** is an optional objects, same as in `parse`. See [Parse PO files](#parse-po-files) section for details.
+  * **transformOptions** are the standard stream options.
 
 **Example**
 
