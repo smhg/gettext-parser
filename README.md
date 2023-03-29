@@ -20,7 +20,7 @@ Parse a PO file with
 Where
 
   * **input** is a *po* file as a Buffer or an unicode string. Charset is converted to unicode from other encodings only if the input is a Buffer, otherwise the charset information is discarded
-  * **options** is an optional object with the following optinal properties:
+  * **options** is an optional object with the following optional properties:
     * **defaultCharset** is the charset to use if charset is not defined or is the default `"CHARSET"` (applies only if *input* is a Buffer)
     * **validation** is a flag to turn on PO source file validation. The validation makes sure that:
 
