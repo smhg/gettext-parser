@@ -1,0 +1,21 @@
+{
+    "charset": "utf-8",
+    "headers": {
+        "Project-Id-Version": "project 1.0.2",
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Transfer-Encoding": "8bit",
+        "Plural-Forms": "nplurals=2; plural=(n!=1);",
+        "Mime-Version": "1.0",
+        "X-Poedit-SourceCharset": "UTF-8"
+    },
+    "translations": {
+        "": {
+            "": {
+                "msgid": "",
+                "msgstr": [
+                    "Project-Id-Version: project 1.0.2\nContent-Type: text/plain; charset=utf-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n!=1);\nMime-Version: 1.0\nX-Poedit-SourceCharset: UTF-8\n"
+                ]
+            }
+        }
+    }
+}

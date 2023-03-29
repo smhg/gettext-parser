@@ -3,7 +3,7 @@
 const chai = require('chai');
 const { promisify } = require('util');
 const path = require('path');
-const { formatCharset, parseHeader, generateHeader, foldLine } = require('../lib/shared');
+const { formatCharset, parseHeader, generateHeader, foldLine, parseNPluralFromHeadersSafely } = require('../lib/shared');
 const readFile = promisify(require('fs').readFile);
 
 const expect = chai.expect;
@@ -142,6 +142,56 @@ X-Poedit-SourceCharset: UTF-8`;
       expect(line).to.equal(folded.join(''));
       expect(folded).to.deep.equal(['--abc', 'defgh', 'i']);
       expect(folded.length).to.equal(3);
+    });
+  });
+
+  describe('parseNPluralFromHeadersSafely', () => {
+    it('should return parsed value', () => {
+      const headers = { 'Plural-Forms': 'nplurals=10; plural=n' };
+      const nplurals = parseNPluralFromHeadersSafely(headers);
+
+      expect(nplurals).to.equal(10);
+    });
+
+    it('should return parsed value (missing plural declaration)', () => {
+      const headers = { 'Plural-Forms': 'nplurals=10' };
+      const nplurals = parseNPluralFromHeadersSafely(headers);
+
+      expect(nplurals).to.equal(10);
+    });
+
+    it('should return fallback value ("Plural-Forms" header is absent)', () => {
+      const nplurals = parseNPluralFromHeadersSafely();
+
+      expect(nplurals).to.equal(1);
+    });
+
+    it('should return fallback value (nplurals is not declared)', () => {
+      const headers = { 'Plural-Forms': '; plural=n' };
+      const nplurals = parseNPluralFromHeadersSafely(headers);
+
+      expect(nplurals).to.equal(1);
+    });
+
+    it('should return fallback value (nplurals is set to zero)', () => {
+      const headers = { 'Plural-Forms': 'nplurals=0' };
+      const nplurals = parseNPluralFromHeadersSafely(headers);
+
+      expect(nplurals).to.equal(1);
+    });
+
+    it('should return fallback value (nplurals is set to negative value)', () => {
+      const headers = { 'Plural-Forms': 'nplurals=-99' };
+      const nplurals = parseNPluralFromHeadersSafely(headers);
+
+      expect(nplurals).to.equal(1);
+    });
+
+    it('should return fallback value (failed to parse nplurals value)', () => {
+      const headers = { 'Plural-Forms': 'nplurals=foo' };
+      const nplurals = parseNPluralFromHeadersSafely(headers);
+
+      expect(nplurals).to.equal(1);
     });
   });
 });
