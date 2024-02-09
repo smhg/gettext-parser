@@ -24,7 +24,7 @@
     "preversion": "npm run lint && npm test",
     "postversion": "git push && git push --tags"
   },
-  "main": "./index",
+  "main": "./index.js",
   "license": "MIT",
   "dependencies": {
     "content-type": "^1.0.5",
