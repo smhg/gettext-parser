@@ -13,6 +13,7 @@
     "type": "git",
     "url": "http://github.com/smhg/gettext-parser.git"
   },
+  "type": "module",
   "engines": {
     "node": ">=18"
   },

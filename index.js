@@ -1,12 +1,15 @@
-const { parse, stream } = require('./lib/poparser');
+import * as poParser from './lib/poparser.js';
+import poCompiler from './lib/pocompiler.js';
+import moParser from './lib/moparser.js';
+import moCompiler from './lib/mocompiler.js';
 
-module.exports.po = {
-  parse,
-  createParseStream: stream,
-  compile: require('./lib/pocompiler')
+export const po = {
+  parse: poParser.parse,
+  createParseStream: poParser.stream,
+  compile: poCompiler
 };
 
-module.exports.mo = {
-  parse: require('./lib/moparser'),
-  compile: require('./lib/mocompiler')
+export const mo = {
+  parse: moParser,
+  compile: moCompiler
 };

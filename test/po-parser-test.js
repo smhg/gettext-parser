@@ -1,8 +1,12 @@
-const chai = require('chai');
-const { promisify } = require('util');
-const path = require('path');
-const fs = require('fs');
-const gettextParser = require('..');
+import chai from 'chai';
+import { promisify } from 'util';
+import path from 'path';
+import fs from 'fs';
+import * as gettextParser from '../index.js';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const readFile = promisify(fs.readFile);
 

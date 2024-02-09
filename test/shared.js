@@ -1,10 +1,16 @@
 'use strict';
 
-const chai = require('chai');
-const { promisify } = require('util');
-const path = require('path');
-const { formatCharset, parseHeader, generateHeader, foldLine, parseNPluralFromHeadersSafely } = require('../lib/shared');
-const readFile = promisify(require('fs').readFile);
+import chai from 'chai';
+import { promisify } from 'util';
+import path from 'path';
+import { formatCharset, parseHeader, generateHeader, foldLine, parseNPluralFromHeadersSafely } from '../lib/shared.js';
+import { readFile as fsReadFile } from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const readFile = promisify(fsReadFile);
 
 const expect = chai.expect;
 chai.config.includeStack = true;
