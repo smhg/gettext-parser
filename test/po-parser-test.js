@@ -1,4 +1,4 @@
-import chai from 'chai';
+import * as chai from 'chai';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs';
