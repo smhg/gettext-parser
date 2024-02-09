@@ -13,3 +13,5 @@ export const mo = {
   parse: moParser,
   compile: moCompiler
 };
+
+export default { mo, po };
