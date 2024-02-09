@@ -13,6 +13,9 @@
     "type": "git",
     "url": "http://github.com/smhg/gettext-parser.git"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "lint": "eslint lib/*.js test/*.js index.js",
     "test-generate-mo": "msgfmt test/fixtures/latin13.po -o test/fixtures/latin13.mo & msgfmt test/fixtures/utf8.po -o test/fixtures/utf8.mo & msgfmt test/fixtures/obsolete.po -o test/fixtures/obsolete.mo",
