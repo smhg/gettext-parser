@@ -1,18 +1,27 @@
 module.exports = {
-  'env': {
-    'commonjs': true,
-    'es6': true,
-    'node': true
+  env: {
+    browser: true,
+    commonjs: true,
+    es2021: true
   },
-  'extends': 'standard',
-  'globals': {
-    'Atomics': 'readonly',
-    'SharedArrayBuffer': 'readonly'
+  extends: 'standard',
+  overrides: [
+    {
+      env: {
+        node: true
+      },
+      files: [
+        '.eslintrc.{js,cjs}'
+      ],
+      parserOptions: {
+        sourceType: 'script'
+      }
+    }
+  ],
+  parserOptions: {
+    ecmaVersion: 'latest'
   },
-  'parserOptions': {
-    'ecmaVersion': 2018
-  },
-  'rules': {
-    'semi': ['error', 'always'],
+  rules: {
+    semi: ['error', 'always']
   }
-}
+};
