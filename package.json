@@ -17,29 +17,45 @@
   "engines": {
     "node": ">=18"
   },
+  "files": [
+    "lib",
+    "test",
+    "*.json",
+    "*.md",
+    "license.txt"
+  ],
   "scripts": {
-    "lint": "eslint lib/*.js test/*.js index.js",
+    "start": "tsc --watch",
+    "build": "tsc --build --clean ./index.ts",
+    "lint": "eslint src/*.js test/*.js",
     "test-generate-mo": "msgfmt test/fixtures/latin13.po -o test/fixtures/latin13.mo & msgfmt test/fixtures/utf8.po -o test/fixtures/utf8.mo & msgfmt test/fixtures/obsolete.po -o test/fixtures/obsolete.mo",
     "test": "mocha",
     "preversion": "npm run lint && npm test",
     "postversion": "git push && git push --tags"
   },
-  "main": "./index.js",
+  "main": "./lib/index.js",
   "license": "MIT",
   "dependencies": {
+    "@types/gettext-parser": "^4.0.4",
     "content-type": "^1.0.5",
     "encoding": "^0.1.13",
     "readable-stream": "^4.5.2",
     "safe-buffer": "^5.2.1"
   },
   "devDependencies": {
-    "chai": "^5.0.3",
+    "@types/chai": "latest",
+    "@types/content-type": "^1.1.8",
+    "@types/mocha": "latest",
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/parser": "^6.14.0",
+    "chai": "^5.1.0",
     "eslint": "^8.56.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
-    "mocha": "^10.3.0"
+    "mocha": "^10.4.0",
+    "typescript": "^5.4.4"
   },
   "keywords": [
     "i18n",
