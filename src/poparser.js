@@ -1,5 +1,5 @@
 import encoding from 'encoding';
-import { formatCharset, parseNPluralFromHeadersSafely, parseHeader } from './shared.js';
+import { formatCharset, parseHeader, parseNPluralFromHeadersSafely } from './shared.js';
 import { Transform } from 'readable-stream';
 import util from 'util';
 
@@ -14,18 +14,18 @@ export function parse (input, options = {}) {
   const parser = new Parser(input, options);
 
   return parser.parse();
-};
+}
 
 /**
  * Parses a PO stream, emits translation table in object mode
  *
- * @typedef {{ defaultCharset: strubg, validation: boolean }} Options
+ * @typedef {{ defaultCharset: string, validation: boolean }} Options
  * @param {Options} [options] Optional options with defaultCharset and validation
  * @param {import('readable-stream').TransformOptions} [transformOptions] Optional stream options
  */
 export function stream (options = {}, transformOptions = {}) {
   return new PoParserTransform(options, transformOptions);
-};
+}
 
 /**
  * Creates a PO parser object. If PO object is a string,
@@ -68,7 +68,7 @@ Parser.prototype.parse = function () {
 /**
  * Detects charset for PO strings from the header
  *
- * @param {Buffer} headers Header value
+ * @param buf PO string buffer to be parsed
  */
 Parser.prototype._handleCharset = function (buf = '') {
   const str = buf.toString();
@@ -77,8 +77,8 @@ Parser.prototype._handleCharset = function (buf = '') {
   let match;
 
   if ((pos = str.search(/^\s*msgid/im)) >= 0) {
-    pos = pos + str.substr(pos + 5).search(/^\s*(msgid|msgctxt)/im);
-    headers = str.substr(0, pos >= 0 ? pos + 5 : str.length);
+    pos = pos + str.substring(pos + 5).search(/^\s*(msgid|msgctxt)/im);
+    headers = str.substring(0, pos >= 0 ? pos + 5 : str.length);
   }
 
   if ((match = headers.match(/[; ]charset\s*=\s*([\w-]+)(?:[\s;]|\\n)*"\s*$/mi))) {
@@ -515,7 +515,7 @@ Parser.prototype._finalize = function (tokens) {
 /**
  * Creates a transform stream for parsing PO input
  *
- * @typedef {{ defaultCharset: strubg, validation: boolean }} Options
+ * @typedef {{ defaultCharset: string, validation: boolean }} Options
  * @constructor
  * @param {Options} options Optional options with defaultCharset and validation
  * @param {import('readable-stream').TransformOptions} transformOptions Optional stream options
@@ -533,6 +533,8 @@ function PoParserTransform (options, transformOptions) {
   Transform.call(this, transformOptions);
   this._writableState.objectMode = false;
   this._readableState.objectMode = true;
+
+  return this;
 }
 util.inherits(PoParserTransform, Transform);
 

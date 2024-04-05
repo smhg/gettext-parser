@@ -1,5 +1,7 @@
 // see https://www.gnu.org/software/gettext/manual/html_node/Header-Entry.html
+
 const PLURAL_FORMS = 'Plural-Forms';
+
 export const HEADERS = new Map([
   ['project-id-version', 'Project-Id-Version'],
   ['report-msgid-bugs-to', 'Report-Msgid-Bugs-To'],
@@ -43,10 +45,11 @@ export function parseHeader (str = '') {
  * Attempts to safely parse 'nplurals" value from "Plural-Forms" header
  *
  * @param {Object} [headers = {}] An object with parsed headers
+ * @param fallback {Number} Fallback value
  * @returns {number} Parsed result
  */
-export function parseNPluralFromHeadersSafely (headers = {}, fallback = 1) {
-  const pluralForms = headers[PLURAL_FORMS];
+export function parseNPluralFromHeadersSafely (headers, fallback = 1) {
+  const pluralForms = headers ? headers[PLURAL_FORMS] : false;
 
   if (!pluralForms) {
     return fallback;
@@ -83,6 +86,7 @@ export function generateHeader (header = {}) {
  * Normalizes charset name. Converts utf8 to utf-8, WIN1257 to windows-1257 etc.
  *
  * @param {String} charset Charset name
+ * @param defaultCharset Default charset (default: 'iso-8859-1')
  * @return {String} Normalized charset name
  */
 export function formatCharset (charset = 'iso-8859-1', defaultCharset = 'iso-8859-1') {
@@ -101,7 +105,7 @@ export function formatCharset (charset = 'iso-8859-1', defaultCharset = 'iso-885
  *
  * @param {String} str PO formatted string to be folded
  * @param {Number} [maxLen=76] Maximum allowed length for folded lines
- * @return {Array} An array of lines
+ * @return {string[]} An array of lines
  */
 export function foldLine (str, maxLen = 76) {
   const lines = [];

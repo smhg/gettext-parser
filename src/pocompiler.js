@@ -1,20 +1,20 @@
-import { Buffer } from 'safe-buffer';
-import encoding from 'encoding';
-import { HEADERS, foldLine, compareMsgid, formatCharset, generateHeader } from './shared.js';
+import { compareMsgid, foldLine, formatCharset, generateHeader, HEADERS } from './shared.js';
 import contentType from 'content-type';
+import encoding from 'encoding';
 
 /**
  * Exposes general compiler function. Takes a translation
  * object as a parameter and returns PO object
  *
  * @param {Object} table Translation object
+ * @param options
  * @return {Buffer} Compiled PO object
  */
 export default function (table, options) {
   const compiler = new Compiler(table, options);
 
   return compiler.compile();
-};
+}
 
 /**
  * Creates a PO compiler object.
@@ -72,7 +72,7 @@ function Compiler (table = {}, options = {}) {
  * @param {Object} comments A comments object
  * @return {String} A comment string for the PO file
  */
-Compiler.prototype._drawComments = function (comments) {
+Compiler.prototype._drawComments = function (comments){
   const lines = [];
   const types = [{
     key: 'translator',

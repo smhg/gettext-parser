@@ -1,28 +1,29 @@
 import { Buffer } from 'safe-buffer';
 import encoding from 'encoding';
-import { HEADERS, formatCharset, generateHeader, compareMsgid } from './shared.js';
+import { compareMsgid, formatCharset, generateHeader, HEADERS } from './shared.js';
 import contentType from 'content-type';
 
 /**
  * Exposes general compiler function. Takes a translation
  * object as a parameter and returns binary MO object
  *
- * @param {Object} table Translation object
+ * @param {import('./index.js').gettextTranslations} table Translation object
  * @return {Buffer} Compiled binary MO object
  */
 export default function (table) {
   const compiler = new Compiler(table);
 
   return compiler.compile();
-};
+}
 
 /**
  * Creates a MO compiler object.
  *
  * @constructor
- * @param {Object} table Translation table as defined in the README
+ * @param {import('./index.js').gettextTranslations} table Translation table as defined in the README
+ * @return {import('./index.js').Compiler} Compiler
  */
-function Compiler (table = {}) {
+function Compiler (table ) {
   this._table = table;
 
   let { headers = {}, translations = {} } = this._table;
@@ -70,6 +71,8 @@ function Compiler (table = {}) {
   this._writeFunc = 'writeUInt32LE';
 
   this._handleCharset();
+
+  return this;
 }
 
 /**
@@ -148,7 +151,7 @@ Compiler.prototype._generateList = function () {
 /**
  * Calculate buffer size for the final binary object
  *
- * @param {Array} list An array of translation strings from _generateList
+ * @param {import('./index.js').GettextTranslations} list An array of translation strings from _generateList
  * @return {Object} Size data of {msgid, msgstr, total}
  */
 Compiler.prototype._calculateSize = function (list) {
@@ -183,7 +186,7 @@ Compiler.prototype._calculateSize = function (list) {
 /**
  * Generates the binary MO object from the translation list
  *
- * @param {Array} list translation list
+ * @param {import('./index.js').GettextTranslations} list translation list
  * @param {Object} size Byte size information
  * @return {Buffer} Compiled MO object
  */
@@ -237,7 +240,7 @@ Compiler.prototype._build = function (list, size) {
 };
 
 /**
- * Compiles translation object into a binary MO object
+ * Compiles the translation object into a binary MO object
  *
  * @return {Buffer} Compiled MO object
  */
