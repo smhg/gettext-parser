@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "noImplicitAny": true,
-    "removeComments": true,
+    "removeComments": false,
     "module": "ESNext",
     "moduleResolution": "Node",
     "target": "ES2021",

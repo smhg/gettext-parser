@@ -26,7 +26,7 @@
   ],
   "scripts": {
     "start": "tsc --watch",
-    "build": "tsc --build --clean ./index.ts",
+    "build": "tsc",
     "lint": "eslint src/*.js test/*.js",
     "test-generate-mo": "msgfmt test/fixtures/latin13.po -o test/fixtures/latin13.mo & msgfmt test/fixtures/utf8.po -o test/fixtures/utf8.mo & msgfmt test/fixtures/obsolete.po -o test/fixtures/obsolete.mo",
     "test": "mocha",
@@ -34,9 +34,9 @@
     "postversion": "git push && git push --tags"
   },
   "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "license": "MIT",
   "dependencies": {
-    "@types/gettext-parser": "^4.0.4",
     "content-type": "^1.0.5",
     "encoding": "^0.1.13",
     "readable-stream": "^4.5.2",
