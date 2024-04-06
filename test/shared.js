@@ -3,7 +3,7 @@
 import * as chai from 'chai';
 import { promisify } from 'util';
 import path from 'path';
-import { formatCharset, parseHeader, generateHeader, foldLine, parseNPluralFromHeadersSafely } from '../lib/shared.js';
+import { formatCharset, parseHeader, generateHeader, foldLine, parseNPluralFromHeadersSafely } from '../src/shared.js';
 import { readFile as fsReadFile } from 'fs';
 import { fileURLToPath } from 'url';
 
