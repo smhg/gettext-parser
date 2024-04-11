@@ -1,8 +1,9 @@
 import { Transform } from "readable-stream";
+
 import {Buffer} from "safe-buffer";
 
 export declare module 'encoding' {
-    export function convert(buf: Buffer, charset: string): Buffer;
+    export function convert(buf: Buffer, toCharset: string, fromCharset: string): Buffer;
 }
 
 export interface Compiler {
@@ -37,13 +38,13 @@ export interface parserOptions {
     validation?: boolean;
 }
 
-export interface PoParser {
+export interface po {
     parse: (buffer: Buffer | string, defaultCharset?: string) => GetTextTranslations;
     compile: (table: GetTextTranslations, options?: parserOptions) => Buffer;
     createParseStream: (options?: parserOptions, transformOptions?: import('readable-stream').TransformOptions) => Transform;
 }
 
-export interface MoParser {
+export interface mo {
     parse: (buffer: Buffer | string, defaultCharset?: string) => GetTextTranslations;
     compile: (table: GetTextTranslations, options?: parserOptions) => Buffer;
 }

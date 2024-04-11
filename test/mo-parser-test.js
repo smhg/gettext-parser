@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import { promisify } from 'util';
 import path from 'path';
-import { mo } from '../src/index.js';
+import { mo } from '../index.js';
 import { readFile as fsReadFile } from 'fs';
 import { fileURLToPath } from 'url';
 

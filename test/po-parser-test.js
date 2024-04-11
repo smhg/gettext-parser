@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs';
-import * as gettextParser from '../src/index.js';
+import * as gettextParser from '../index.js';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
