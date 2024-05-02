@@ -48,7 +48,7 @@
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
     "mocha": "^10.3.0",
-    "typescript": "^5.4.4"
+    "typescript": "^5.4.5"
   },
   "keywords": [
     "i18n",

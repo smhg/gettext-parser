@@ -3,7 +3,7 @@ import { promisify } from 'util';
 import path from 'path';
 import { readFile as fsReadFile } from 'fs';
 import * as chai from 'chai';
-import { po } from '../index.js';
+import { po } from '../lib/index.js';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);

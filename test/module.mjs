@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { po, mo } from '../index.js';
+import { po, mo } from '../lib/index.js';
 
 describe('esm module', () => {
   it('should allow named imports', () => {
