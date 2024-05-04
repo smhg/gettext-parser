@@ -1,9 +1,9 @@
+import { promisify } from 'node:util';
+import path from 'node:path';
+import { readFile as fsReadFile } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import * as chai from 'chai';
-import { promisify } from 'util';
-import path from 'path';
-import { mo } from '../lib/index.js';
-import { readFile as fsReadFile } from 'fs';
-import { fileURLToPath } from 'url';
+import { mo } from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

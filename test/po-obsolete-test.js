@@ -1,10 +1,10 @@
-import { EOL } from 'os';
+import { EOL } from 'node:os';
+import path from 'node:path';
+import fs from 'node:fs';
+import { promisify } from 'node:util';
 import * as chai from 'chai';
-import { promisify } from 'util';
-import path from 'path';
-import fs from 'fs';
-import * as gettextParser from '../lib/index.js';
-import { fileURLToPath } from 'url';
+import * as gettextParser from '../src/index.js';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
