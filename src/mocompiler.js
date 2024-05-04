@@ -1,4 +1,3 @@
-import { Buffer } from 'safe-buffer';
 import encoding from 'encoding';
 import { HEADERS, formatCharset, generateHeader, compareMsgid } from './shared.js';
 import contentType from 'content-type';
