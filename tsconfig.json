@@ -15,22 +15,23 @@
     // Check js files for errors
     "checkJs": false,
 
+    // the directory sources are in
+    "rootDir": "src",
+
     // Output d.ts files to @types
-    "outDir": "@types",
+    "outDir": "lib",
 
     // Generate d.ts files
     "declaration": true,
 
-    // This compiler run should
-    // only output d.ts files
-    "emitDeclarationOnly": true,
     // Minify
     "pretty": false,
+
     // Skip lib check when compiling
     "skipLibCheck": true
   },
   "include": [
-    "lib/**/*.js",
+    "src/**/*.js",
     "index.d.ts"
   ]
 }

@@ -1,9 +1,9 @@
 import * as chai from 'chai';
-import { promisify } from 'util';
-import path from 'path';
-import fs from 'fs';
-import * as gettextParser from '../index.js';
-import { fileURLToPath } from 'url';
+import { promisify } from 'node:util';
+import path from 'node:path';
+import fs from 'node:fs';
+import * as gettextParser from '../src/index.js';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

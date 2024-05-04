@@ -1,7 +1,7 @@
-import * as poParser from './lib/poparser.js';
-import poCompiler from './lib/pocompiler.js';
-import moParser from './lib/moparser.js';
-import moCompiler from './lib/mocompiler.js';
+import * as poParser from './poparser.js';
+import poCompiler from './pocompiler.js';
+import moParser from './moparser.js';
+import moCompiler from './mocompiler.js';
 
 /**
  * Translation parser and compiler for PO files
