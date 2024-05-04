@@ -5,11 +5,16 @@ Parse and compile gettext *po* and *mo* files with node.js, nothing more, nothin
 
 > *Please note:* starting with version 3 only latest LTS and latest stable node versions are supported. **Use version 2 with older node versions.**
 
+## Installation
+To install the library, run the following command:
+
+    npm install gettext-parser --save
+
 ## Usage
 
 Include the library:
 
-    var gettextParser = require("gettext-parser");
+    import gettextParser from "gettext-parser";
 
 ### Parse PO files
 
@@ -34,9 +39,15 @@ Method returns gettext-parser specific translation object (see below)
 **Example**
 
 ```javascript
-var input = require('fs').readFileSync('en.po');
-var po = gettextParser.po.parse(input);
-console.log(po.translations['']); // output translations for the default context
+import fs from "node:fs";
+import gettextParser from "gettext-parser";
+
+const input = await fs
+  .readFile("en.po")
+  // read the PO file
+  .then((buf) => gettextParser.po.parse(buf))
+  // output translations for the default context
+  .then((translations) => console.log(translations));
 ```
 
 ### Parse PO as a Stream
@@ -53,10 +64,13 @@ Where
 **Example**
 
 ```javascript
-var input = require('fs').createReadStream('en.po');
-var po = gettextParser.po.createParseStream();
-input.pipe(po);
-po.on('data', function(data){
+import fs from "node:fs";
+import gettextParser from "../index.js";
+
+const input = fs.createReadStream("en.po");
+const stream = input.pipe(gettextParser.po.createParseStream());
+
+stream.on('data', function(data){
     console.log(data.translations['']); // output translations for the default context
 });
 ```
@@ -83,7 +97,7 @@ var data = {
     ...
 };
 var output = gettextParser.po.compile(data);
-require('fs').writeFileSync('filename.po', output);
+fs.writeFileSync('filename.po', output);
 ```
 
 ### 
@@ -104,7 +118,7 @@ Method returns gettext-parser specific translation object (see below)
 **Example**
 
 ```javascript
-var input = require('fs').readFileSync('en.mo');
+var input = fs.readFileSync('en.mo');
 var mo = gettextParser.mo.parse(input);
 console.log(mo.translations['']); // output translations for the default context
 ```
@@ -126,7 +140,7 @@ var data = {
     ...
 };
 var output = gettextParser.mo.compile(data);
-require('fs').writeFileSync('filename.mo', output);
+fs.writeFileSync('filename.mo', output);
 ```
 
 ### Notes
