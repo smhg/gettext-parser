@@ -8,7 +8,7 @@ Parse and compile gettext *po* and *mo* files with node.js, nothing more, nothin
 ## Installation
 To install the library, run the following command:
 
-    npm install gettext-parser --save-dev
+    npm install gettext-parser --save
 
 ## Usage
 
