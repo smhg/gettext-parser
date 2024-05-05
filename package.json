@@ -31,8 +31,7 @@
   "dependencies": {
     "content-type": "^1.0.5",
     "encoding": "^0.1.13",
-    "readable-stream": "^4.5.2",
-    "safe-buffer": "^5.2.1"
+    "readable-stream": "^4.5.2"
   },
   "devDependencies": {
     "@types/chai": "latest",

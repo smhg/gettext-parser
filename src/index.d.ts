@@ -1,7 +1,5 @@
 import { Transform } from "readable-stream";
 
-import {Buffer} from "safe-buffer";
-
 export declare module 'encoding' {
     export function convert(buf: Buffer, toCharset: string, fromCharset: string): Buffer;
 }
