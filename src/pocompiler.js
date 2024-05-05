@@ -6,8 +6,9 @@ import contentType from 'content-type';
  * Exposes general compiler function. Takes a translation
  * object as a parameter and returns PO object
  *
- * @param {Object} table Translation object
- * @return {Buffer} Compiled PO object
+ * @param {import( './types.d.ts').GettextTranslations} table Translation object
+ * @param {import( './types.d.ts').parserOptions|{}} [options] Options
+ * @return {Buffer} The compiled PO object
  */
 export default function (table, options) {
   const compiler = new Compiler(table, options);
@@ -19,7 +20,8 @@ export default function (table, options) {
  * Creates a PO compiler object.
  *
  * @constructor
- * @param {Object} table Translation table to be compiled
+ * @param {import( './types.d.ts').GetTextTranslations|{}} table Translation table to be compiled
+ * @param {import( './types.d.ts').parserOptions|{}} [options] Options
  */
 function Compiler (table = {}, options = {}) {
   this._table = table;
@@ -65,10 +67,10 @@ function Compiler (table = {}, options = {}) {
 }
 
 /**
- * Converts a comments object to a comment string. The comment object is
- * in the form of {translator:'', reference: '', extracted: '', flag: '', previous:''}
+ * Converts a comment object to a comment string. The comment object is
+ * in the form of {translator: '', reference: '', extracted: '', flag: '', previous: ''}
  *
- * @param {Object} comments A comments object
+ * @param {import(types.d.ts).GetTextComment} comments A comments object
  * @return {String} A comment string for the PO file
  */
 Compiler.prototype._drawComments = function (comments) {
@@ -106,7 +108,7 @@ Compiler.prototype._drawComments = function (comments) {
 /**
  * Builds a PO string for a single translation object
  *
- * @param {Object} block Translation object
+ * @param {import(types.d.ts).GetTextTranslation} block Translation object
  * @param {Object} [override] Properties of this object will override `block` properties
  * @param {boolean} [obsolete] Block is obsolete and must be commented out
  * @return {String} Translation string for a single object
@@ -256,9 +258,9 @@ Compiler.prototype._prepareSection = function (section) {
 };
 
 /**
- * Compiles translation object into a PO object
+ * Compiles a translation object into a PO object
  *
- * @return {Buffer} Compiled PO object
+ * @return {Buffer} Compiled a PO object
  */
 Compiler.prototype.compile = function () {
   const headerBlock = (this._table.translations[''] && this._table.translations['']['']) || {};

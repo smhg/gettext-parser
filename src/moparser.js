@@ -36,6 +36,12 @@ function Parser (fileContents, defaultCharset = 'iso-8859-1') {
 
   this._charset = defaultCharset;
 
+  /**
+   * Translation table
+   *
+   * @type {import( './shared.js').GetTextTranslations} table Translation object
+   * @private
+   */
   this._table = {
     charset: this._charset,
     headers: undefined,
@@ -49,7 +55,7 @@ function Parser (fileContents, defaultCharset = 'iso-8859-1') {
 Parser.prototype.MAGIC = 0x950412de;
 
 /**
- * Checks if number values in the input file are in big- or littleendian format.
+ * Checks if number values in the input file are in big- or little endian format.
  *
  * @return {Boolean} Return true if magic was detected
  */
@@ -70,8 +76,8 @@ Parser.prototype._checkMagick = function () {
 };
 
 /**
- * Read the original strings and translations from the input MO file. Use the
- * first translation string in the file as the header.
+ * Read the original strings and translations from the input MO file.
+ * Use the first translation string in the file as the header.
  */
 Parser.prototype._loadTranslationTable = function () {
   let offsetOriginals = this._offsetOriginals;
@@ -121,7 +127,7 @@ Parser.prototype._loadTranslationTable = function () {
 /**
  * Detects charset for MO strings from the header
  *
- * @param {Buffer} headers Header value
+ * @param {string} headers Header value
  */
 Parser.prototype._handleCharset = function (headers) {
   const headersStr = headers.toString();
@@ -140,15 +146,15 @@ Parser.prototype._handleCharset = function (headers) {
 /**
  * Adds a translation to the translation object
  *
- * @param {String} msgid Original string
- * @params {String} msgstr Translation for the original string
+ * @param {String} msgidRaw Original string
+ * @param {String} msgstrRaw Translation for the original string
  */
-Parser.prototype._addString = function (msgid, msgstr) {
+Parser.prototype._addString = function (msgidRaw, msgstrRaw) {
   const translation = {};
   let msgctxt;
   let msgidPlural;
 
-  msgid = msgid.split('\u0004');
+  let msgid = msgidRaw.split('\u0004');
   if (msgid.length > 1) {
     msgctxt = msgid.shift();
     translation.msgctxt = msgctxt;
@@ -166,7 +172,7 @@ Parser.prototype._addString = function (msgid, msgstr) {
     translation.msgid_plural = msgidPlural;
   }
 
-  msgstr = msgstr.split('\u0000');
+  let msgstr = msgstrRaw.split('\u0000');
   translation.msgstr = [].concat(msgstr || []);
 
   if (!this._table.translations[msgctxt]) {
@@ -179,7 +185,7 @@ Parser.prototype._addString = function (msgid, msgstr) {
 /**
  * Parses the MO object and returns translation table
  *
- * @return {Object} Translation table
+ * @return {import("./types.d.ts").GetTextTranslations | false} Translation table
  */
 Parser.prototype.parse = function () {
   if (!this._checkMagick()) {

@@ -28,8 +28,8 @@ export function stream (options = {}, transformOptions = {}) {
 }
 
 /**
- * Creates a PO parser object. If PO object is a string,
- * UTF-8 will be used as the charset
+ * Creates a PO parser object.
+ * If a PO object is a string, UTF-8 will be used as the charset
  *
  * @typedef {{ defaultCharset?: string, validation?: boolean }} Options
  * @constructor
@@ -68,7 +68,7 @@ Parser.prototype.parse = function () {
 /**
  * Detects charset for PO strings from the header
  *
- * @param {Buffer} headers Header value
+ * @param {string | Buffer} buf Header value
  */
 Parser.prototype._handleCharset = function (buf = '') {
   const str = buf.toString();
@@ -410,11 +410,11 @@ Parser.prototype._handleValues = function (tokens) {
 /**
  * Validate token
  *
- * @param {Object} token Parsed token
- * @param {Object} translations Translation table
+ * @param {{ msgid?: string, msgid_plural?: string, msgstr?: string[] }} token Parsed token
+ * @param {import("./types.d.ts").GetTextTranslation[]} translations Translation table
  * @param {string} msgctxt Message entry context
- * @param {number} nplurals Number of epected plural forms
- * @throws Will throw an error if token validation fails
+ * @param {number} nplurals Number of expected plural forms
+ * @throws {Error} Will throw an error if token validation fails
  */
 Parser.prototype._validateToken = function (
   {
@@ -513,9 +513,7 @@ Parser.prototype._finalize = function (tokens) {
 /**
  * Creates a transform stream for parsing PO input
  *
- * @typedef {{ defaultCharset: string, validation: boolean }} Options
- * @constructor
- * @param {Options} options Optional options with defaultCharset and validation
+ * @param {import( "./types.d.ts").parserOptions} options Optional options with defaultCharset and validation
  * @param {import('readable-stream').TransformOptions} transformOptions Optional stream options
  */
 function PoParserTransform (options, transformOptions) {
@@ -536,6 +534,9 @@ util.inherits(PoParserTransform, Transform);
 
 /**
  * Processes a chunk of the input stream
+ * @param {Buffer} chunk Chunk of the input stream
+ * @param {string} encoding Encoding of the chunk
+ * @param {Function} done Callback to call when the chunk is processed
  */
 PoParserTransform.prototype._transform = function (chunk, encoding, done) {
   let i;
@@ -601,7 +602,8 @@ PoParserTransform.prototype._transform = function (chunk, encoding, done) {
 };
 
 /**
- * Once all input has been processed emit the parsed translation table as an object
+ * Once all inputs have been processed, emit the parsed translation table as an object
+ * @param {Function} done Callback to call when the chunk is processed
  */
 PoParserTransform.prototype._flush = function (done) {
   let chunk;

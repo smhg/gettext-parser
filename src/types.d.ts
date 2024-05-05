@@ -1,8 +1,6 @@
 import { Transform } from "readable-stream";
 
-export declare module 'encoding' {
-    export function convert(buf: Buffer, toCharset: string, fromCharset: string): Buffer;
-}
+declare module 'encoding'
 
 export interface Compiler {
     _table: GetTextTranslations;
@@ -47,6 +45,6 @@ export interface mo {
     compile: (table: GetTextTranslations, options?: parserOptions) => Buffer;
 }
 
-export * from "./@types";
-
 export default { po, mo } as { po: po, mo: mo };
+
+export * from './types.d.ts';

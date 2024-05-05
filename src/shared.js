@@ -43,6 +43,7 @@ export function parseHeader (str = '') {
  * Attempts to safely parse 'nplurals" value from "Plural-Forms" header
  *
  * @param {Object} [headers = {}] An object with parsed headers
+ * @param {number} fallback Fallback value if "Plural-Forms" header is absent
  * @returns {number} Parsed result
  */
 export function parseNPluralFromHeadersSafely (headers, fallback = 1) {
@@ -83,6 +84,7 @@ export function generateHeader (header = {}) {
  * Normalizes charset name. Converts utf8 to utf-8, WIN1257 to windows-1257 etc.
  *
  * @param {String} charset Charset name
+ * @param {String} defaultCharset Default charset name, defaults to 'iso-8859-1'
  * @return {String} Normalized charset name
  */
 export function formatCharset (charset = 'iso-8859-1', defaultCharset = 'iso-8859-1') {
@@ -125,7 +127,7 @@ export function foldLine (str, maxLen = 76) {
       curLine = match[0];
     } else if (pos + curLine.length < len) {
       // if we're not at the end
-      if ((match = /.*\s+/.exec(curLine)) && /[^\s]/.test(match[0])) {
+      if ((match = /.*\s+/.exec(curLine)) && /\S/.test(match[0])) {
         // use everything before and including the last white space character (if anything)
         curLine = match[0];
       } else if ((match = /.*[\x21-\x2f0-9\x5b-\x60\x7b-\x7e]+/.exec(curLine)) && /[^\x21-\x2f0-9\x5b-\x60\x7b-\x7e]/.test(match[0])) {
@@ -144,8 +146,8 @@ export function foldLine (str, maxLen = 76) {
 /**
  * Comparator function for comparing msgid
  *
- * @param {Object} object with msgid prev
- * @param {Object} object with msgid next
+ * @param {Object} left with msgid prev
+ * @param {Object} right with msgid next
  * @returns {number} comparator index
  */
 export function compareMsgid ({ msgid: left }, { msgid: right }) {

@@ -6,7 +6,7 @@ import contentType from 'content-type';
  * Exposes general compiler function. Takes a translation
  * object as a parameter and returns binary MO object
  *
- * @param {import('./index.d.ts').GetTextTranslations} table Translation object
+ * @param {import('./types.d.ts').GetTextTranslations} table Translation object
  * @return {Buffer} Compiled binary MO object
  */
 export default function (table) {
@@ -19,8 +19,8 @@ export default function (table) {
  * Creates a MO compiler object.
  *
  * @constructor
- * @param {import('./index.d.ts').GetTextTranslations} table Translation table as defined in the README
- * @return {import('./index.d.ts').Compiler} Compiler
+ * @param {import('./types.d.ts').GetTextTranslations} table Translation table as defined in the README
+ * @return {import('./types.d.ts').Compiler} Compiler
  */
 function Compiler (table = {}) {
   this._table = table;
@@ -96,7 +96,7 @@ Compiler.prototype._handleCharset = function () {
 
 /**
  * Generates an array of translation strings
- * in the form of [{msgid:... , msgstr:...}]
+ * in the form of [{msgid:..., msgstr: ...}]
  *
  * @return {Array} Translation strings array
  */
@@ -148,20 +148,19 @@ Compiler.prototype._generateList = function () {
 /**
  * Calculate buffer size for the final binary object
  *
- * @param {import('./index.d.ts').GetTextTranslations} list An array of translation strings from _generateList
+ * @param {import('./types.d.ts').GetTextTranslation[]} list An array of translation strings from _generateList
  * @return {Object} Size data of {msgid, msgstr, total}
  */
 Compiler.prototype._calculateSize = function (list) {
   let msgidLength = 0;
   let msgstrLength = 0;
-  let totalLength = 0;
 
   list.forEach(translation => {
     msgidLength += translation.msgid.length + 1; // + extra 0x00
     msgstrLength += translation.msgstr.length + 1; // + extra 0x00
   });
 
-  totalLength = 4 + // magic number
+  let totalLength = 4 + // magic number
         4 + // revision
         4 + // string count
         4 + // original string table offset
@@ -183,7 +182,7 @@ Compiler.prototype._calculateSize = function (list) {
 /**
  * Generates the binary MO object from the translation list
  *
- * @param {import('./index.d.ts').GetTextTranslations} list translation list
+ * @param {import('./types.d.ts').GetTextTranslation[]} list translation list
  * @param {Object} size Byte size information
  * @return {Buffer} Compiled MO object
  */
@@ -214,7 +213,7 @@ Compiler.prototype._build = function (list, size) {
   // hash table offset
   returnBuffer[this._writeFunc](28 + (4 + 4) * list.length * 2, 24);
 
-  // build originals table
+  // Build originals table
   curPosition = 28 + 2 * (4 + 4) * list.length;
   for (i = 0, len = list.length; i < len; i++) {
     list[i].msgid.copy(returnBuffer, curPosition);
@@ -224,7 +223,7 @@ Compiler.prototype._build = function (list, size) {
     curPosition += list[i].msgid.length + 1;
   }
 
-  // build translations table
+  // build translation table
   for (i = 0, len = list.length; i < len; i++) {
     list[i].msgstr.copy(returnBuffer, curPosition);
     returnBuffer[this._writeFunc](list[i].msgstr.length, 28 + (4 + 4) * list.length + i * 8);
@@ -237,7 +236,7 @@ Compiler.prototype._build = function (list, size) {
 };
 
 /**
- * Compiles translation object into a binary MO object
+ * Compiles a translation object into a binary MO object
  *
  * @return {Buffer} Compiled MO object
  */
