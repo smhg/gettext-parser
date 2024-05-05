@@ -579,9 +579,9 @@ PoParserTransform.prototype._transform = function (chunk, encoding, done) {
   }
   // it seems we found some 8bit bytes from the end of the string, so let's cache these
   if (len) {
-    this._cache = [chunk.slice(chunk.length - len)];
+    this._cache = [chunk.subarray(chunk.length - len)];
     this._cacheSize = this._cache[0].length;
-    chunk = chunk.slice(0, chunk.length - len);
+    chunk = chunk.subarray(0, chunk.length - len);
   }
 
   // chunk might be empty if it only continued of 8bit bytes and these were all cached

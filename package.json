@@ -23,7 +23,7 @@
     "test": "mocha",
     "preversion": "npm run lint && npm test",
     "postversion": "git push && git push --tags",
-    "prepublish": "tsc && npm run lint && npm run test"
+    "prepublishOnly": "npm i && tsc && npm run lint && npm run test"
   },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",

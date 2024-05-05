@@ -111,11 +111,11 @@ export function foldLine (str, maxLen = 76) {
   let match;
 
   while (pos < len) {
-    curLine = str.substr(pos, maxLen);
+    curLine = str.substring(pos, pos + maxLen);
 
     // ensure that the line never ends with a partial escaping
     // make longer lines if needed
-    while (curLine.substr(-1) === '\\' && pos + curLine.length < len) {
+    while (curLine.substring(-1) === '\\' && pos + curLine.length < len) {
       curLine += str.charAt(pos + curLine.length);
     }
 
