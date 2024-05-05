@@ -121,8 +121,6 @@ Parser.prototype.types = {
  * String matches for lexer
  */
 Parser.prototype.symbols = {
-  quotes: /["']/,
-  comments: /#/,
   whitespace: /\s/,
   key: /[\w\-[\]]/,
   keyNames: /^(?:msgctxt|msgid(?:_plural)?|msgstr(?:\[\d+])?)$/
