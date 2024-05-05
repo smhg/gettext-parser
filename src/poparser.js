@@ -121,8 +121,6 @@ Parser.prototype.types = {
  * String matches for lexer
  */
 Parser.prototype.symbols = {
-  quotes: /["']/,
-  comments: /#/,
   whitespace: /\s/,
   key: /[\w\-[\]]/,
   keyNames: /^(?:msgctxt|msgid(?:_plural)?|msgstr(?:\[\d+])?)$/
@@ -146,7 +144,7 @@ Parser.prototype._lexer = function (chunk) {
     switch (this._state) {
       case this.states.none:
       case this.states.obsolete:
-        if (chr.match(this.symbols.quotes)) {
+        if (chr === '"' || chr === "'") {
           this._node = {
             type: this.types.string,
             value: '',
@@ -154,7 +152,7 @@ Parser.prototype._lexer = function (chunk) {
           };
           this._lex.push(this._node);
           this._state = this.states.string;
-        } else if (chr.match(this.symbols.comments)) {
+        } else if (chr === "#") {
           this._node = {
             type: this.types.comments,
             value: ''
