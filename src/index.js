@@ -1,4 +1,4 @@
-import * as poParser from './poparser.js';
+import { poParse, poStream } from './poparser.js';
 import poCompiler from './pocompiler.js';
 import moParser from './moparser.js';
 import moCompiler from './mocompiler.js';
@@ -8,8 +8,8 @@ import moCompiler from './mocompiler.js';
  * @see https://www.gnu.org/software/gettext/manual/html_node/PO.html
  */
 export const po = {
-  parse: poParser.parse,
-  createParseStream: poParser.stream,
+  parse: poParse,
+  createParseStream: poStream,
   compile: poCompiler
 };
 

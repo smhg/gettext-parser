@@ -10,7 +10,7 @@ import util from 'util';
  * @param {string | Buffer} input PO object
  * @param {Options} [options] Optional options with defaultCharset and validation
  */
-export function parse (input, options = {}) {
+export function poParse (input, options = {}) {
   const parser = new Parser(input, options);
 
   return parser.parse();
@@ -23,7 +23,7 @@ export function parse (input, options = {}) {
  * @param {Options} [options] Optional options with defaultCharset and validation
  * @param {import('readable-stream').TransformOptions} [transformOptions] Optional stream options
  */
-export function stream (options = {}, transformOptions = {}) {
+export function poStream (options = {}, transformOptions = {}) {
   return new PoParserTransform(options, transformOptions);
 }
 
