@@ -146,8 +146,8 @@ export function foldLine (str, maxLen = 76) {
 /**
  * Comparator function for comparing msgid
  *
- * @param {Object} left with msgid prev
- * @param {Object} right with msgid next
+ * @param {{msgid: string}} left with msgid prev
+ * @param {{msgid: string}} right with msgid next
  * @returns {number} comparator index
  */
 export function compareMsgid ({ msgid: left }, { msgid: right }) {

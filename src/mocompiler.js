@@ -19,10 +19,9 @@ export default function (table) {
  * Creates a MO compiler object.
  *
  * @constructor
- * @param {import('./types.js').GetTextTranslations} table Translation table as defined in the README
- * @return {import('./types.js').Compiler} Compiler
+ * @param {import('./types.js').GetTextTranslations|{headers: {}, translations: {}}} table Translation table as defined in the README
  */
-function Compiler (table = {}) {
+function Compiler (table = {headers: {}, translations: {}}) {
   this._table = table;
 
   let { headers = {}, translations = {} } = this._table;
@@ -98,7 +97,7 @@ Compiler.prototype._handleCharset = function () {
  * Generates an array of translation strings
  * in the form of [{msgid:..., msgstr: ...}]
  *
- * @return {Array} Translation strings array
+ * @return {import('./types.js').GetTextTranslation[]} Translation strings array
  */
 Compiler.prototype._generateList = function () {
   const list = [];
@@ -183,7 +182,7 @@ Compiler.prototype._calculateSize = function (list) {
  * Generates the binary MO object from the translation list
  *
  * @param {import('./types.js').GetTextTranslation[]} list translation list
- * @param {Object} size Byte size information
+ * @param {Buffer} size Byte size information
  * @return {Buffer} Compiled MO object
  */
 Compiler.prototype._build = function (list, size) {

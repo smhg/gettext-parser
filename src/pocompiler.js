@@ -8,7 +8,7 @@ import encoding from 'encoding';
  * Exposes general compiler function. Takes a translation
  * object as a parameter and returns PO object
  *
- * @param {import('./types.js').GettextTranslations} table Translation object
+ * @param {import('./types.js').GetTextTranslations} table Translation object
  * @param {import('./types.js').parserOptions|{}} [options] Options
  * @return {Buffer} The compiled PO object
  */
@@ -111,7 +111,7 @@ Compiler.prototype._drawComments = function (comments) {
  * Builds a PO string for a single translation object
  *
  * @param {import('./types.js').GetTextTranslation} block Translation object
- * @param {Object} [override] Properties of this object will override `block` properties
+ * @param {import('./types.js').GetTextTranslation|{}} [override] Properties of this object will override `block` properties
  * @param {boolean} [obsolete] Block is obsolete and must be commented out
  * @return {String} Translation string for a single object
  */
@@ -223,7 +223,7 @@ Compiler.prototype._handleCharset = function () {
  * Flatten and sort translations object
  *
  * @param {Object} section Object to be prepared (translations or obsolete)
- * @returns {Array} Prepared array
+ * @returns {string[]} Prepared array
  */
 Compiler.prototype._prepareSection = function (section) {
   let response = [];

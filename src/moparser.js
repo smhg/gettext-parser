@@ -39,7 +39,7 @@ function Parser (fileContents, defaultCharset = 'iso-8859-1') {
   /**
    * Translation table
    *
-   * @type {import( './shared.js').GetTextTranslations} table Translation object
+   * @type {import('./types.js').GetTextTranslations} table Translation object
    * @private
    */
   this._table = {
@@ -127,7 +127,7 @@ Parser.prototype._loadTranslationTable = function () {
 /**
  * Detects charset for MO strings from the header
  *
- * @param {string} headers Header value
+ * @param {String} headers Header value
  */
 Parser.prototype._handleCharset = function (headers) {
   const headersStr = headers.toString();
@@ -185,7 +185,7 @@ Parser.prototype._addString = function (msgidRaw, msgstrRaw) {
 /**
  * Parses the MO object and returns translation table
  *
- * @return {import("./index.js").GetTextTranslations | false} Translation table
+ * @return {import("./types.js").GetTextTranslations | false} Translation table
  */
 Parser.prototype.parse = function () {
   if (!this._checkMagick()) {
