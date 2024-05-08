@@ -1,13 +1,15 @@
-import encoding from 'encoding';
 import { HEADERS, foldLine, compareMsgid, formatCharset, generateHeader } from './shared.js';
 import contentType from 'content-type';
+
+// @ts-expect-error TS7016: Could not find a declaration file for module encoding.
+import encoding from 'encoding';
 
 /**
  * Exposes general compiler function. Takes a translation
  * object as a parameter and returns PO object
  *
- * @param {import( './types.d.ts').GettextTranslations} table Translation object
- * @param {import( './types.d.ts').parserOptions|{}} [options] Options
+ * @param {import('./types.js').GettextTranslations} table Translation object
+ * @param {import('./types.js').parserOptions|{}} [options] Options
  * @return {Buffer} The compiled PO object
  */
 export default function (table, options) {
@@ -20,8 +22,8 @@ export default function (table, options) {
  * Creates a PO compiler object.
  *
  * @constructor
- * @param {import( './types.d.ts').GetTextTranslations|{}} table Translation table to be compiled
- * @param {import( './types.d.ts').parserOptions|{}} [options] Options
+ * @param {import('./types.js').GetTextTranslations|{}} table Translation table to be compiled
+ * @param {import('./types.js').parserOptions|{}} [options] Options
  */
 function Compiler (table = {}, options = {}) {
   this._table = table;
@@ -70,7 +72,7 @@ function Compiler (table = {}, options = {}) {
  * Converts a comment object to a comment string. The comment object is
  * in the form of {translator: '', reference: '', extracted: '', flag: '', previous: ''}
  *
- * @param {import(types.d.ts).GetTextComment} comments A comments object
+ * @param {import('./types.js').GetTextComment} comments A comments object
  * @return {String} A comment string for the PO file
  */
 Compiler.prototype._drawComments = function (comments) {
@@ -108,7 +110,7 @@ Compiler.prototype._drawComments = function (comments) {
 /**
  * Builds a PO string for a single translation object
  *
- * @param {import(types.d.ts).GetTextTranslation} block Translation object
+ * @param {import('./types.js').GetTextTranslation} block Translation object
  * @param {Object} [override] Properties of this object will override `block` properties
  * @param {boolean} [obsolete] Block is obsolete and must be commented out
  * @return {String} Translation string for a single object
@@ -260,6 +262,7 @@ Compiler.prototype._prepareSection = function (section) {
 /**
  * Compiles a translation object into a PO object
  *
+ * @interface
  * @return {Buffer} Compiled a PO object
  */
 Compiler.prototype.compile = function () {

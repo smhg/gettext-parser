@@ -95,7 +95,7 @@ Parser.prototype._loadTranslationTable = function () {
     offsetOriginals += 4;
     msgid = this._fileContents.subarray(
       position,
-      position + length,
+      position + length
     );
 
     // matching msgstr
@@ -105,7 +105,7 @@ Parser.prototype._loadTranslationTable = function () {
     offsetTranslations += 4;
     msgstr = this._fileContents.subarray(
       position,
-      position + length,
+      position + length
     );
 
     if (!i && !msgid.toString()) {
@@ -172,7 +172,7 @@ Parser.prototype._addString = function (msgidRaw, msgstrRaw) {
     translation.msgid_plural = msgidPlural;
   }
 
-  let msgstr = msgstrRaw.split('\u0000');
+  const msgstr = msgstrRaw.split('\u0000');
   translation.msgstr = [].concat(msgstr || []);
 
   if (!this._table.translations[msgctxt]) {
@@ -185,7 +185,7 @@ Parser.prototype._addString = function (msgidRaw, msgstrRaw) {
 /**
  * Parses the MO object and returns translation table
  *
- * @return {import("./types.d.ts").GetTextTranslations | false} Translation table
+ * @return {import("./index.js").GetTextTranslations | false} Translation table
  */
 Parser.prototype.parse = function () {
   if (!this._checkMagick()) {

@@ -152,7 +152,7 @@ Parser.prototype._lexer = function (chunk) {
           };
           this._lex.push(this._node);
           this._state = this.states.string;
-        } else if (chr === "#") {
+        } else if (chr === '#') {
           this._node = {
             type: this.types.comments,
             value: ''
@@ -411,7 +411,7 @@ Parser.prototype._handleValues = function (tokens) {
  * Validate token
  *
  * @param {{ msgid?: string, msgid_plural?: string, msgstr?: string[] }} token Parsed token
- * @param {import("./types.d.ts").GetTextTranslation[]} translations Translation table
+ * @param {import("./index.js").GetTextTranslation[]} translations Translation table
  * @param {string} msgctxt Message entry context
  * @param {number} nplurals Number of expected plural forms
  * @throws {Error} Will throw an error if token validation fails
@@ -513,7 +513,7 @@ Parser.prototype._finalize = function (tokens) {
 /**
  * Creates a transform stream for parsing PO input
  *
- * @param {import( "./types.d.ts").parserOptions} options Optional options with defaultCharset and validation
+ * @param {import( "./index.js").parserOptions} options Optional options with defaultCharset and validation
  * @param {import('readable-stream').TransformOptions} transformOptions Optional stream options
  */
 function PoParserTransform (options, transformOptions) {

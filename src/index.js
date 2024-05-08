@@ -6,8 +6,6 @@ import moCompiler from './mocompiler.js';
 /**
  * Translation parser and compiler for PO files
  * @see https://www.gnu.org/software/gettext/manual/html_node/PO.html
- *
- * @type {import("./types.d.ts").po} po
  */
 export const po = {
   parse: poParser.parse,
@@ -16,10 +14,8 @@ export const po = {
 };
 
 /**
- * Translation parser and compiler for PO files
+ * Translation parser and compiler for MO files
  * @see https://www.gnu.org/software/gettext/manual/html_node/MO.html
- *
- * @type {import("./types.d.ts").mo} mo
  */
 export const mo = {
   parse: moParser,
