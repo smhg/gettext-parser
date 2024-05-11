@@ -21,7 +21,7 @@ export default function (table) {
  * @return {{[key: string]: string}} The prepared header
  */
 function prepareMoHeaders (headers) {
-  return Object.keys(headers).reduce((/** @type {{[key: string]: string}} */ result, key) => {
+  return Object.keys(headers).reduce((/** @type {Record<string, string>} */ result, key) => {
     const lowerKey = key.toLowerCase();
 
     if (HEADERS.has(lowerKey)) {
