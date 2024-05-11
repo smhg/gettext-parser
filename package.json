@@ -21,6 +21,7 @@
     "lint": "eslint src/*.js test/*.js",
     "test-generate-mo": "msgfmt test/fixtures/latin13.po -o test/fixtures/latin13.mo & msgfmt test/fixtures/utf8.po -o test/fixtures/utf8.mo & msgfmt test/fixtures/obsolete.po -o test/fixtures/obsolete.mo",
     "test": "mocha",
+    "test:coverage": "npx c8 --check-coverage npm run test",
     "preversion": "npm run lint && npm test",
     "postversion": "git push && git push --tags",
     "prepublish": "tsc && npm run lint && npm run test"
@@ -46,7 +47,7 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
-    "mocha": "^10.3.0",
+    "mocha": "^10.4.0",
     "typescript": "^5.4.5"
   },
   "keywords": [
