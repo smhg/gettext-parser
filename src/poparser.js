@@ -37,7 +37,6 @@ export function poStream (options = {}, transformOptions = {}) {
  * Creates a PO parser object.
  * If a PO object is a string, UTF-8 will be used as the charset
  *
- * @constructor
  * @param {string | Buffer} fileContents PO object
  * @param {Options} options Options with defaultCharset and validation
  */
@@ -367,7 +366,7 @@ Parser.prototype._handleKeys = function (tokens) {
 Parser.prototype._handleValues = function (tokens) {
   /** @type {import("./types.js").GetTextTranslation[]} */
   const response = [];
-  /** @type {{ msgid: string, msgctxt?: string, msgstr: string[], comments?: import('./types.js').GetTextComment, obsolete?: unknown, msgid_plural?: string}} Translation object */
+  /** @type {import("./types.js").GetTextTranslation} Translation object */
   let lastNode = {};
   /** @type {string | undefined} */
   let curContext;
@@ -537,7 +536,7 @@ Parser.prototype._normalize = function (tokens) {
  * Converts parsed tokens to a translation table
  *
  * @param {Node[]} tokens Parsed tokens
- * @returns {Object} Translation table
+ * @returns {import("./types.js").GetTextTranslations} Translation table
  */
 Parser.prototype._finalize = function (tokens) {
   /**
@@ -557,14 +556,19 @@ Parser.prototype._finalize = function (tokens) {
 };
 
 /**
+ * @typedef {import('stream').Stream.Writable} WritableState
+ */
+/**
  * Creates a transform stream for parsing PO input
  * @constructor
- * @inheritDoc {Transform}
+ * @class {Duplex} Node transform stream
  *
  * @private
- * @this {PoParserTransform} PoParserTransform
  * @param {import( "./types.js").parserOptions} options Optional options with defaultCharset and validation
  * @param {import('readable-stream').TransformOptions & {initialTreshold?: number;}} transformOptions Optional stream options
+ *
+ * @property  {WritableState} [_writableState] Optional stream options
+ * @property {Mode} [readableState] Optional stream options
  */
 function PoParserTransform (options, transformOptions) {
   this.options = options;

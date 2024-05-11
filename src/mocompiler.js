@@ -51,7 +51,7 @@ function prepareTranslations (translations) {
   return Object.keys(translations).reduce((result, msgctxt) => {
     const context = translations[msgctxt];
     const msgs = Object.keys(context).reduce((/** @type {{[key: string]: string}} */ result, msgid) => {
-      /** @type {import('./types.js').GetTextTranslation[]} */
+      /** @type {import('./types.js').GetTextTranslation[]} TranslationMsgstr */
       const TranslationMsgstr = context[msgid].msgstr;
       const hasTranslation = TranslationMsgstr.some(item => !!item.length);
 
@@ -84,7 +84,10 @@ function Compiler (table) {
   };
 
   this._translations = [];
-
+  /**
+   * @typedef {('writeUInt32LE'|'writeUInt32BE')} WriteFunc Type definition for write functions.
+   * @type {WriteFunc}
+   */
   this._writeFunc = 'writeUInt32LE';
 
   this._handleCharset();

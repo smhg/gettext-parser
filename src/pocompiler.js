@@ -100,7 +100,7 @@ Compiler.prototype._drawComments = function (comments) {
   }];
 
   for (const type of types) {
-    /** @var {import('./types.js').GetTextComment} value The comment type */
+    /** @var {keyof import('./types.js').GetTextComment} value The comment type */
     const value = type.key;
 
     // ignore empty comments
@@ -131,7 +131,7 @@ Compiler.prototype._drawBlock = function (block, override = {}, obsolete = false
   const msgstrData = override.msgstr || block.msgstr;
   const msgstr = Array.isArray(msgstrData) ? [...msgstrData] : [msgstrData];
 
-  // add comments
+  /** @type {import('./types.js').GetTextComment|undefined} */
   const comments = override.comments || block.comments;
   if (comments) {
     const drawnComments = this._drawComments(comments);

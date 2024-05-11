@@ -27,12 +27,14 @@ function Parser (fileContents, defaultCharset = 'iso-8859-1') {
   this._charset = defaultCharset;
 
   /**
-   * Method name for writing int32 values, default littleendian
+   * @typedef {('writeUInt32LE'|'writeUInt32BE')} WriteFunc Method name for writing int32 values, default littleendian
+   * @type {WriteFunc}
    */
   this._writeFunc = 'writeUInt32LE';
 
   /**
-   * Method name for reading int32 values, default littleendian
+   * @typedef {('readUInt32LE'|'readUInt32BE')} ReadFunc Method name for reading int32 values, default littleendian
+   * @type {ReadFunc}
    */
   this._readFunc = 'readUInt32LE';
 
