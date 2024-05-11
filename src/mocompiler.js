@@ -2,6 +2,8 @@ import encoding from 'encoding';
 import { HEADERS, formatCharset, generateHeader, compareMsgid } from './shared.js';
 import contentType from 'content-type';
 
+/** @typedef {{msgid: number, msgstr: number, total: number}} Size data of {msgid, msgstr, total} */
+
 /**
  * Exposes general compiler function. Takes a translation
  * object as a parameter and returns binary MO object
@@ -82,6 +84,8 @@ function Compiler (table) {
   };
 
   this._translations = [];
+
+  this._writeFunc = 'writeUInt32LE';
 
   this._handleCharset();
 
@@ -166,7 +170,7 @@ Compiler.prototype._generateList = function () {
  * Calculate buffer size for the final binary object
  *
  * @param {import('./types.js').GetTextTranslation[]} list An array of translation strings from _generateList
- * @return {{msgid: number, msgstr: number, total: number}} Size data of {msgid, msgstr, total}
+ * @return {Size} Size data of {msgid, msgstr, total}
  */
 Compiler.prototype._calculateSize = function (list) {
   let msgidLength = 0;
@@ -204,32 +208,31 @@ Compiler.prototype._calculateSize = function (list) {
  *  @return {Buffer} Compiled MO object
  */
 Compiler.prototype._build = function (list, size) {
-  /** @type {Buffer} returnBuffer */
   const returnBuffer = Buffer.alloc(size.total);
   let curPosition = 0;
   let i;
   let len;
 
   // magic
-  returnBuffer.writeUInt32LE(this.MAGIC, 0);
+  returnBuffer[this._writeFunc](this.MAGIC, 0);
 
   // revision
-  returnBuffer.writeUInt32LE(0, 4);
+  returnBuffer[this._writeFunc](0, 4);
 
   // string count
-  returnBuffer.writeUInt32LE(list.length, 8);
+  returnBuffer[this._writeFunc](list.length, 8);
 
   // original string table offset
-  returnBuffer.writeUInt32LE(28, 12);
+  returnBuffer[this._writeFunc](28, 12);
 
   // translation string table offset
-  returnBuffer.writeUInt32LE(28 + (4 + 4) * list.length, 16);
+  returnBuffer[this._writeFunc](28 + (4 + 4) * list.length, 16);
 
   // hash table size
-  returnBuffer.writeUInt32LE(0, 20);
+  returnBuffer[this._writeFunc](0, 20);
 
   // hash table offset
-  returnBuffer.writeUInt32LE(28 + (4 + 4) * list.length * 2, 24);
+  returnBuffer[this._writeFunc](28 + (4 + 4) * list.length * 2, 24);
 
   // Build original table
   curPosition = 28 + 2 * (4 + 4) * list.length;

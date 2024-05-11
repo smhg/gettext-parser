@@ -27,6 +27,16 @@ function Parser (fileContents, defaultCharset = 'iso-8859-1') {
   this._charset = defaultCharset;
 
   /**
+   * Method name for writing int32 values, default littleendian
+   */
+  this._writeFunc = 'writeUInt32LE';
+
+  /**
+   * Method name for reading int32 values, default littleendian
+   */
+  this._readFunc = 'readUInt32LE';
+
+  /**
    * Translation table
    *
    * @type {import('./types.js').GetTextTranslations} table Translation object
@@ -76,40 +86,42 @@ Parser.prototype._loadTranslationTable = function () {
   let msgid;
   let msgstr;
 
-  if (this._total) {
-    for (let i = 0; i < this._total; i++) {
-      if (this._fileContents === null) continue;
-      // msgid string
-      length = this._fileContents.readUInt32LE(offsetOriginals);
-      offsetOriginals += 4;
-      position = this._fileContents.readUInt32LE(offsetOriginals);
-      offsetOriginals += 4;
-      msgid = this._fileContents.subarray(
-        position,
-        position + length
-      );
+  // Return if there are no translations
+  if (!this._total) { this._fileContents = null; return; }
 
-      // matching msgstr
-      length = this._fileContents.readUInt32LE(offsetTranslations);
-      offsetTranslations += 4;
-      position = this._fileContents.readUInt32LE(offsetTranslations);
-      offsetTranslations += 4;
-      msgstr = this._fileContents.subarray(
-        position,
-        position + length
-      );
+  // Loop through all strings in the MO file
+  for (let i = 0; i < this._total; i++) {
+    if (this._fileContents === null) continue;
+    // msgid string
+    length = this._fileContents[this._readFunc](offsetOriginals);
+    offsetOriginals += 4;
+    position = this._fileContents[this._readFunc](offsetOriginals);
+    offsetOriginals += 4;
+    msgid = this._fileContents.subarray(
+      position,
+      position + length
+    );
 
-      if (!i && !msgid.toString()) {
-        this._handleCharset(msgstr);
-      }
+    // matching msgstr
+    length = this._fileContents[this._readFunc](offsetTranslations);
+    offsetTranslations += 4;
+    position = this._fileContents[this._readFunc](offsetTranslations);
+    offsetTranslations += 4;
+    msgstr = this._fileContents.subarray(
+      position,
+      position + length
+    );
 
-      msgid = encoding.convert(msgid, 'utf-8', this._charset)
-        .toString('utf8');
-      msgstr = encoding.convert(msgstr, 'utf-8', this._charset)
-        .toString('utf8');
-
-      this._addString(msgid, msgstr);
+    if (!i && !msgid.toString()) {
+      this._handleCharset(msgstr);
     }
+
+    msgid = encoding.convert(msgid, 'utf-8', this._charset)
+      .toString('utf8');
+    msgstr = encoding.convert(msgstr, 'utf-8', this._charset)
+      .toString('utf8');
+
+    this._addString(msgid, msgstr);
   }
 
   // dump the file contents object
@@ -184,22 +196,22 @@ Parser.prototype.parse = function () {
   /**
    * GetText revision nr, usually 0
    */
-  this._revision = this._fileContents.readUInt32LE(4);
+  this._revision = this._fileContents[this._readFunc](4);
 
   /**
    * @type {number} Total count of translated strings
    */
-  this._total = this._fileContents.readUInt32LE(8) ?? 0;
+  this._total = this._fileContents[this._readFunc](8) ?? 0;
 
   /**
    * @type {number} Offset position for original strings table
    */
-  this._offsetOriginals = this._fileContents.readUInt32LE(12);
+  this._offsetOriginals = this._fileContents[this._readFunc](12);
 
   /**
    * @type {number} Offset position for translation strings table
    */
-  this._offsetTranslations = this._fileContents.readUInt32LE(16);
+  this._offsetTranslations = this._fileContents[this._readFunc](16);
 
   // Load translations into this._translationTable
   this._loadTranslationTable();

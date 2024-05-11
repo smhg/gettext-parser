@@ -102,11 +102,13 @@ Compiler.prototype._drawComments = function (comments) {
   for (const type of types) {
     /** @var {import('./types.js').GetTextComment} value The comment type */
     const value = type.key;
-    if (value in comments) {
-      const commentLines = comments[value];
-      for (const line of commentLines.split(/\r?\n|\r/)) {
-        lines.push(`${type.prefix}${line}`);
-      }
+
+    // ignore empty comments
+    if (!(value in comments)) { continue; }
+
+    const commentLines = comments[value];
+    for (const line of commentLines.split(/\r?\n|\r/)) {
+      lines.push(`${type.prefix}${line}`);
     }
   }
 
