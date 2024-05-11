@@ -21,8 +21,8 @@ export default function (table, options) {
 /**
  * Takes the header object and converts all headers into the lowercase format
  *
- * @param {{ [x: string]: any; }} headersRaw the headers to prepare
- * @returns {{ [x: string]: any; }} the headers in the lowercase format
+ * @param {Record<string, any>} headersRaw the headers to prepare
+ * @returns {Record<string, any>} the headers in the lowercase format
  */
 export function preparePoHeaders (headersRaw) {
   return Object.keys(headersRaw).reduce((/** @type {{ [x: string]: any; }} */ result, key) => {
@@ -287,7 +287,7 @@ Compiler.prototype.compile = function () {
 
   /** @type {import('./types.js').GetTextTranslation[]|undefined} translations Prepared array */
   const translations = this._prepareSection(this._table.translations);
-  /** @type {String[]|undefined} response Prepared array */
+  /** @type {string[]|undefined} response Prepared array */
   let response = translations?.map(t => this._drawBlock(t));
 
   if (typeof this._table.obsolete === 'object') {

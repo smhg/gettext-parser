@@ -137,8 +137,8 @@ Parser.prototype._handleCharset = function (headers) {
 /**
  * Adds a translation to the translation object
  *
- * @param {String} msgidRaw Original string
- * @param {String} msgstrRaw Translation for the original string
+ * @param {string} msgidRaw Original string
+ * @param {string} msgstrRaw Translation for the original string
  */
 Parser.prototype._addString = function (msgidRaw, msgstrRaw) {
   const translation = {};

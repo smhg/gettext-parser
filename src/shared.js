@@ -87,9 +87,9 @@ export function generateHeader (header = {}) {
 /**
  * Normalizes charset name. Converts utf8 to utf-8, WIN1257 to windows-1257 etc.
  *
- * @param {String} charset Charset name
- * @param {String} defaultCharset Default charset name, defaults to 'iso-8859-1'
- * @return {String} Normalized charset name
+ * @param {string} charset Charset name
+ * @param {string} defaultCharset Default charset name, defaults to 'iso-8859-1'
+ * @return {string} Normalized charset name
  */
 export function formatCharset (charset = 'iso-8859-1', defaultCharset = 'iso-8859-1') {
   return charset.toString()
