@@ -1,6 +1,7 @@
 import encoding from 'encoding';
 import { HEADERS, formatCharset, generateHeader, compareMsgid } from './shared.js';
 import contentType from 'content-type';
+import { Transform } from 'node:stream';
 
 /** @typedef {{msgid: number, msgstr: number, total: number}} Size data of {msgid, msgstr, total} */
 
@@ -72,6 +73,7 @@ function prepareTranslations (translations) {
 
 /**
  * Creates a MO compiler object.
+ * @this {Compiler & Transform}
  *
  * @param {import('./types.js').GetTextTranslations} [table] Translation table as defined in the README
  */
@@ -240,7 +242,9 @@ Compiler.prototype._build = function (list, size) {
   // Build original table
   curPosition = 28 + 2 * (4 + 4) * list.length;
   for (i = 0, len = list.length; i < len; i++) {
-    list[i].msgid.copy(returnBuffer, curPosition);
+    /** @type {Buffer} */
+    const msgidLength = list[i].msgid;
+    msgidLength.copy(returnBuffer, curPosition);
     returnBuffer.writeUInt32LE(list[i].msgid.length, 28 + i * 8);
     returnBuffer.writeUInt32LE(curPosition, 28 + i * 8 + 4);
     returnBuffer[curPosition + list[i].msgid.length] = 0x00;
@@ -249,7 +253,9 @@ Compiler.prototype._build = function (list, size) {
 
   // build translation table
   for (i = 0, len = list.length; i < len; i++) {
-    list[i].msgstr.copy(returnBuffer, curPosition);
+    /** @type {Buffer} */
+    const msgstrLength = list[i].msgstr;
+    msgstrLength.copy(returnBuffer, curPosition);
     returnBuffer.writeUInt32LE(list[i].msgstr.length, 28 + (4 + 4) * list.length + i * 8);
     returnBuffer.writeUInt32LE(curPosition, 28 + (4 + 4) * list.length + i * 8 + 4);
     returnBuffer[curPosition + list[i].msgstr.length] = 0x00;

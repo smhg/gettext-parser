@@ -75,11 +75,11 @@ function Compiler (table, options) {
  * Converts a comment object to a comment string. The comment object is
  * in the form of {translator: '', reference: '', extracted: '', flag: '', previous: ''}
  *
- * @param {import('./types.js').GetTextComment} comments A comments object
+ * @param {Record<string, string>} comments A comments object
  * @return {String} A comment string for the PO file
  */
 Compiler.prototype._drawComments = function (comments) {
-  /** @var {String[]} lines The comment lines to be returned */
+  /** @var {Record<string, string[]>[]} lines The comment lines to be returned */
   const lines = [];
   /** @var {{key: keyof import('./types.js').GetTextComment, prefix: string}} type The comment type */
   const types = [{
@@ -100,14 +100,16 @@ Compiler.prototype._drawComments = function (comments) {
   }];
 
   for (const type of types) {
-    /** @var {keyof import('./types.js').GetTextComment} value The comment type */
+    /** @var {string} value The comment type */
     const value = type.key;
 
     // ignore empty comments
     if (!(value in comments)) { continue; }
 
-    const commentLines = comments[value];
-    for (const line of commentLines.split(/\r?\n|\r/)) {
+    const commentLines = comments[value].split(/\r?\n|\r/);
+
+    // add comment lines to comments Array
+    for (const line of commentLines) {
       lines.push(`${type.prefix}${line}`);
     }
   }

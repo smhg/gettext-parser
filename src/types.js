@@ -14,7 +14,7 @@
  * @property {string} [msgctxt] Context of the message.
  * @property {string} msgid The singular message ID.
  * @property {string} [msgid_plural] The plural message ID.
- * @property {string[]} msgstr Array of translated strings.
+ * @property {string} msgstr Array of translated strings.
  * @property {GetTextComment} [comments] Comments associated with the translation.
  * @property {GetTextTranslation} [obsolete] Whether the translation is obsolete.
  */

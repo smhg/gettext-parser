@@ -165,3 +165,17 @@ export function compareMsgid ({ msgid: left }, { msgid: right }) {
 
   return 0;
 }
+
+/**
+ * Custom SyntaxError subclass that includes the lineNumber property.
+ */
+export class ParserError extends SyntaxError {
+  /**
+   * @param {string} message - Error message.
+   * @param {number} lineNumber - Line number where the error occurred.
+   */
+  constructor (message, lineNumber) {
+    super(message);
+    this.lineNumber = lineNumber;
+  }
+}
