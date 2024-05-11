@@ -1,5 +1,7 @@
 // see https://www.gnu.org/software/gettext/manual/html_node/Header-Entry.html
+/** @type {string} Header name for "Plural-Forms" */
 const PLURAL_FORMS = 'Plural-Forms';
+/** @typedef {Map<string, string>} Headers Map of header keys to header names */
 export const HEADERS = new Map([
   ['project-id-version', 'Project-Id-Version'],
   ['report-msgid-bugs-to', 'Report-Msgid-Bugs-To'],
@@ -18,12 +20,14 @@ const PLURAL_FORM_HEADER_NPLURALS_REGEX = /nplurals\s*=\s*(?<nplurals>\d+)/;
 /**
  * Parses a header string into an object of key-value pairs
  *
- * @param {String} str Header string
- * @return {Object} An object of key-value pairs
+ * @param {string} str Header string
+ * @return {{[key: string]: string}} An object of key-value pairs
  */
 export function parseHeader (str = '') {
-  return str.split('\n')
-    .reduce((headers, line) => {
+  /** @type {string} Header string  */
+  return str
+    .split('\n')
+    .reduce((/** @type {Record<string, string>} */ headers, line) => {
       const parts = line.split(':');
       let key = (parts.shift() || '').trim();
 
@@ -42,7 +46,7 @@ export function parseHeader (str = '') {
 /**
  * Attempts to safely parse 'nplurals" value from "Plural-Forms" header
  *
- * @param {Object} [headers = {}] An object with parsed headers
+ * @param {{[key: string]: string}} [headers] An object with parsed headers
  * @param {number} fallback Fallback value if "Plural-Forms" header is absent
  * @returns {number} Parsed result
  */
@@ -63,8 +67,8 @@ export function parseNPluralFromHeadersSafely (headers, fallback = 1) {
 /**
  * Joins a header object of key value pairs into a header string
  *
- * @param {Object} header Object of key value pairs
- * @return {String} Header string
+ * @param {{[key: string]: string}} header Object of key value pairs
+ * @return {string} An object of key-value pairs
  */
 export function generateHeader (header = {}) {
   const keys = Object.keys(header)

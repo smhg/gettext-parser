@@ -13,7 +13,7 @@
     "allowJs": true,
 
     // Check js files for errors
-    "checkJs": false,
+    "checkJs": true,
 
     // the directory sources are in
     "rootDir": "src",

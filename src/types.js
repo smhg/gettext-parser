@@ -16,14 +16,16 @@
  * @property {string} [msgid_plural] The plural message ID.
  * @property {string[]} msgstr Array of translated strings.
  * @property {GetTextComment} [comments] Comments associated with the translation.
+ * @property {GetTextTranslation} [obsolete] Whether the translation is obsolete.
  */
 
 /**
  * Represents GetText translations.
  * @typedef {Object} GetTextTranslations
- * @property {string} charset Character set.
- * @property {Object.<string, string>} headers Headers.
- * @property {Object.<string, Object.<string, GetTextTranslation>>} translations Translations.
+ * @property {string|undefined} charset Character set.
+ * @property {{[key: string]: string}} headers Headers.
+ * @property {GetTextTranslations['translations']} [obsolete] Obsolete messages.
+ * @property {Object.<[msgctxt: string], Object.<[msgid: string], GetTextTranslation>>} translations Translations.
  */
 
 /**
@@ -31,4 +33,8 @@
  * @typedef {Object} parserOptions
  * @property {string} [defaultCharset] Default character set.
  * @property {boolean} [validation] Whether to perform validation.
+ * @property {number} [foldLength] the fold length.
+ * @property {boolean} [escapeCharacters] Whether to escape characters.
+ * @property {boolean} [sort] Whether to sort messages.
+ * @property {string} [eol] End of line character.
  */
