@@ -1,7 +1,6 @@
 import { HEADERS, foldLine, compareMsgid, formatCharset, generateHeader } from './shared.js';
 import contentType from 'content-type';
 
-// @ts-expect-error TS7016: Could not find a declaration file for module encoding.
 import encoding from 'encoding';
 
 /**
@@ -11,6 +10,11 @@ import encoding from 'encoding';
  * @typedef {import('./types.js').Translations} Translations
  * @typedef {import('./types.js').ParserOptions} ParserOptions
  */
+
+/**
+ * @typedef {Partial<Omit<GetTextTranslation, 'msgstr'>> & { msgstr?: string | string[] }} PreOutputTranslation
+ */
+
 /**
  * Exposes general compiler function. Takes a translation
  * object as a parameter and returns PO object
@@ -127,8 +131,8 @@ Compiler.prototype._drawComments = function (comments) {
 /**
  * Builds a PO string for a single translation object
  *
- * @param {GetTextTranslation} block Translation object
- * @param {Partial<GetTextTranslation>} [override] Properties of this object will override `block` properties
+ * @param {PreOutputTranslation} block Translation object
+ * @param {Partial<PreOutputTranslation>} [override] Properties of this object will override `block` properties
  * @param {boolean} [obsolete] Block is obsolete and must be commented out
  * @return {string} Translation string for a single object
  */
@@ -246,7 +250,7 @@ Compiler.prototype._handleCharset = function () {
  * Flatten and sort translations object
  *
  * @param {Translations} section Object to be prepared (translations or obsolete)
- * @returns {GetTextTranslation[]|undefined} Prepared array
+ * @returns {PreOutputTranslation[]|undefined} Prepared array
  */
 Compiler.prototype._prepareSection = function (section) {
   /** @type {GetTextTranslation[]} response Prepared array */
@@ -293,11 +297,11 @@ Compiler.prototype.compile = function () {
   if (!this._table.translations) {
     throw new Error('No translations found');
   }
-  /** @type {GetTextTranslation} headerBlock */
+  /** @type {PreOutputTranslation} headerBlock */
   const headerBlock = (this._table.translations[''] && this._table.translations['']['']) || {};
 
   const translations = this._prepareSection(this._table.translations);
-  let response = translations?.map(t => this._drawBlock(t));
+  let response = /** @type {(PreOutputTranslation|string)[]} */ (/** @type {unknown[]} */ (translations?.map(t => this._drawBlock(t))));
 
   if (typeof this._table.obsolete === 'object') {
     const obsolete = this._prepareSection(this._table.obsolete);

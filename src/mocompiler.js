@@ -18,7 +18,7 @@ import contentType from 'content-type';
  */
 
 /**
- * @typedef {{ msgid: Buffer, msgstr: Buffer }} InProgressTranslation A translation object partially parsed.
+ * @typedef {{ msgid: Buffer, msgstr: Buffer }} TranslationBuffers A translation object partially parsed.
  */
 
 /**
@@ -138,7 +138,7 @@ Compiler.prototype._handleCharset = function () {
  *
  */
 Compiler.prototype._generateList = function () {
-  /** @type {InProgressTranslation[]} */
+  /** @type {TranslationBuffers[]} */
   const list = [];
 
   if ('headers' in this._table) {
@@ -188,7 +188,7 @@ Compiler.prototype._generateList = function () {
 /**
  * Calculate buffer size for the final binary object
  *
- * @param {InProgressTranslation[]} list An array of translation strings from _generateList
+ * @param {TranslationBuffers[]} list An array of translation strings from _generateList
  * @return {Size} Size data of {msgid, msgstr, total}
  */
 Compiler.prototype._calculateSize = function (list) {
@@ -222,7 +222,7 @@ Compiler.prototype._calculateSize = function (list) {
 /**
  * Generates the binary MO object from the translation list
  *
- * @param {GetTextTranslation[]} list translation list
+ * @param {TranslationBuffers[]} list translation list
  *  @param {Size} size Byte size information
  *  @return {Buffer} Compiled MO object
  */

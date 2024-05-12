@@ -5,7 +5,7 @@ import util from 'util';
 
 /**
  * @typedef {import('stream').Stream.Writable} WritableState
- * @typedef {import('stream').TransformOptions} TransformOptions
+ * @typedef {import('readable-stream').TransformOptions} TransformOptions
  * @typedef {import('./types.js').GetTextTranslations} GetTextTranslations
  * @typedef {import('./types.js').GetTextTranslation} GetTextTranslation
  * @typedef {import('./types.js').GetTextComment} GetTextComment
@@ -327,11 +327,13 @@ Parser.prototype._parseComments = function (tokens) {
       }
     }
 
-    node.value = {};
+    const finalToken = /** @type {Omit<Node, 'value'> & { value: Record<string, string>}} */ (/** @type {unknown} */ (node));
+
+    finalToken.value = {};
 
     for (const key of Object.keys(comment)) {
       if (key && comment[key]?.length) {
-        node.value[key] = comment[key].join('\n');
+        finalToken.value[key] = comment[key].join('\n');
       }
     }
   }
@@ -561,26 +563,27 @@ Parser.prototype._finalize = function (tokens) {
 };
 
 /**
-   * Creates a transform stream for parsing PO input
-   * @constructor
-   * @this {PoParserTransform & Transform}
-   *
-   * @param {ParserOptions} options Optional options with defaultCharset and validation
-   * @param {TransformOptions & {initialTreshold?: number;}} transformOptions Optional stream options
-   */
+ * Creates a transform stream for parsing PO input
+ * @constructor
+ * @this {PoParserTransform & Transform}
+ *
+ * @param {ParserOptions} options Optional options with defaultCharset and validation
+ * @param {TransformOptions & {initialTreshold?: number;}} transformOptions Optional stream options
+ */
 function PoParserTransform (options, transformOptions) {
+  const { initialTreshold, ..._transformOptions } = transformOptions;
   this.options = options;
   /** @type {Parser|false} */
   this._parser = false;
   this._tokens = {};
 
-  /** @type {*[]} */
+  /** @type {Buffer[]} */
   this._cache = [];
   this._cacheSize = 0;
 
   this.initialTreshold = transformOptions.initialTreshold || 2 * 1024;
 
-  Transform.call(this, transformOptions);
+  Transform.call(this, _transformOptions);
 
   this._writableState.objectMode = false;
   this._readableState.objectMode = true;
@@ -685,7 +688,7 @@ PoParserTransform.prototype._flush = function (done) {
   }
 
   if (this._parser) {
-    this.push(this._parser._finalize(this._parser._lex));
+    /** @type {any} */ (this).push(this._parser._finalize(this._parser._lex));
   }
 
   setImmediate(done);
