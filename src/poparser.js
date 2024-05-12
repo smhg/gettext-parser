@@ -5,10 +5,12 @@ import util from 'util';
 
 /**
  * @typedef {import('stream').Stream.Writable} WritableState
+ * @typedef {import('stream').TransformOptions} TransformOptions
  * @typedef {import('./types.js').GetTextTranslations} GetTextTranslations
  * @typedef {import('./types.js').GetTextTranslation} GetTextTranslation
  * @typedef {import('./types.js').GetTextComment} GetTextComment
  * @typedef {import('./types.js').Translations} Translations
+ * @typedef {import('./types.js').ParserOptions} ParserOptions
  */
 
 /**
@@ -45,7 +47,7 @@ export function poParse (input, options = {}) {
  * Parses a PO stream, emits translation table in object mode
  *
  * @param {Options} [options] Optional options with defaultCharset and validation
- * @param {import('readable-stream').TransformOptions} [transformOptions] Optional stream options
+ * @param {TransformOptions} [transformOptions] Optional stream options
  */
 export function poStream (options = {}, transformOptions = {}) {
   return new PoParserTransform(options, transformOptions);
@@ -380,7 +382,7 @@ Parser.prototype._handleValues = function (tokens) {
   let lastNode = {};
   /** @type {string | undefined} */
   let curContext;
-  /** @type {import('./types.js').GetTextComment | undefined} */
+  /** @type {GetTextComment | undefined} */
   let curComments;
 
   for (let i = 0, len = tokens.length; i < len; i++) {
@@ -450,8 +452,8 @@ Parser.prototype._handleValues = function (tokens) {
 /**
  * Validate token
  *
- * @param {{ msgid?: string, msgid_plural?: string, msgstr?: string[] }} token Parsed token
- * @param {import("./types.js").GetTextTranslations['translations']} translations Translation table
+ * @param {GetTextTranslation} token Parsed token
+ * @param {Translations} translations Translation table
  * @param {string} msgctxt Message entry context
  * @param {number} nplurals Number of expected plural forms
  * @throws {Error} Will throw an error if token validation fails
@@ -563,8 +565,8 @@ Parser.prototype._finalize = function (tokens) {
    * @constructor
    * @this {PoParserTransform & Transform}
    *
-   * @param {import( "./types.js").ParserOptions} options Optional options with defaultCharset and validation
-   * @param {import('readable-stream').TransformOptions & {initialTreshold?: number;}} transformOptions Optional stream options
+   * @param {ParserOptions} options Optional options with defaultCharset and validation
+   * @param {TransformOptions & {initialTreshold?: number;}} transformOptions Optional stream options
    */
 function PoParserTransform (options, transformOptions) {
   this.options = options;
@@ -587,7 +589,6 @@ util.inherits(PoParserTransform, Transform);
 
 /**
    * Processes a chunk of the input stream
-   * @template {(...args: any[]) => void} DoneCallback
    * @param {Buffer} chunk Chunk of the input stream
    * @param {string} encoding Encoding of the chunk
    * @param {DoneCallback} done Callback to call when the chunk is processed
@@ -658,7 +659,6 @@ PoParserTransform.prototype._transform = function (chunk, encoding, done) {
 /**
    * Once all inputs have been processed, emit the parsed translation table as an object
    *
-   * @template {(...args: any[]) => void} DoneCallback
    * @param {DoneCallback} done Callback to call when the chunk is processed
    */
 PoParserTransform.prototype._flush = function (done) {
