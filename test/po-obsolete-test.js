@@ -17,7 +17,7 @@ chai.config.includeStack = true;
 describe('Obsolete', async () => {
   const [po, mo, jsonString] = await Promise.all([
     readFile(path.join(__dirname, 'fixtures/obsolete.po')),
-    readFile(path.join(__dirname, 'fixtures/obsolete.mo')),
+    readFile(path.join(__dirname, 'fixtures/obsolete-le.mo')),
     readFile(path.join(__dirname, 'fixtures/obsolete.json'), 'utf8')
   ]);
 
