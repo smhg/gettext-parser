@@ -3,10 +3,29 @@ import { HEADERS, formatCharset, generateHeader, compareMsgid } from './shared.j
 import contentType from 'content-type';
 
 /**
+ * @typedef {import('node:stream').Transform} Transform
+ * @typedef {import('./types.js').GetTextTranslation} GetTextTranslation
+ * @typedef {import('./types.js').GetTextTranslations} GetTextTranslations
+ * @typedef {import('./types.js').Translations} Translations
+ * @typedef {import('./types.js').WriteFunc} WriteFunc
+ */
+
+/**
+ * @typedef {Object} Size Data about the size of the compiled MO object.
+ * @property {number} msgid The size of the msgid section.
+ * @property {number} msgstr The size of the msgstr section.
+ * @property {number} total The total size of the compiled MO object.
+ */
+
+/**
+ * @typedef {{ msgid: Buffer, msgstr: Buffer }} TranslationBuffers A translation object partially parsed.
+ */
+
+/**
  * Exposes general compiler function. Takes a translation
  * object as a parameter and returns binary MO object
  *
- * @param {import('./index.d.ts').GetTextTranslations} table Translation object
+ * @param {GetTextTranslations} table Translation object
  * @return {Buffer} Compiled binary MO object
  */
 export default function (table) {
@@ -16,66 +35,85 @@ export default function (table) {
 }
 
 /**
- * Creates a MO compiler object.
- *
- * @constructor
- * @param {import('./index.d.ts').GetTextTranslations} table Translation table as defined in the README
- * @return {import('./index.d.ts').Compiler} Compiler
+ * Prepare the header object to be compatible with MO compiler
+ * @param {Record<string, string>} headers the headers
+ * @return {Record<string, string>} The prepared header
  */
-function Compiler (table = {}) {
-  this._table = table;
-
-  let { headers = {}, translations = {} } = this._table;
-
-  headers = Object.keys(headers).reduce((result, key) => {
+function prepareMoHeaders (headers) {
+  return Object.keys(headers).reduce((result, key) => {
     const lowerKey = key.toLowerCase();
 
     if (HEADERS.has(lowerKey)) {
       // POT-Creation-Date is removed in MO (see https://savannah.gnu.org/bugs/?49654)
       if (lowerKey !== 'pot-creation-date') {
-        result[HEADERS.get(lowerKey)] = headers[key];
+        const value = HEADERS.get(lowerKey);
+        if (value) {
+          result[value] = headers[key];
+        }
       }
     } else {
       result[key] = headers[key];
     }
 
     return result;
-  }, {});
+  }, /** @type {Record<string, string>} */ ({}));
+}
 
-  // filter out empty translations
-  translations = Object.keys(translations).reduce((result, msgctxt) => {
+/**
+ * Prepare the translation object to be compatible with MO compiler
+ * @param {Translations} translations
+ * @return {Translations}
+ */
+function prepareTranslations (translations) {
+  return Object.keys(translations).reduce((result, msgctxt) => {
     const context = translations[msgctxt];
     const msgs = Object.keys(context).reduce((result, msgid) => {
-      const hasTranslation = context[msgid].msgstr.some(item => !!item.length);
+      const TranslationMsgstr = context[msgid].msgstr;
+      const hasTranslation = TranslationMsgstr.some(item => !!item.length);
 
       if (hasTranslation) {
         result[msgid] = context[msgid];
       }
 
       return result;
-    }, {});
+    }, /** @type {Record<string, GetTextTranslation>} */({}));
 
     if (Object.keys(msgs).length) {
       result[msgctxt] = msgs;
     }
 
     return result;
-  }, {});
-
-  this._table.translations = translations;
-  this._table.headers = headers;
-
-  this._translations = [];
-
-  this._writeFunc = 'writeUInt32LE';
-
-  this._handleCharset();
+  }, /** @type {Translations} */({}));
 }
 
 /**
- * Magic bytes for the generated binary data
+ * Creates a MO compiler object.
+ * @this {Compiler & Transform}
+ *
+ * @param {GetTextTranslations} [table] Translation table as defined in the README
  */
-Compiler.prototype.MAGIC = 0x950412de;
+function Compiler (table) {
+  /** @type {GetTextTranslations} _table The translation table */
+  this._table = {
+    charset: undefined,
+    translations: prepareTranslations(table?.translations ?? {}),
+    headers: prepareMoHeaders(table?.headers ?? {})
+  };
+
+  this._translations = [];
+  /**
+   * @type {WriteFunc}
+   */
+  this._writeFunc = 'writeUInt32LE';
+
+  this._handleCharset();
+
+  /**
+   * Magic bytes for the generated binary data
+   * @type {number} MAGIC file header magic value of mo file
+   */
+  this.MAGIC = 0x950412de;
+}
 
 /**
  * Handles header values, replaces or adds (if needed) a charset property
@@ -96,17 +134,19 @@ Compiler.prototype._handleCharset = function () {
 
 /**
  * Generates an array of translation strings
- * in the form of [{msgid:... , msgstr:...}]
+ * in the form of [{msgid:..., msgstr: ...}]
  *
- * @return {Array} Translation strings array
  */
 Compiler.prototype._generateList = function () {
+  /** @type {TranslationBuffers[]} */
   const list = [];
 
-  list.push({
-    msgid: Buffer.alloc(0),
-    msgstr: encoding.convert(generateHeader(this._table.headers), this._table.charset)
-  });
+  if ('headers' in this._table) {
+    list.push({
+      msgid: Buffer.alloc(0),
+      msgstr: encoding.convert(generateHeader(this._table.headers), this._table.charset)
+    });
+  }
 
   Object.keys(this._table.translations).forEach(msgctxt => {
     if (typeof this._table.translations[msgctxt] !== 'object') {
@@ -133,7 +173,7 @@ Compiler.prototype._generateList = function () {
         key += '\u0000' + msgidPlural;
       }
 
-      const value = [].concat(this._table.translations[msgctxt][msgid].msgstr || []).join('\u0000');
+      const value = /** @type {string[]} */([]).concat(this._table.translations[msgctxt][msgid].msgstr ?? []).join('\u0000');
 
       list.push({
         msgid: encoding.convert(key, this._table.charset),
@@ -148,20 +188,19 @@ Compiler.prototype._generateList = function () {
 /**
  * Calculate buffer size for the final binary object
  *
- * @param {import('./index.d.ts').GetTextTranslations} list An array of translation strings from _generateList
- * @return {Object} Size data of {msgid, msgstr, total}
+ * @param {TranslationBuffers[]} list An array of translation strings from _generateList
+ * @return {Size} Size data of {msgid, msgstr, total}
  */
 Compiler.prototype._calculateSize = function (list) {
   let msgidLength = 0;
   let msgstrLength = 0;
-  let totalLength = 0;
 
   list.forEach(translation => {
     msgidLength += translation.msgid.length + 1; // + extra 0x00
     msgstrLength += translation.msgstr.length + 1; // + extra 0x00
   });
 
-  totalLength = 4 + // magic number
+  const totalLength = 4 + // magic number
         4 + // revision
         4 + // string count
         4 + // original string table offset
@@ -183,9 +222,9 @@ Compiler.prototype._calculateSize = function (list) {
 /**
  * Generates the binary MO object from the translation list
  *
- * @param {import('./index.d.ts').GetTextTranslations} list translation list
- * @param {Object} size Byte size information
- * @return {Buffer} Compiled MO object
+ * @param {TranslationBuffers[]} list translation list
+ *  @param {Size} size Byte size information
+ *  @return {Buffer} Compiled MO object
  */
 Compiler.prototype._build = function (list, size) {
   const returnBuffer = Buffer.alloc(size.total);
@@ -214,21 +253,23 @@ Compiler.prototype._build = function (list, size) {
   // hash table offset
   returnBuffer[this._writeFunc](28 + (4 + 4) * list.length * 2, 24);
 
-  // build originals table
+  // Build original table
   curPosition = 28 + 2 * (4 + 4) * list.length;
   for (i = 0, len = list.length; i < len; i++) {
-    list[i].msgid.copy(returnBuffer, curPosition);
-    returnBuffer[this._writeFunc](list[i].msgid.length, 28 + i * 8);
-    returnBuffer[this._writeFunc](curPosition, 28 + i * 8 + 4);
+    const msgidLength = /** @type {Buffer} */(/** @type {unknown} */(list[i].msgid));
+    msgidLength.copy(returnBuffer, curPosition);
+    returnBuffer.writeUInt32LE(list[i].msgid.length, 28 + i * 8);
+    returnBuffer.writeUInt32LE(curPosition, 28 + i * 8 + 4);
     returnBuffer[curPosition + list[i].msgid.length] = 0x00;
     curPosition += list[i].msgid.length + 1;
   }
 
-  // build translations table
+  // build translation table
   for (i = 0, len = list.length; i < len; i++) {
-    list[i].msgstr.copy(returnBuffer, curPosition);
-    returnBuffer[this._writeFunc](list[i].msgstr.length, 28 + (4 + 4) * list.length + i * 8);
-    returnBuffer[this._writeFunc](curPosition, 28 + (4 + 4) * list.length + i * 8 + 4);
+    const msgstrLength = /** @type {Buffer} */(/** @type {unknown} */(list[i].msgstr));
+    msgstrLength.copy(returnBuffer, curPosition);
+    returnBuffer.writeUInt32LE(list[i].msgstr.length, 28 + (4 + 4) * list.length + i * 8);
+    returnBuffer.writeUInt32LE(curPosition, 28 + (4 + 4) * list.length + i * 8 + 4);
     returnBuffer[curPosition + list[i].msgstr.length] = 0x00;
     curPosition += list[i].msgstr.length + 1;
   }
@@ -237,8 +278,9 @@ Compiler.prototype._build = function (list, size) {
 };
 
 /**
- * Compiles translation object into a binary MO object
+ * Compiles a translation object into a binary MO object
  *
+ * @interface
  * @return {Buffer} Compiled MO object
  */
 Compiler.prototype.compile = function () {

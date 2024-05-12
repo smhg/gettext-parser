@@ -1,13 +1,27 @@
-import encoding from 'encoding';
 import { HEADERS, foldLine, compareMsgid, formatCharset, generateHeader } from './shared.js';
 import contentType from 'content-type';
+
+import encoding from 'encoding';
+
+/**
+ * @typedef {import('./types.js').GetTextTranslations} GetTextTranslations
+ * @typedef {import('./types.js').GetTextTranslation} GetTextTranslation
+ * @typedef {import('./types.js').GetTextComment} GetTextComment
+ * @typedef {import('./types.js').Translations} Translations
+ * @typedef {import('./types.js').ParserOptions} ParserOptions
+ */
+
+/**
+ * @typedef {Partial<Omit<GetTextTranslation, 'msgstr'>> & { msgstr?: string | string[] }} PreOutputTranslation
+ */
 
 /**
  * Exposes general compiler function. Takes a translation
  * object as a parameter and returns PO object
  *
- * @param {Object} table Translation object
- * @return {Buffer} Compiled PO object
+ * @param {GetTextTranslations} table Translation object
+ * @param {ParserOptions} [options] Options
+ * @return {Buffer} The compiled PO object
  */
 export default function (table, options) {
   const compiler = new Compiler(table, options);
@@ -16,48 +30,52 @@ export default function (table, options) {
 }
 
 /**
- * Creates a PO compiler object.
+ * Takes the header object and converts all headers into the lowercase format
  *
- * @constructor
- * @param {Object} table Translation table to be compiled
+ * @param {Record<string, string>} headersRaw the headers to prepare
+ * @returns {Record<string, string>} the headers in the lowercase format
  */
-function Compiler (table = {}, options = {}) {
-  this._table = table;
-  this._options = options;
-
-  this._table.translations = this._table.translations || {};
-
-  let { headers = {} } = this._table;
-
-  headers = Object.keys(headers).reduce((result, key) => {
+export function preparePoHeaders (headersRaw) {
+  return Object.keys(headersRaw).reduce((result, key) => {
     const lowerKey = key.toLowerCase();
+    const value = HEADERS.get(lowerKey);
 
-    if (HEADERS.has(lowerKey)) {
-      result[HEADERS.get(lowerKey)] = headers[key];
+    if (typeof value === 'string') {
+      result[value] = headersRaw[key];
     } else {
-      result[key] = headers[key];
+      result[key] = headersRaw[key];
     }
 
     return result;
-  }, {});
+  }, /** @type {Record<string, string>} */ ({}));
+}
 
-  this._table.headers = headers;
+/**
+ * Creates a PO compiler object.
+ *
+ * @constructor
+ * @param {GetTextTranslations} [table] Translation table to be compiled
+ * @param {ParserOptions} [options] Options
+ */
+function Compiler (table, options) {
+  this._table = table ?? {
+    headers: {},
+    charset: undefined,
+    translations: {}
+  };
+  this._table.translations = { ...this._table.translations };
 
-  if (!('foldLength' in this._options)) {
-    this._options.foldLength = 76;
-  }
+  /** @type {ParserOptions} _options The Options object */
+  this._options = {
+    foldLength: 76,
+    escapeCharacters: true,
+    sort: false,
+    eol: '\n',
+    ...options
+  };
 
-  if (!('escapeCharacters' in this._options)) {
-    this._options.escapeCharacters = true;
-  }
-
-  if (!('sort' in this._options)) {
-    this._options.sort = false;
-  }
-
-  if (!('eol' in this._options)) {
-    this._options.eol = '\n';
-  }
+  /** @type {Record<string, string>}} the translation table */
+  this._table.headers = preparePoHeaders(this._table.headers ?? {});
 
   this._translations = [];
 
@@ -65,14 +83,16 @@ function Compiler (table = {}, options = {}) {
 }
 
 /**
- * Converts a comments object to a comment string. The comment object is
- * in the form of {translator:'', reference: '', extracted: '', flag: '', previous:''}
+ * Converts a comment object to a comment string. The comment object is
+ * in the form of {translator: '', reference: '', extracted: '', flag: '', previous: ''}
  *
- * @param {Object} comments A comments object
- * @return {String} A comment string for the PO file
+ * @param {Record<string, string>} comments A comments object
+ * @return {string} A comment string for the PO file
  */
 Compiler.prototype._drawComments = function (comments) {
+  /** @var {Record<string, string[]>[]} lines The comment lines to be returned */
   const lines = [];
+  /** @var {{key: GetTextComment, prefix: string}} type The comment type */
   const types = [{
     key: 'translator',
     prefix: '# '
@@ -90,38 +110,47 @@ Compiler.prototype._drawComments = function (comments) {
     prefix: '#| '
   }];
 
-  types.forEach(type => {
-    if (!comments[type.key]) {
-      return;
-    }
+  for (const type of types) {
+    /** @var {string} value The comment type */
+    const value = type.key;
 
-    comments[type.key].split(/\r?\n|\r/).forEach(line => {
+    // ignore empty comments
+    if (!(value in comments)) { continue; }
+
+    const commentLines = comments[value].split(/\r?\n|\r/);
+
+    // add comment lines to comments Array
+    for (const line of commentLines) {
       lines.push(`${type.prefix}${line}`);
-    });
-  });
+    }
+  }
 
-  return lines.join(this._options.eol);
+  return lines.length ? lines.join(this._options.eol) : '';
 };
 
 /**
  * Builds a PO string for a single translation object
  *
- * @param {Object} block Translation object
- * @param {Object} [override] Properties of this object will override `block` properties
+ * @param {PreOutputTranslation} block Translation object
+ * @param {Partial<PreOutputTranslation>} [override] Properties of this object will override `block` properties
  * @param {boolean} [obsolete] Block is obsolete and must be commented out
- * @return {String} Translation string for a single object
+ * @return {string} Translation string for a single object
  */
 Compiler.prototype._drawBlock = function (block, override = {}, obsolete = false) {
   const response = [];
   const msgctxt = override.msgctxt || block.msgctxt;
   const msgid = override.msgid || block.msgid;
   const msgidPlural = override.msgid_plural || block.msgid_plural;
-  const msgstr = [].concat(override.msgstr || block.msgstr);
-  let comments = override.comments || block.comments;
+  const msgstrData = override.msgstr || block.msgstr;
+  const msgstr = Array.isArray(msgstrData) ? [...msgstrData] : [msgstrData];
 
-  // add comments
-  if (comments && (comments = this._drawComments(comments))) {
-    response.push(comments);
+  /** @type {GetTextComment|undefined} */
+  const comments = override.comments || block.comments;
+  if (comments) {
+    const drawnComments = this._drawComments(comments);
+    if (drawnComments) {
+      response.push(drawnComments);
+    }
   }
 
   if (msgctxt) {
@@ -146,10 +175,10 @@ Compiler.prototype._drawBlock = function (block, override = {}, obsolete = false
 /**
  * Escapes and joins a key and a value for the PO string
  *
- * @param {String} key Key name
- * @param {String} value Key value
+ * @param {string} key Key name
+ * @param {string} value Key value
  * @param {boolean} [obsolete] PO string is obsolete and must be commented out
- * @return {String} Joined and escaped key-value pair
+ * @return {string} Joined and escaped key-value pair
  */
 Compiler.prototype._addPOString = function (key = '', value = '', obsolete = false) {
   key = key.toString();
@@ -176,7 +205,7 @@ Compiler.prototype._addPOString = function (key = '', value = '', obsolete = fal
     eol = eol + '#~ ';
   }
 
-  if (foldLength > 0) {
+  if (foldLength && foldLength > 0) {
     lines = foldLine(value, foldLength);
   } else {
     // split only on new lines
@@ -202,49 +231,52 @@ Compiler.prototype._addPOString = function (key = '', value = '', obsolete = fal
  * Handles header values, replaces or adds (if needed) a charset property
  */
 Compiler.prototype._handleCharset = function () {
-  const ct = contentType.parse(this._table.headers['Content-Type'] || 'text/plain');
+  if (this._table.headers) {
+    const ct = contentType.parse(this._table.headers['Content-Type'] || 'text/plain');
 
-  const charset = formatCharset(this._table.charset || ct.parameters.charset || 'utf-8');
+    const charset = formatCharset(this._table.charset || ct.parameters.charset || 'utf-8');
 
-  // clean up content-type charset independently using fallback if missing
-  if (ct.parameters.charset) {
-    ct.parameters.charset = formatCharset(ct.parameters.charset);
+    // clean up content-type charset independently using fallback if missing
+    if (ct.parameters.charset) {
+      ct.parameters.charset = formatCharset(ct.parameters.charset);
+    }
+
+    this._table.charset = charset;
+    this._table.headers['Content-Type'] = contentType.format(ct);
   }
-
-  this._table.charset = charset;
-  this._table.headers['Content-Type'] = contentType.format(ct);
 };
 
 /**
  * Flatten and sort translations object
  *
- * @param {Object} section Object to be prepared (translations or obsolete)
- * @returns {Array} Prepared array
+ * @param {Translations} section Object to be prepared (translations or obsolete)
+ * @returns {PreOutputTranslation[]|undefined} Prepared array
  */
 Compiler.prototype._prepareSection = function (section) {
+  /** @type {GetTextTranslation[]} response Prepared array */
   let response = [];
 
-  Object.keys(section).forEach(msgctxt => {
+  for (const msgctxt in section) {
     if (typeof section[msgctxt] !== 'object') {
       return;
     }
 
-    Object.keys(section[msgctxt]).forEach(msgid => {
+    for (const msgid of Object.keys(section[msgctxt])) {
       if (typeof section[msgctxt][msgid] !== 'object') {
-        return;
+        continue;
       }
 
       if (msgctxt === '' && msgid === '') {
-        return;
+        continue;
       }
 
       response.push(section[msgctxt][msgid]);
-    });
-  });
+    }
+  }
 
   const { sort } = this._options;
 
-  if (sort !== false) {
+  if (sort) {
     if (typeof sort === 'function') {
       response = response.sort(sort);
     } else {
@@ -256,33 +288,37 @@ Compiler.prototype._prepareSection = function (section) {
 };
 
 /**
- * Compiles translation object into a PO object
+ * Compiles a translation object into a PO object
  *
- * @return {Buffer} Compiled PO object
+ * @interface
+ * @return {Buffer} Compiled a PO object
  */
 Compiler.prototype.compile = function () {
+  if (!this._table.translations) {
+    throw new Error('No translations found');
+  }
+  /** @type {PreOutputTranslation} headerBlock */
   const headerBlock = (this._table.translations[''] && this._table.translations['']['']) || {};
-  let response = [];
 
   const translations = this._prepareSection(this._table.translations);
-  response = translations.map(r => this._drawBlock(r));
+  let response = /** @type {(PreOutputTranslation|string)[]} */ (/** @type {unknown[]} */ (translations?.map(t => this._drawBlock(t))));
 
   if (typeof this._table.obsolete === 'object') {
     const obsolete = this._prepareSection(this._table.obsolete);
-    if (obsolete.length) {
-      response = response.concat(obsolete.map(r => this._drawBlock(r, {}, true)));
+    if (obsolete && obsolete.length) {
+      response = response?.concat(obsolete.map(r => this._drawBlock(r, {}, true)));
     }
   }
 
-  const { eol } = this._options;
+  const eol = this._options.eol ?? '\n';
 
-  response.unshift(this._drawBlock(headerBlock, {
+  response?.unshift(this._drawBlock(headerBlock, {
     msgstr: generateHeader(this._table.headers)
   }));
 
   if (this._table.charset === 'utf-8' || this._table.charset === 'ascii') {
-    return Buffer.from(response.join(eol + eol) + eol, 'utf-8');
+    return Buffer.from(response?.join(eol + eol) + eol, 'utf-8');
   }
 
-  return encoding.convert(response.join(eol + eol) + eol, this._table.charset);
+  return encoding.convert(response?.join(eol + eol) + eol, this._table.charset);
 };

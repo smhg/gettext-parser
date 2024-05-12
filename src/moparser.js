@@ -2,11 +2,18 @@ import encoding from 'encoding';
 import { formatCharset, parseHeader } from './shared.js';
 
 /**
+ * @typedef {import('./types.js').GetTextTranslations} GetTextTranslations
+ * @typedef {import('./types.js').GetTextTranslation} GetTextTranslation
+ * @typedef {import('./types.js').Translations} Translations
+ * @typedef {import('./types.js').WriteFunc} WriteFunc
+ * @typedef {import('./types.js').ReadFunc} ReadFunc
+ */
+
+/**
  * Parses a binary MO object into translation table
  *
  * @param {Buffer} buffer Binary MO object
- * @param {String} [defaultCharset] Default charset to use
- * @return {Object} Translation object
+ * @param {string} [defaultCharset] Default charset to use
  */
 export default function (buffer, defaultCharset) {
   const parser = new Parser(buffer, defaultCharset);
@@ -18,48 +25,53 @@ export default function (buffer, defaultCharset) {
  * Creates a MO parser object.
  *
  * @constructor
- * @param {Buffer} fileContents Binary MO object
- * @param {String} [defaultCharset] Default charset to use
+ * @param {Buffer|null} fileContents Binary MO object
+ * @param {string} [defaultCharset] Default charset to use
  */
 function Parser (fileContents, defaultCharset = 'iso-8859-1') {
   this._fileContents = fileContents;
 
+  this._charset = defaultCharset;
+
   /**
-     * Method name for writing int32 values, default littleendian
-     */
+   * @type {WriteFunc}
+   */
   this._writeFunc = 'writeUInt32LE';
 
   /**
-     * Method name for reading int32 values, default littleendian
-     */
+   * @type {ReadFunc}
+   */
   this._readFunc = 'readUInt32LE';
 
-  this._charset = defaultCharset;
-
+  /**
+   * Translation table
+   *
+   * @type {GetTextTranslations} table Translation object
+   */
   this._table = {
     charset: this._charset,
-    headers: undefined,
+    headers: {},
     translations: {}
   };
+
+  /**
+   * Magic constant to check the endianness of the input file
+   */
+  this.MAGIC = 0x950412de;
 }
 
 /**
- * Magic constant to check the endianness of the input file
- */
-Parser.prototype.MAGIC = 0x950412de;
-
-/**
- * Checks if number values in the input file are in big- or littleendian format.
+ * Checks if number values in the input file are in big- or little endian format.
  *
- * @return {Boolean} Return true if magic was detected
+ * @return {boolean} Return true if magic was detected
  */
 Parser.prototype._checkMagick = function () {
-  if (this._fileContents.readUInt32LE(0) === this.MAGIC) {
+  if (this._fileContents?.readUInt32LE(0) === this.MAGIC) {
     this._readFunc = 'readUInt32LE';
     this._writeFunc = 'writeUInt32LE';
 
     return true;
-  } else if (this._fileContents.readUInt32BE(0) === this.MAGIC) {
+  } else if (this._fileContents?.readUInt32BE(0) === this.MAGIC) {
     this._readFunc = 'readUInt32BE';
     this._writeFunc = 'writeUInt32BE';
 
@@ -70,18 +82,23 @@ Parser.prototype._checkMagick = function () {
 };
 
 /**
- * Read the original strings and translations from the input MO file. Use the
- * first translation string in the file as the header.
+ * Read the original strings and translations from the input MO file.
+ * Use the first translation string in the file as the header.
  */
 Parser.prototype._loadTranslationTable = function () {
-  let offsetOriginals = this._offsetOriginals;
-  let offsetTranslations = this._offsetTranslations;
+  let offsetOriginals = this._offsetOriginals || 0;
+  let offsetTranslations = this._offsetTranslations || 0;
   let position;
   let length;
   let msgid;
   let msgstr;
 
+  // Return if there are no translations
+  if (!this._total) { this._fileContents = null; return; }
+
+  // Loop through all strings in the MO file
   for (let i = 0; i < this._total; i++) {
+    if (this._fileContents === null) continue;
     // msgid string
     length = this._fileContents[this._readFunc](offsetOriginals);
     offsetOriginals += 4;
@@ -89,7 +106,7 @@ Parser.prototype._loadTranslationTable = function () {
     offsetOriginals += 4;
     msgid = this._fileContents.subarray(
       position,
-      position + length,
+      position + length
     );
 
     // matching msgstr
@@ -99,7 +116,7 @@ Parser.prototype._loadTranslationTable = function () {
     offsetTranslations += 4;
     msgstr = this._fileContents.subarray(
       position,
-      position + length,
+      position + length
     );
 
     if (!i && !msgid.toString()) {
@@ -131,34 +148,31 @@ Parser.prototype._handleCharset = function (headers) {
     this._charset = this._table.charset = formatCharset(match[1], this._charset);
   }
 
-  headers = encoding.convert(headers, 'utf-8', this._charset)
-    .toString('utf8');
+  headers = encoding.convert(headers, 'utf-8', this._charset);
 
-  this._table.headers = parseHeader(headers);
+  this._table.headers = parseHeader(headers.toString('utf8'));
 };
 
 /**
  * Adds a translation to the translation object
  *
- * @param {String} msgid Original string
- * @params {String} msgstr Translation for the original string
+ * @param {string} msgidRaw Original string
+ * @param {string} msgstrRaw Translation for the original string
  */
-Parser.prototype._addString = function (msgid, msgstr) {
+Parser.prototype._addString = function (msgidRaw, msgstrRaw) {
   const translation = {};
-  let msgctxt;
+  let msgctxt = '';
   let msgidPlural;
 
-  msgid = msgid.split('\u0004');
-  if (msgid.length > 1) {
-    msgctxt = msgid.shift();
+  const msgidArray = msgidRaw.split('\u0004');
+  if (msgidArray.length > 1) {
+    msgctxt = msgidArray.shift() || '';
     translation.msgctxt = msgctxt;
-  } else {
-    msgctxt = '';
   }
-  msgid = msgid.join('\u0004');
+  msgidRaw = msgidArray.join('\u0004');
 
-  const parts = msgid.split('\u0000');
-  msgid = parts.shift();
+  const parts = msgidRaw.split('\u0000');
+  const msgid = parts.shift() || '';
 
   translation.msgid = msgid;
 
@@ -166,8 +180,8 @@ Parser.prototype._addString = function (msgid, msgstr) {
     translation.msgid_plural = msgidPlural;
   }
 
-  msgstr = msgstr.split('\u0000');
-  translation.msgstr = [].concat(msgstr || []);
+  const msgstr = msgstrRaw.split('\u0000');
+  translation.msgstr = [...msgstr];
 
   if (!this._table.translations[msgctxt]) {
     this._table.translations[msgctxt] = {};
@@ -179,31 +193,31 @@ Parser.prototype._addString = function (msgid, msgstr) {
 /**
  * Parses the MO object and returns translation table
  *
- * @return {Object} Translation table
+ * @return {GetTextTranslations | false} Translation table
  */
 Parser.prototype.parse = function () {
-  if (!this._checkMagick()) {
+  if (!this._checkMagick() || this._fileContents === null) {
     return false;
   }
 
   /**
-     * GetText revision nr, usually 0
-     */
+   * GetText revision nr, usually 0
+   */
   this._revision = this._fileContents[this._readFunc](4);
 
   /**
-     * Total count of translated strings
-     */
-  this._total = this._fileContents[this._readFunc](8);
+   * @type {number} Total count of translated strings
+   */
+  this._total = this._fileContents[this._readFunc](8) ?? 0;
 
   /**
-     * Offset position for original strings table
-     */
+   * @type {number} Offset position for original strings table
+   */
   this._offsetOriginals = this._fileContents[this._readFunc](12);
 
   /**
-     * Offset position for translation strings table
-     */
+   * @type {number} Offset position for translation strings table
+   */
   this._offsetTranslations = this._fileContents[this._readFunc](16);
 
   // Load translations into this._translationTable
