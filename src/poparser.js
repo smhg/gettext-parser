@@ -4,18 +4,31 @@ import { Transform } from 'readable-stream';
 import util from 'util';
 
 /**
- * Po parser options
+ * @typedef {import('stream').Stream.Writable} WritableState
+ * @typedef {import('readable-stream').TransformOptions} TransformOptions
+ * @typedef {import('./types.js').GetTextTranslations} GetTextTranslations
+ * @typedef {import('./types.js').GetTextTranslation} GetTextTranslation
+ * @typedef {import('./types.js').GetTextComment} GetTextComment
+ * @typedef {import('./types.js').Translations} Translations
+ * @typedef {import('./types.js').ParserOptions} ParserOptions
+ */
+
+/**
  * @typedef {{ defaultCharset?: string, validation?: boolean }} Options Po parser options
- *
- * The single Node object in the PO file
- * @typedef {{
- * key?: string,
- * type?: number,
- * value: string,
- * quote?: string,
- * obsolete?: boolean,
- * comments?: import('./types.js').GetTextComment | undefined
- * }} Node PO node
+ */
+
+/**
+ * @typedef {(...args: any[]) => void} DoneCallback
+ */
+
+/**
+ * @typedef {Object} Node A single Node object in the PO file
+ * @property {string} [key]
+ * @property {number} [type]
+ * @property {string} value
+ * @property {string} [quote]
+ * @property {boolean} [obsolete]
+ * @property {GetTextComment | undefined} [comments]
  */
 
 /**
@@ -34,7 +47,7 @@ export function poParse (input, options = {}) {
  * Parses a PO stream, emits translation table in object mode
  *
  * @param {Options} [options] Optional options with defaultCharset and validation
- * @param {import('readable-stream').TransformOptions} [transformOptions] Optional stream options
+ * @param {TransformOptions} [transformOptions] Optional stream options
  */
 export function poStream (options = {}, transformOptions = {}) {
   return new PoParserTransform(options, transformOptions);
@@ -54,7 +67,7 @@ function Parser (fileContents, { defaultCharset = 'iso-8859-1', validation = fal
   /** @type {Node[]} Lexed tokens */
   this._lex = [];
   this._escaped = false;
-  /** @type {Node} */
+  /** @type {Partial<Node>} */
   this._node = {};
   this._state = this.states.none;
   this._lineNumber = 1;
@@ -147,7 +160,7 @@ Parser.prototype.symbols = {
 /**
  * Token parser. Parsed state can be found from this._lex
  *
- * @param {String} chunk String
+ * @param {string} chunk String
  * @throws {ParserError} Throws a SyntaxError if the value doesn't match the key names.
  */
 Parser.prototype._lexer = function (chunk) {
@@ -169,14 +182,14 @@ Parser.prototype._lexer = function (chunk) {
             value: '',
             quote: chr
           };
-          this._lex.push(this._node);
+          this._lex.push(/** @type {Node} */ (this._node));
           this._state = this.states.string;
         } else if (chr === '#') {
           this._node = {
             type: this.types.comments,
             value: ''
           };
-          this._lex.push(this._node);
+          this._lex.push(/** @type {Node} */ (this._node));
           this._state = this.states.comments;
         } else if (!chr.match(this.symbols.whitespace)) {
           this._node = {
@@ -186,7 +199,7 @@ Parser.prototype._lexer = function (chunk) {
           if (this._state === this.states.obsolete) {
             this._node.obsolete = true;
           }
-          this._lex.push(this._node);
+          this._lex.push(/** @type {Node} */ (this._node));
           this._state = this.states.key;
         }
         break;
@@ -230,8 +243,7 @@ Parser.prototype._lexer = function (chunk) {
         break;
       case this.states.key:
         if (!chr.match(this.symbols.key)) {
-          if (!this._node.value.match(this.symbols.keyNames)) {
-            /**  @type {Record<string, { lineNumber: number, message: SyntaxError}>} */
+          if (!this._node.value?.match(this.symbols.keyNames)) {
             throw new ParserError(`Error parsing PO data: Invalid key name "${this._node.value}" at line ${this._lineNumber}. This can be caused by an unescaped quote character in a msgid or msgstr value.`, this._lineNumber);
           }
           this._state = this.states.none;
@@ -315,11 +327,13 @@ Parser.prototype._parseComments = function (tokens) {
       }
     }
 
-    node.value = {};
+    const finalToken = /** @type {Omit<Node, 'value'> & { value: Record<string, string>}} */ (/** @type {unknown} */ (node));
+
+    finalToken.value = {};
 
     for (const key of Object.keys(comment)) {
       if (key && comment[key]?.length) {
-        node.value[key] = comment[key].join('\n');
+        finalToken.value[key] = comment[key].join('\n');
       }
     }
   }
@@ -328,13 +342,13 @@ Parser.prototype._parseComments = function (tokens) {
 /**
  * Join gettext keys with values
  *
- * @param {Node[]& {key: { value: string } } } tokens - Parsed tokens containing key-value pairs
+ * @param {(Node & { value?: string })[]} tokens - Parsed tokens containing key-value pairs
  * @return {Node[]} - An array of Nodes representing joined tokens
  */
 Parser.prototype._handleKeys = function (tokens) {
   /** @type {Node[]} */
   const response = [];
-  /** @type {Node & {key: any, obsolete?: boolean, comments?: string}} */
+  /** @type {Partial<Node> & { comments?: string }} */
   let lastNode = {};
 
   for (let i = 0, len = tokens.length; i < len; i++) {
@@ -349,8 +363,7 @@ Parser.prototype._handleKeys = function (tokens) {
         lastNode.comments = tokens[i - 1].value;
       }
       lastNode.value = '';
-      /** @type {Node} */
-      response.push(lastNode);
+      response.push(/** @type {Node} */ (lastNode));
     } else if (tokens[i].type === this.types.string && lastNode) {
       lastNode.value += tokens[i].value;
     }
@@ -363,15 +376,15 @@ Parser.prototype._handleKeys = function (tokens) {
  * Separate different values into individual translation objects
  *
  * @param {Node[]} tokens Parsed tokens
- * @return {import("./types.js").GetTextTranslation[]} Tokens
+ * @return {GetTextTranslation[]} Tokens
  */
 Parser.prototype._handleValues = function (tokens) {
   const response = [];
-  /** @type {import("./types.js").GetTextTranslation | {msgid_plural?: string, msgctxt?: string, msgstr?: string[], msgid: string, comments?: import("./types.js").GetTextComment, obsolete?: boolean}} Translation object */
+  /** @type {GetTextTranslation} Translation object */
   let lastNode = {};
   /** @type {string | undefined} */
   let curContext;
-  /** @type {import('./types.js').GetTextComment | undefined} */
+  /** @type {GetTextComment | undefined} */
   let curComments;
 
   for (let i = 0, len = tokens.length; i < len; i++) {
@@ -441,8 +454,8 @@ Parser.prototype._handleValues = function (tokens) {
 /**
  * Validate token
  *
- * @param {{ msgid?: string, msgid_plural?: string, msgstr?: string[] }} token Parsed token
- * @param {import("./types.js").GetTextTranslations['translations']} translations Translation table
+ * @param {GetTextTranslation} token Parsed token
+ * @param {Translations} translations Translation table
  * @param {string} msgctxt Message entry context
  * @param {number} nplurals Number of expected plural forms
  * @throws {Error} Will throw an error if token validation fails
@@ -472,18 +485,13 @@ Parser.prototype._validateToken = function (
 /**
  * Compose a translation table from tokens object
  *
- * @param {import("./types.js").GetTextTranslation[] & Node[]} tokens Parsed tokens
- * @return {import("./types.js").GetTextTranslations} Translation table
+ * @param {GetTextTranslation[]} tokens Parsed tokens
+ * @return {GetTextTranslations} Translation table
  */
 Parser.prototype._normalize = function (tokens) {
   /**
    * Translation table to be returned
-   * @type {{
-   *    charset: string,
-   *    obsolete?: { [x: string]: { [x: string]: import("./types.js").GetTextTranslation} },
-   *    headers: import("./types.js").GetTextTranslations['headers'] | undefined,
-   *    translations: import("./types.js").GetTextTranslations['translations'] | {}
-   * }} table
+   * @type {Omit<GetTextTranslations, 'headers'> & Partial<Pick<GetTextTranslations, 'headers'>> } table
    */
   const table = {
     charset: this._charset,
@@ -525,24 +533,22 @@ Parser.prototype._normalize = function (tokens) {
       this._validateToken(tokens[i], table.translations, msgctxt, nplurals);
     }
 
-    /** @type {import("./types.js").GetTextTranslation} token */
     const token = tokens[i];
     table.translations[msgctxt][token.msgid] = token;
   }
 
-  return table;
+  return /** @type {GetTextTranslations} */ (table);
 };
 
 /**
  * Converts parsed tokens to a translation table
  *
  * @param {Node[]} tokens Parsed tokens
- * @returns {import("./types.js").GetTextTranslations} Translation table
+ * @returns {GetTextTranslations} Translation table
  */
 Parser.prototype._finalize = function (tokens) {
   /**
    * Translation table
-   * @type {Node[]} Translation table
    */
   let data = this._joinStringValues(tokens);
 
@@ -557,29 +563,27 @@ Parser.prototype._finalize = function (tokens) {
 };
 
 /**
- * @typedef {import('stream').Stream.Writable} WritableState
+ * Creates a transform stream for parsing PO input
+ * @constructor
+ * @this {PoParserTransform & Transform}
+ *
+ * @param {ParserOptions} options Optional options with defaultCharset and validation
+ * @param {TransformOptions & {initialTreshold?: number;}} transformOptions Optional stream options
  */
-/**
-   * Creates a transform stream for parsing PO input
-   * @constructor
-   * @this {PoParserTransform & Transform}
-   *
-   * @param {import( "./types.js").parserOptions} options Optional options with defaultCharset and validation
-   * @param {import('readable-stream').TransformOptions & {initialTreshold?: number;}} transformOptions Optional stream options
-   */
 function PoParserTransform (options, transformOptions) {
+  const { initialTreshold, ..._transformOptions } = transformOptions;
   this.options = options;
   /** @type {Parser|false} */
   this._parser = false;
   this._tokens = {};
 
-  /** @type {*[]} */
+  /** @type {Buffer[]} */
   this._cache = [];
   this._cacheSize = 0;
 
   this.initialTreshold = transformOptions.initialTreshold || 2 * 1024;
 
-  Transform.call(this, transformOptions);
+  Transform.call(this, _transformOptions);
 
   this._writableState.objectMode = false;
   this._readableState.objectMode = true;
@@ -590,7 +594,7 @@ util.inherits(PoParserTransform, Transform);
    * Processes a chunk of the input stream
    * @param {Buffer} chunk Chunk of the input stream
    * @param {string} encoding Encoding of the chunk
-   * @param {(k?: *)=> void} done Callback to call when the chunk is processed
+   * @param {DoneCallback} done Callback to call when the chunk is processed
    */
 PoParserTransform.prototype._transform = function (chunk, encoding, done) {
   let i;
@@ -657,7 +661,8 @@ PoParserTransform.prototype._transform = function (chunk, encoding, done) {
 
 /**
    * Once all inputs have been processed, emit the parsed translation table as an object
-   * @param {} done Callback to call when the chunk is processed
+   *
+   * @param {DoneCallback} done Callback to call when the chunk is processed
    */
 PoParserTransform.prototype._flush = function (done) {
   let chunk;
@@ -683,7 +688,7 @@ PoParserTransform.prototype._flush = function (done) {
   }
 
   if (this._parser) {
-    this.push(this._parser._finalize(this._parser._lex));
+    /** @type {any} */ (this).push(this._parser._finalize(this._parser._lex));
   }
 
   setImmediate(done);
