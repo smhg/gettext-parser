@@ -1,6 +1,5 @@
 /node_modules
 /lib
 /@types
-/types
 npm-debug.log
 .DS_Store
