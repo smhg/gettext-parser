@@ -2,11 +2,18 @@ import encoding from 'encoding';
 import { formatCharset, parseHeader } from './shared.js';
 
 /**
+ * @typedef {import('./types.js').GetTextTranslations} GetTextTranslations
+ * @typedef {import('./types.js').GetTextTranslation} GetTextTranslation
+ * @typedef {import('./types.js').Translations} Translations
+ * @typedef {import('./types.js').WriteFunc} WriteFunc
+ * @typedef {import('./types.js').ReadFunc} ReadFunc
+ */
+
+/**
  * Parses a binary MO object into translation table
  *
  * @param {Buffer} buffer Binary MO object
- * @param {String} [defaultCharset] Default charset to use
- * @return {Object} Translation object
+ * @param {string} [defaultCharset] Default charset to use
  */
 export default function (buffer, defaultCharset) {
   const parser = new Parser(buffer, defaultCharset);
@@ -19,7 +26,7 @@ export default function (buffer, defaultCharset) {
  *
  * @constructor
  * @param {Buffer|null} fileContents Binary MO object
- * @param {String} [defaultCharset] Default charset to use
+ * @param {string} [defaultCharset] Default charset to use
  */
 function Parser (fileContents, defaultCharset = 'iso-8859-1') {
   this._fileContents = fileContents;
@@ -27,13 +34,11 @@ function Parser (fileContents, defaultCharset = 'iso-8859-1') {
   this._charset = defaultCharset;
 
   /**
-   * @typedef {('writeUInt32LE'|'writeUInt32BE')} WriteFunc Method name for writing int32 values, default littleendian
    * @type {WriteFunc}
    */
   this._writeFunc = 'writeUInt32LE';
 
   /**
-   * @typedef {('readUInt32LE'|'readUInt32BE')} ReadFunc Method name for reading int32 values, default littleendian
    * @type {ReadFunc}
    */
   this._readFunc = 'readUInt32LE';
@@ -41,7 +46,7 @@ function Parser (fileContents, defaultCharset = 'iso-8859-1') {
   /**
    * Translation table
    *
-   * @type {import('./types.js').GetTextTranslations} table Translation object
+   * @type {GetTextTranslations} table Translation object
    */
   this._table = {
     charset: this._charset,
@@ -58,7 +63,7 @@ function Parser (fileContents, defaultCharset = 'iso-8859-1') {
 /**
  * Checks if number values in the input file are in big- or little endian format.
  *
- * @return {Boolean} Return true if magic was detected
+ * @return {boolean} Return true if magic was detected
  */
 Parser.prototype._checkMagick = function () {
   if (this._fileContents?.readUInt32LE(0) === this.MAGIC) {
@@ -188,7 +193,7 @@ Parser.prototype._addString = function (msgidRaw, msgstrRaw) {
 /**
  * Parses the MO object and returns translation table
  *
- * @return {import("./types.js").GetTextTranslations | false} Translation table
+ * @return {GetTextTranslations | false} Translation table
  */
 Parser.prototype.parse = function () {
   if (!this._checkMagick() || this._fileContents === null) {

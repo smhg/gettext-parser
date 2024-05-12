@@ -21,7 +21,7 @@ const PLURAL_FORM_HEADER_NPLURALS_REGEX = /nplurals\s*=\s*(?<nplurals>\d+)/;
  * Parses a header string into an object of key-value pairs
  *
  * @param {string} str Header string
- * @return {{[key: string]: string}} An object of key-value pairs
+ * @return {Record<string, string>} An object of key-value pairs
  */
 export function parseHeader (str = '') {
   /** @type {string} Header string  */
@@ -46,7 +46,7 @@ export function parseHeader (str = '') {
 /**
  * Attempts to safely parse 'nplurals" value from "Plural-Forms" header
  *
- * @param {{[key: string]: string}} [headers] An object with parsed headers
+ * @param {Record<string, string>} [headers] An object with parsed headers
  * @param {number} fallback Fallback value if "Plural-Forms" header is absent
  * @returns {number} Parsed result
  */
@@ -67,7 +67,7 @@ export function parseNPluralFromHeadersSafely (headers, fallback = 1) {
 /**
  * Joins a header object of key value pairs into a header string
  *
- * @param {{[key: string]: string}} header Object of key value pairs
+ * @param {Record<string, string>} header Object of key value pairs
  * @return {string} An object of key-value pairs
  */
 export function generateHeader (header = {}) {
@@ -105,8 +105,8 @@ export function formatCharset (charset = 'iso-8859-1', defaultCharset = 'iso-885
 /**
  * Folds long lines according to PO format
  *
- * @param {String} str PO formatted string to be folded
- * @param {Number} [maxLen=76] Maximum allowed length for folded lines
+ * @param {string} str PO formatted string to be folded
+ * @param {number} [maxLen=76] Maximum allowed length for folded lines
  * @return {string[]} An array of lines
  */
 export function foldLine (str, maxLen = 76) {
@@ -150,8 +150,9 @@ export function foldLine (str, maxLen = 76) {
 /**
  * Comparator function for comparing msgid
  *
- * @param {{msgid: string}} left with msgid prev
- * @param {{msgid: string}} right with msgid next
+ * @template {Buffer|string} T
+ * @param {{msgid: T}} left with msgid prev
+ * @param {{msgid: T}} right with msgid next
  * @returns {number} comparator index
  */
 export function compareMsgid ({ msgid: left }, { msgid: right }) {

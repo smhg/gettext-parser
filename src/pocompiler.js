@@ -5,11 +5,18 @@ import contentType from 'content-type';
 import encoding from 'encoding';
 
 /**
+ * @typedef {import('./types.js').GetTextTranslations} GetTextTranslations
+ * @typedef {import('./types.js').GetTextTranslation} GetTextTranslation
+ * @typedef {import('./types.js').GetTextComment} GetTextComment
+ * @typedef {import('./types.js').Translations} Translations
+ * @typedef {import('./types.js').ParserOptions} ParserOptions
+ */
+/**
  * Exposes general compiler function. Takes a translation
  * object as a parameter and returns PO object
  *
- * @param {import('./types.js').GetTextTranslations} table Translation object
- * @param {import('./types.js').parserOptions|{}} [options] Options
+ * @param {GetTextTranslations} table Translation object
+ * @param {ParserOptions} [options] Options
  * @return {Buffer} The compiled PO object
  */
 export default function (table, options) {
@@ -21,11 +28,11 @@ export default function (table, options) {
 /**
  * Takes the header object and converts all headers into the lowercase format
  *
- * @param {Record<string, any>} headersRaw the headers to prepare
- * @returns {Record<string, any>} the headers in the lowercase format
+ * @param {Record<string, string>} headersRaw the headers to prepare
+ * @returns {Record<string, string>} the headers in the lowercase format
  */
 export function preparePoHeaders (headersRaw) {
-  return Object.keys(headersRaw).reduce((/** @type {{ [x: string]: any; }} */ result, key) => {
+  return Object.keys(headersRaw).reduce((result, key) => {
     const lowerKey = key.toLowerCase();
     const value = HEADERS.get(lowerKey);
 
@@ -36,15 +43,15 @@ export function preparePoHeaders (headersRaw) {
     }
 
     return result;
-  }, {});
+  }, /** @type {Record<string, string>} */ ({}));
 }
 
 /**
  * Creates a PO compiler object.
  *
  * @constructor
- * @param {import('./types.js').GetTextTranslations} [table] Translation table to be compiled
- * @param {Partial<import('./types.js').parserOptions>} [options] Options
+ * @param {GetTextTranslations} [table] Translation table to be compiled
+ * @param {ParserOptions} [options] Options
  */
 function Compiler (table, options) {
   this._table = table ?? {
@@ -54,7 +61,7 @@ function Compiler (table, options) {
   };
   this._table.translations = { ...this._table.translations };
 
-  /** @type {import('./types.js').parserOptions} _options The Options object */
+  /** @type {ParserOptions} _options The Options object */
   this._options = {
     foldLength: 76,
     escapeCharacters: true,
@@ -63,7 +70,7 @@ function Compiler (table, options) {
     ...options
   };
 
-  /** @type {{ [x: string]: any; }} the translation table */
+  /** @type {Record<string, string>}} the translation table */
   this._table.headers = preparePoHeaders(this._table.headers ?? {});
 
   this._translations = [];
@@ -76,12 +83,12 @@ function Compiler (table, options) {
  * in the form of {translator: '', reference: '', extracted: '', flag: '', previous: ''}
  *
  * @param {Record<string, string>} comments A comments object
- * @return {String} A comment string for the PO file
+ * @return {string} A comment string for the PO file
  */
 Compiler.prototype._drawComments = function (comments) {
   /** @var {Record<string, string[]>[]} lines The comment lines to be returned */
   const lines = [];
-  /** @var {{key: keyof import('./types.js').GetTextComment, prefix: string}} type The comment type */
+  /** @var {{key: GetTextComment, prefix: string}} type The comment type */
   const types = [{
     key: 'translator',
     prefix: '# '
@@ -120,10 +127,10 @@ Compiler.prototype._drawComments = function (comments) {
 /**
  * Builds a PO string for a single translation object
  *
- * @param {import('./types.js').GetTextTranslation} block Translation object
- * @param {Partial<import('./types.js').GetTextTranslation>} [override] Properties of this object will override `block` properties
+ * @param {GetTextTranslation} block Translation object
+ * @param {Partial<GetTextTranslation>} [override] Properties of this object will override `block` properties
  * @param {boolean} [obsolete] Block is obsolete and must be commented out
- * @return {String} Translation string for a single object
+ * @return {string} Translation string for a single object
  */
 Compiler.prototype._drawBlock = function (block, override = {}, obsolete = false) {
   const response = [];
@@ -133,7 +140,7 @@ Compiler.prototype._drawBlock = function (block, override = {}, obsolete = false
   const msgstrData = override.msgstr || block.msgstr;
   const msgstr = Array.isArray(msgstrData) ? [...msgstrData] : [msgstrData];
 
-  /** @type {import('./types.js').GetTextComment|undefined} */
+  /** @type {GetTextComment|undefined} */
   const comments = override.comments || block.comments;
   if (comments) {
     const drawnComments = this._drawComments(comments);
@@ -164,10 +171,10 @@ Compiler.prototype._drawBlock = function (block, override = {}, obsolete = false
 /**
  * Escapes and joins a key and a value for the PO string
  *
- * @param {String} key Key name
- * @param {String} value Key value
+ * @param {string} key Key name
+ * @param {string} value Key value
  * @param {boolean} [obsolete] PO string is obsolete and must be commented out
- * @return {String} Joined and escaped key-value pair
+ * @return {string} Joined and escaped key-value pair
  */
 Compiler.prototype._addPOString = function (key = '', value = '', obsolete = false) {
   key = key.toString();
@@ -238,11 +245,11 @@ Compiler.prototype._handleCharset = function () {
 /**
  * Flatten and sort translations object
  *
- * @param {{ [msgctxt: string]: { [msgid: string]: import('./types.js').GetTextTranslation }}} section Object to be prepared (translations or obsolete)
- * @returns {import('./types.js').GetTextTranslation[]|undefined} Prepared array
+ * @param {Translations} section Object to be prepared (translations or obsolete)
+ * @returns {GetTextTranslation[]|undefined} Prepared array
  */
 Compiler.prototype._prepareSection = function (section) {
-  /** @type {import('./types.js').GetTextTranslation[]} response Prepared array */
+  /** @type {GetTextTranslation[]} response Prepared array */
   let response = [];
 
   for (const msgctxt in section) {
@@ -286,16 +293,13 @@ Compiler.prototype.compile = function () {
   if (!this._table.translations) {
     throw new Error('No translations found');
   }
-  /** @type {import('./types.js').GetTextTranslation} headerBlock */
+  /** @type {GetTextTranslation} headerBlock */
   const headerBlock = (this._table.translations[''] && this._table.translations['']['']) || {};
 
-  /** @type {import('./types.js').GetTextTranslation[]|undefined} translations Prepared array */
   const translations = this._prepareSection(this._table.translations);
-  /** @type {string[]|undefined} response Prepared array */
   let response = translations?.map(t => this._drawBlock(t));
 
   if (typeof this._table.obsolete === 'object') {
-    /** @type {import('./types.js').GetTextTranslation[]|undefined} obsolete Prepared array */
     const obsolete = this._prepareSection(this._table.obsolete);
     if (obsolete && obsolete.length) {
       response = response?.concat(obsolete.map(r => this._drawBlock(r, {}, true)));
