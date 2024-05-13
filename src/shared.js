@@ -121,8 +121,8 @@ export function foldLine (str, maxLen = 76) {
 
     // ensure that the line never ends with a partial escaping
     // make longer lines if needed
-    while (curLine.substring(-1) === '\\' && pos + curLine.length < len) {
-      curLine += str.charAt(pos + curLine.length);
+    while (curLine.endsWith('\\') && pos + curLine.length < len) {
+      curLine += str.charAt(pos + curLine.length + 1); // Append the next character
     }
 
     // ensure that if possible, line breaks are done at reasonable places
