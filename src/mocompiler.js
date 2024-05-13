@@ -22,14 +22,21 @@ import contentType from 'content-type';
  */
 
 /**
+ *
+ * @typedef {Object} CompilerOptions MO compiler options
+ * @property {'be'|'le'} [endian='le'] Endianness of the output buffer. Default is 'le'
+ */
+
+/**
  * Exposes general compiler function. Takes a translation
  * object as a parameter and returns binary MO object
  *
  * @param {GetTextTranslations} table Translation object
+ * @param {CompilerOptions} [options] MO compiler options
  * @return {Buffer} Compiled binary MO object
  */
-export default function (table) {
-  const compiler = new Compiler(table);
+export default function (table, options = { endian: 'le' }) {
+  const compiler = new Compiler(table, options);
 
   return compiler.compile();
 }
@@ -91,8 +98,9 @@ function prepareTranslations (translations) {
  * @this {Compiler & Transform}
  *
  * @param {GetTextTranslations} [table] Translation table as defined in the README
+ * @param {CompilerOptions} [options] MO compiler options
  */
-function Compiler (table) {
+function Compiler (table, options = { endian: 'le' }) {
   /** @type {GetTextTranslations} _table The translation table */
   this._table = {
     charset: undefined,
@@ -101,10 +109,11 @@ function Compiler (table) {
   };
 
   this._translations = [];
+
   /**
    * @type {WriteFunc}
    */
-  this._writeFunc = 'writeUInt32LE';
+  this._writeFunc = options?.endian === 'be' ? 'writeUInt32BE' : 'writeUInt32LE';
 
   this._handleCharset();
 
@@ -258,8 +267,8 @@ Compiler.prototype._build = function (list, size) {
   for (i = 0, len = list.length; i < len; i++) {
     const msgidLength = /** @type {Buffer} */(/** @type {unknown} */(list[i].msgid));
     msgidLength.copy(returnBuffer, curPosition);
-    returnBuffer.writeUInt32LE(list[i].msgid.length, 28 + i * 8);
-    returnBuffer.writeUInt32LE(curPosition, 28 + i * 8 + 4);
+    returnBuffer[this._writeFunc](list[i].msgid.length, 28 + i * 8);
+    returnBuffer[this._writeFunc](curPosition, 28 + i * 8 + 4);
     returnBuffer[curPosition + list[i].msgid.length] = 0x00;
     curPosition += list[i].msgid.length + 1;
   }
@@ -268,8 +277,8 @@ Compiler.prototype._build = function (list, size) {
   for (i = 0, len = list.length; i < len; i++) {
     const msgstrLength = /** @type {Buffer} */(/** @type {unknown} */(list[i].msgstr));
     msgstrLength.copy(returnBuffer, curPosition);
-    returnBuffer.writeUInt32LE(list[i].msgstr.length, 28 + (4 + 4) * list.length + i * 8);
-    returnBuffer.writeUInt32LE(curPosition, 28 + (4 + 4) * list.length + i * 8 + 4);
+    returnBuffer[this._writeFunc](list[i].msgstr.length, 28 + (4 + 4) * list.length + i * 8);
+    returnBuffer[this._writeFunc](curPosition, 28 + (4 + 4) * list.length + i * 8 + 4);
     returnBuffer[curPosition + list[i].msgstr.length] = 0x00;
     curPosition += list[i].msgstr.length + 1;
   }
