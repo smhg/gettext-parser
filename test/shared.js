@@ -226,4 +226,14 @@ describe('Strings Sorting function', () => {
     const result = compareMsgid({ msgid: 'a' }, { msgid: 'a' });
     expect(result).to.equal(0);
   });
+
+  it('should return -1 when msgid is the uppercased version of the other msgid', () => {
+    const result = compareMsgid({ msgid: 'A' }, { msgid: 'a' });
+    expect(result).to.equal(-1);
+  });
+
+  it('should return 1 when the msgid is a number and other is a string', () => {
+    const result = compareMsgid({ msgid: 'A' }, { msgid: '1' });
+    expect(result).to.equal(1);
+  });
 });
