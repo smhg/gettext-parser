@@ -3,7 +3,7 @@ import path from 'node:path';
 import { readFile as fsReadFile } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import * as chai from 'chai';
-import { formatCharset, parseHeader, generateHeader, foldLine, parseNPluralFromHeadersSafely } from '../src/shared.js';
+import { formatCharset, parseHeader, generateHeader, foldLine, parseNPluralFromHeadersSafely, compareMsgid } from '../src/shared.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -87,6 +87,17 @@ X-Poedit-SourceCharset: UTF-8`;
       expect(line).to.equal(folded.join(''));
       expect(folded).to.deep.equal(['abc \\n', 'def \\n', 'ghi']);
       expect(folded.length).to.equal(3);
+    });
+
+    it('should ensure that the line never ends with a partial escaping', () => {
+      const line = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\'aaaaa\'aaaa';
+      const folded = foldLine(line);
+
+      expect(line).to.equal(folded.join(''));
+      expect(folded).to.deep.equal([
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
+        "aaaaa'aaaa"
+      ]);
     });
 
     it('should fold at default length', () => {
@@ -197,5 +208,22 @@ X-Poedit-SourceCharset: UTF-8`;
 
       expect(nplurals).to.equal(1);
     });
+  });
+});
+
+describe('Strings Sorting function', () => {
+  it('should return -1 when left msgid is less than right msgid', () => {
+    const result = compareMsgid({ msgid: 'a' }, { msgid: 'b' });
+    expect(result).to.equal(-1);
+  });
+
+  it('should return 1 when left msgid is greater than right msgid', () => {
+    const result = compareMsgid({ msgid: 'b' }, { msgid: 'a' });
+    expect(result).to.equal(1);
+  });
+
+  it('should return 0 when left msgid is equal to right msgid', () => {
+    const result = compareMsgid({ msgid: 'a' }, { msgid: 'a' });
+    expect(result).to.equal(0);
   });
 });
