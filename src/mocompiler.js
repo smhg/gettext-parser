@@ -113,7 +113,7 @@ function Compiler (table, options = { endian: 'le' }) {
   /**
    * @type {WriteFunc}
    */
-  this._writeFunc = options?.endian === 'le' ? 'writeUInt32LE' : 'writeUInt32BE';
+  this._writeFunc = options?.endian === 'be' ? 'writeUInt32BE' : 'writeUInt32LE';
 
   this._handleCharset();
 
