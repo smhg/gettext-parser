@@ -89,14 +89,14 @@ X-Poedit-SourceCharset: UTF-8`;
       expect(folded.length).to.equal(3);
     });
 
-    it('should ensure that the line never ends with a partial escaping', () => {
-      const line = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\'aaaaa\'aaaa';
+    it('should fold the line into multiple lines with the right length', () => {
+      const line = Array.from({ length: 75 }, () => 'a').join('') + '\\aaaaa\\aaaa';
       const folded = foldLine(line);
-
+      expect(folded.length).to.equal(2);
       expect(line).to.equal(folded.join(''));
       expect(folded).to.deep.equal([
-        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
-        "aaaaa'aaaa"
+        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\',
+        'aaaaa\\aaaa'
       ]);
     });
 
