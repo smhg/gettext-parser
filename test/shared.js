@@ -236,4 +236,19 @@ describe('Strings Sorting function', () => {
     const result = compareMsgid({ msgid: 'A' }, { msgid: '1' });
     expect(result).to.equal(1);
   });
+
+  it('should return the right result using buffer comparison', () => {
+    const result = compareMsgid({ msgid: Buffer.from('a') }, { msgid: Buffer.from('b') });
+    expect(result).to.equal(-1);
+  });
+
+  it('should return the right result using buffer (both directions)', () => {
+    const result = compareMsgid({ msgid: Buffer.from('c') }, { msgid: Buffer.from('b') });
+    expect(result).to.equal(1);
+  });
+
+  it('should return the right result using buffer comparison (checking uppercase)', () => {
+    const result = compareMsgid({ msgid: Buffer.from('A') }, { msgid: Buffer.from('a') });
+    expect(result).to.equal(-1);
+  });
 });
