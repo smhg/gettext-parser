@@ -117,12 +117,15 @@ export function foldLine (str, maxLen = 76) {
   let match;
 
   while (pos < len) {
+    let escaped = false;
+
     curLine = str.substring(pos, pos + maxLen);
 
     // ensure that the line never ends with a partial escaping
     // make longer lines if needed
-    while (curLine.endsWith('\\') && pos + curLine.length < len) {
-      curLine += str.charAt(pos + curLine.length + 1); // Append the next character
+    if (curLine.endsWith('\\') && pos + curLine.length < len) {
+      escaped = true;
+      curLine += str.charAt(pos + curLine.length); // Append the next character
     }
 
     // ensure that if possible, line breaks are done at reasonable places
@@ -134,7 +137,7 @@ export function foldLine (str, maxLen = 76) {
       if ((match = /.*\s+/.exec(curLine)) && /\S/.test(match[0])) {
         // use everything before and including the last white space character (if anything)
         curLine = match[0];
-      } else if ((match = /.*[\x21-\x2f0-9\x5b-\x60\x7b-\x7e]+/.exec(curLine)) && /[^\x21-\x2f0-9\x5b-\x60\x7b-\x7e]/.test(match[0])) {
+      } else if (!escaped && (match = /.*[\x21-\x2f0-9\x5b-\x60\x7b-\x7e]+/.exec(curLine)) && /[^\x21-\x2f0-9\x5b-\x60\x7b-\x7e]/.test(match[0])) {
         // use everything before and including the last "special" character (if anything)
         curLine = match[0];
       }

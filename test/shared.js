@@ -90,12 +90,38 @@ X-Poedit-SourceCharset: UTF-8`;
     });
 
     it('should fold the line into multiple lines with the right length', () => {
-      const line = Array.from({ length: 75 }, () => 'a').join('') + '\\aaaaa\\aaaa';
+      const line = Array.from({ length: 76 }, () => 'a').join('') + 'aaaaa\\aaaa';
       const folded = foldLine(line);
       expect(folded.length).to.equal(2);
+      expect(folded[0].length).to.equal(76);
       expect(line).to.equal(folded.join(''));
       expect(folded).to.deep.equal([
-        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\',
+        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+        'aaaaa\\aaaa'
+      ]);
+    });
+
+    it('should fold the line into multiple lines with the right length (escaped character)', () => {
+      const line = Array.from({ length: 75 }, () => 'a').join('') + '\\aaaaaa\\aaaa';
+      const folded = foldLine(line);
+      expect(folded.length).to.equal(2);
+      expect(folded[0].length).to.equal(77);
+      expect(line).to.equal(folded.join(''));
+      expect(folded).to.deep.equal([
+        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\a',
+        'aaaaa\\aaaa'
+      ]);
+    });
+
+
+    it('should fold the line into multiple lines with the right length (escaped forward slash)', () => {
+      const line = Array.from({ length: 75 }, () => 'a').join('') + '\\\\aaaaa\\aaaa';
+      const folded = foldLine(line);
+      expect(folded.length).to.equal(2);
+      expect(folded[0].length).to.equal(77);
+      expect(line).to.equal(folded.join(''));
+      expect(folded).to.deep.equal([
+        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\\\\',
         'aaaaa\\aaaa'
       ]);
     });
