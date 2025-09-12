@@ -1,3 +1,6 @@
+/.github
 /test
-.eslintrc.js
+.eslint.config.js
 .gitignore
+.gitattributes
+.npmrc
