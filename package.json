@@ -32,13 +32,13 @@
     "readable-stream": "^4.5.2"
   },
   "devDependencies": {
-    "chai": "^5.0.3",
+    "chai": "^6.0.1",
     "eslint": "^8.56.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.1.1",
-    "mocha": "^10.3.0"
+    "mocha": "^11.7.2"
   },
   "keywords": [
     "i18n",
