@@ -20,7 +20,7 @@
   "scripts": {
     "lint": "eslint lib/*.js test/*.js index.js",
     "test-generate-mo": "msgfmt test/fixtures/latin13.po -o test/fixtures/latin13.mo & msgfmt test/fixtures/utf8.po -o test/fixtures/utf8.mo & msgfmt test/fixtures/obsolete.po -o test/fixtures/obsolete.mo",
-    "test": "mocha",
+    "test": "node --test",
     "preversion": "npm run lint && npm test",
     "postversion": "git push && git push --tags"
   },
@@ -36,8 +36,7 @@
     "@stylistic/eslint-plugin": "^5.3.1",
     "chai": "^6.0.1",
     "eslint": "^9.35.0",
-    "globals": "^16.4.0",
-    "mocha": "^11.7.2"
+    "globals": "^16.4.0"
   },
   "keywords": [
     "i18n",

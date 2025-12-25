@@ -1,3 +1,4 @@
+import { describe, it } from 'node:test';
 import * as chai from 'chai';
 import { promisify } from 'util';
 import path from 'path';
@@ -65,7 +66,7 @@ describe('PO Parser', () => {
   });
 
   describe('Stream input', () => {
-    it('should parse', done => {
+    it('should parse', (_, done) => {
       const po = fs.createReadStream(path.join(__dirname, 'fixtures/utf8.po'), {
         highWaterMark: 1 // ensure that any utf-8 sequences will be broken when streaming
       });
@@ -105,7 +106,7 @@ describe('PO Parser', () => {
   describe('parsing errors', () => {
     const invalidKeyError = /Error parsing PO data: Invalid key name/;
 
-    it('should throw (stream with unescaped quote)', done => {
+    it('should throw (stream with unescaped quote)', (_, done) => {
       const poStream = fs.createReadStream(path.join(__dirname, 'fixtures/error-unescaped-quote.po'), {
         highWaterMark: 1 // ensure that any utf-8 sequences will be broken when streaming
       });

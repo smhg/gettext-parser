@@ -1,5 +1,6 @@
 'use strict';
 
+import { describe, it } from 'node:test';
 import * as chai from 'chai';
 import { promisify } from 'util';
 import path from 'path';
