@@ -15,7 +15,7 @@
   },
   "type": "module",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "lint": "eslint lib/*.js test/*.js index.js",
