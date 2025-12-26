@@ -1,10 +1,10 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import { promisify } from 'util';
-import path from 'path';
+import { promisify } from 'node:util';
+import path from 'node:path';
 import { mo } from '../index.js';
-import { readFile as fsReadFile } from 'fs';
-import { fileURLToPath } from 'url';
+import { readFile as fsReadFile } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
