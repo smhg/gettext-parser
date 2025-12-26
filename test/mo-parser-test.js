@@ -1,5 +1,5 @@
 import { describe, it } from 'node:test';
-import * as chai from 'chai';
+import assert from 'node:assert';
 import { promisify } from 'util';
 import path from 'path';
 import { mo } from '../index.js';
@@ -11,9 +11,6 @@ const __dirname = path.dirname(__filename);
 
 const readFile = promisify(fsReadFile);
 
-const expect = chai.expect;
-chai.config.includeStack = true;
-
 describe('MO Parser', () => {
   describe('UTF-8', () => {
     it('should parse', async () => {
@@ -24,7 +21,7 @@ describe('MO Parser', () => {
 
       const parsed = mo.parse(moData);
 
-      expect(parsed).to.deep.equal(JSON.parse(json));
+      assert.deepStrictEqual(parsed, JSON.parse(json));
     });
   });
 
@@ -37,7 +34,7 @@ describe('MO Parser', () => {
 
       const parsed = mo.parse(moData);
 
-      expect(parsed).to.deep.equal(JSON.parse(json));
+      assert.deepStrictEqual(parsed, JSON.parse(json));
     });
   });
 });

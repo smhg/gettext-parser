@@ -1,7 +1,7 @@
 'use strict';
 
 import { describe, it } from 'node:test';
-import * as chai from 'chai';
+import assert from 'node:assert';
 import { promisify } from 'util';
 import path from 'path';
 import { formatCharset, parseHeader, generateHeader, foldLine, parseNPluralFromHeadersSafely } from '../lib/shared.js';
@@ -13,23 +13,20 @@ const __dirname = path.dirname(__filename);
 
 const readFile = promisify(fsReadFile);
 
-const expect = chai.expect;
-chai.config.includeStack = true;
-
 describe('Shared functions', () => {
   describe('formatCharset', () => {
     it('should default to iso-8859-1', () => {
-      expect(formatCharset()).to.equal('iso-8859-1');
+      assert.strictEqual(formatCharset(), 'iso-8859-1');
     });
 
     it('should normalize UTF8 to utf-8', () => {
-      expect(formatCharset('UTF8')).to.equal('utf-8');
+      assert.strictEqual(formatCharset('UTF8'), 'utf-8');
     });
   });
 
   describe('parseHeader', () => {
     it('should return an empty object by default', () => {
-      expect(parseHeader()).to.deep.equal({});
+      assert.deepStrictEqual(parseHeader(), {});
     });
 
     it('should convert a header string into an object', async () => {
@@ -42,20 +39,25 @@ X-Poedit-SourceCharset: UTF-8`;
 
       const headers = parseHeader(str);
 
-      expect(headers).to.have.all.keys(
+      const expectedKeys = [
         'Project-Id-Version',
         'POT-Creation-Date',
         'Content-Type',
         'Plural-Forms',
         'mime-version',
         'X-Poedit-SourceCharset'
-      );
+      ];
+      const actualKeys = Object.keys(headers);
+      for (const key of expectedKeys) {
+        assert(actualKeys.includes(key), `Expected headers to have key "${key}"`);
+      }
+      assert.strictEqual(actualKeys.length, expectedKeys.length);
     });
   });
 
   describe('generateHeader', () => {
     it('should return an empty string by default', () => {
-      expect(generateHeader()).to.equal('');
+      assert.strictEqual(generateHeader(), '');
     });
 
     it('should convert a header object into a string', async () => {
@@ -66,11 +68,11 @@ X-Poedit-SourceCharset: UTF-8`;
       const headerString = generateHeader(headers);
 
       headerKeys.forEach(key => {
-        expect(headerString).to.have.string(key);
-        expect(headerString).to.have.string(headers[key]);
+        assert(headerString.includes(key), `Expected header string to include key "${key}"`);
+        assert(headerString.includes(headers[key]), `Expected header string to include value "${headers[key]}"`);
       });
 
-      expect(headerString).to.match(/\n$/, 'Non-empty header has to end with newline');
+      assert.match(headerString, /\n$/, 'Non-empty header has to end with newline');
     });
   });
 
@@ -79,17 +81,17 @@ X-Poedit-SourceCharset: UTF-8`;
       const line = 'abc def ghi';
       const folded = foldLine(line);
 
-      expect(line).to.equal(folded.join(''));
-      expect(folded.length).to.equal(1);
+      assert.strictEqual(line, folded.join(''));
+      assert.strictEqual(folded.length, 1);
     });
 
     it('should force fold with newline', () => {
       const line = 'abc \\ndef \\nghi';
       const folded = foldLine(line);
 
-      expect(line).to.equal(folded.join(''));
-      expect(folded).to.deep.equal(['abc \\n', 'def \\n', 'ghi']);
-      expect(folded.length).to.equal(3);
+      assert.strictEqual(line, folded.join(''));
+      assert.deepStrictEqual(folded, ['abc \\n', 'def \\n', 'ghi']);
+      assert.strictEqual(folded.length, 3);
     });
 
     it('should fold at default length', () => {
@@ -102,53 +104,53 @@ X-Poedit-SourceCharset: UTF-8`;
         'lobortis tristique.'
       ];
       const folded = foldLine(expected.join(''));
-      expect(folded).to.deep.equal(expected);
-      expect(folded.length).to.equal(7);
+      assert.deepStrictEqual(folded, expected);
+      assert.strictEqual(folded.length, 7);
     });
 
     it('should force fold white space', () => {
       const line = 'abc def ghi';
       const folded = foldLine(line, 5);
 
-      expect(line).to.equal(folded.join(''));
-      expect(folded).to.deep.equal(['abc ', 'def ', 'ghi']);
-      expect(folded.length).to.equal(3);
+      assert.strictEqual(line, folded.join(''));
+      assert.deepStrictEqual(folded, ['abc ', 'def ', 'ghi']);
+      assert.strictEqual(folded.length, 3);
     });
 
     it('should ignore leading spaces', () => {
       const line = '    abc def ghi';
       const folded = foldLine(line, 5);
 
-      expect(line).to.equal(folded.join(''));
-      expect(folded).to.deep.equal(['    a', 'bc ', 'def ', 'ghi']);
-      expect(folded.length).to.equal(4);
+      assert.strictEqual(line, folded.join(''));
+      assert.deepStrictEqual(folded, ['    a', 'bc ', 'def ', 'ghi']);
+      assert.strictEqual(folded.length, 4);
     });
 
     it('should force fold special character', () => {
       const line = 'abcdef--ghi';
       const folded = foldLine(line, 5);
 
-      expect(line).to.equal(folded.join(''));
-      expect(folded).to.deep.equal(['abcde', 'f--', 'ghi']);
-      expect(folded.length).to.equal(3);
+      assert.strictEqual(line, folded.join(''));
+      assert.deepStrictEqual(folded, ['abcde', 'f--', 'ghi']);
+      assert.strictEqual(folded.length, 3);
     });
 
     it('should force fold last special character', () => {
       const line = 'ab--cdef--ghi';
       const folded = foldLine(line, 10);
 
-      expect(line).to.equal(folded.join(''));
-      expect(folded).to.deep.equal(['ab--cdef--', 'ghi']);
-      expect(folded.length).to.equal(2);
+      assert.strictEqual(line, folded.join(''));
+      assert.deepStrictEqual(folded, ['ab--cdef--', 'ghi']);
+      assert.strictEqual(folded.length, 2);
     });
 
     it('should force fold only if at least one non-special character', () => {
       const line = '--abcdefghi';
       const folded = foldLine(line, 5);
 
-      expect(line).to.equal(folded.join(''));
-      expect(folded).to.deep.equal(['--abc', 'defgh', 'i']);
-      expect(folded.length).to.equal(3);
+      assert.strictEqual(line, folded.join(''));
+      assert.deepStrictEqual(folded, ['--abc', 'defgh', 'i']);
+      assert.strictEqual(folded.length, 3);
     });
   });
 
@@ -157,48 +159,48 @@ X-Poedit-SourceCharset: UTF-8`;
       const headers = { 'Plural-Forms': 'nplurals=10; plural=n' };
       const nplurals = parseNPluralFromHeadersSafely(headers);
 
-      expect(nplurals).to.equal(10);
+      assert.strictEqual(nplurals, 10);
     });
 
     it('should return parsed value (missing plural declaration)', () => {
       const headers = { 'Plural-Forms': 'nplurals=10' };
       const nplurals = parseNPluralFromHeadersSafely(headers);
 
-      expect(nplurals).to.equal(10);
+      assert.strictEqual(nplurals, 10);
     });
 
     it('should return fallback value ("Plural-Forms" header is absent)', () => {
       const nplurals = parseNPluralFromHeadersSafely();
 
-      expect(nplurals).to.equal(1);
+      assert.strictEqual(nplurals, 1);
     });
 
     it('should return fallback value (nplurals is not declared)', () => {
       const headers = { 'Plural-Forms': '; plural=n' };
       const nplurals = parseNPluralFromHeadersSafely(headers);
 
-      expect(nplurals).to.equal(1);
+      assert.strictEqual(nplurals, 1);
     });
 
     it('should return fallback value (nplurals is set to zero)', () => {
       const headers = { 'Plural-Forms': 'nplurals=0' };
       const nplurals = parseNPluralFromHeadersSafely(headers);
 
-      expect(nplurals).to.equal(1);
+      assert.strictEqual(nplurals, 1);
     });
 
     it('should return fallback value (nplurals is set to negative value)', () => {
       const headers = { 'Plural-Forms': 'nplurals=-99' };
       const nplurals = parseNPluralFromHeadersSafely(headers);
 
-      expect(nplurals).to.equal(1);
+      assert.strictEqual(nplurals, 1);
     });
 
     it('should return fallback value (failed to parse nplurals value)', () => {
       const headers = { 'Plural-Forms': 'nplurals=foo' };
       const nplurals = parseNPluralFromHeadersSafely(headers);
 
-      expect(nplurals).to.equal(1);
+      assert.strictEqual(nplurals, 1);
     });
   });
 });

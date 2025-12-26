@@ -1,6 +1,6 @@
 import { EOL } from 'os';
 import { describe, it } from 'node:test';
-import * as chai from 'chai';
+import assert from 'node:assert';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs';
@@ -11,9 +11,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const readFile = promisify(fs.readFile);
-
-const expect = chai.expect;
-chai.config.includeStack = true;
 
 describe('Obsolete', async () => {
   const [po, mo, jsonString] = await Promise.all([
@@ -30,21 +27,21 @@ describe('Obsolete', async () => {
     it('should parse obsolete messages', async () => {
       const parsed = gettextParser.po.parse(po);
 
-      expect(parsed).to.deep.equal(json);
+      assert.deepStrictEqual(parsed, json);
     });
   });
   describe('PO Compiler', () => {
     it('should compile obsolete messages', async () => {
       const compiled = gettextParser.po.compile(json, { eol: EOL }).toString('utf8');
 
-      expect(compiled).to.be.equal(poString);
+      assert.strictEqual(compiled, poString);
     });
   });
   describe('MO Compiler', () => {
     it('should ignore obsolete messages', async () => {
       const compiled = gettextParser.mo.compile(json).toString('utf8');
 
-      expect(compiled).to.be.equal(moString);
+      assert.strictEqual(compiled, moString);
     });
   });
 });

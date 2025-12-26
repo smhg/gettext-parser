@@ -1,5 +1,5 @@
 import { describe, it } from 'node:test';
-import * as chai from 'chai';
+import assert from 'node:assert';
 import { promisify } from 'util';
 import path from 'path';
 import { mo } from '../index.js';
@@ -11,9 +11,6 @@ const __dirname = path.dirname(__filename);
 
 const readFile = promisify(fsReadFile);
 
-const expect = chai.expect;
-chai.config.includeStack = true;
-
 describe('MO Compiler', () => {
   describe('UTF-8', () => {
     it('should compile', async () => {
@@ -24,7 +21,7 @@ describe('MO Compiler', () => {
 
       const compiled = mo.compile(JSON.parse(json));
 
-      expect(compiled.toString('utf8')).to.deep.equal(moData.toString('utf8'));
+      assert.deepStrictEqual(compiled.toString('utf8'), moData.toString('utf8'));
     });
   });
 
@@ -37,7 +34,7 @@ describe('MO Compiler', () => {
 
       const compiled = mo.compile(JSON.parse(json));
 
-      expect(compiled.toString('utf8')).to.equal(moData.toString('utf8'));
+      assert.strictEqual(compiled.toString('utf8'), moData.toString('utf8'));
     });
   });
 });

@@ -1,5 +1,5 @@
 import { describe, it } from 'node:test';
-import * as chai from 'chai';
+import assert from 'node:assert';
 import { promisify } from 'util';
 import path from 'path';
 import fs from 'fs';
@@ -11,9 +11,6 @@ const __dirname = path.dirname(__filename);
 
 const readFile = promisify(fs.readFile);
 
-const expect = chai.expect;
-chai.config.includeStack = true;
-
 describe('PO Parser', () => {
   describe('headers', () => {
     it('should detect charset in header', async () => {
@@ -24,7 +21,7 @@ describe('PO Parser', () => {
 
       const parsed = gettextParser.po.parse(po);
 
-      expect(parsed).to.deep.equal(JSON.parse(json));
+      assert.deepStrictEqual(parsed, JSON.parse(json));
     });
 
     it('should parse all known headers', async () => {
@@ -35,7 +32,7 @@ describe('PO Parser', () => {
 
       const parsed = gettextParser.po.parse(po);
 
-      expect(parsed).to.deep.equal(JSON.parse(json));
+      assert.deepStrictEqual(parsed, JSON.parse(json));
     });
   });
 
@@ -48,7 +45,7 @@ describe('PO Parser', () => {
 
       const parsed = gettextParser.po.parse(po);
 
-      expect(parsed).to.deep.equal(JSON.parse(json));
+      assert.deepStrictEqual(parsed, JSON.parse(json));
     });
   });
 
@@ -61,7 +58,7 @@ describe('PO Parser', () => {
 
       const parsed = gettextParser.po.parse(po);
 
-      expect(parsed).to.deep.equal(JSON.parse(json));
+      assert.deepStrictEqual(parsed, JSON.parse(json));
     });
   });
 
@@ -84,7 +81,7 @@ describe('PO Parser', () => {
       });
 
       stream.on('end', () => {
-        expect(parsed).to.deep.equal(JSON.parse(json));
+        assert.deepStrictEqual(parsed, JSON.parse(json));
         done();
       });
     });
@@ -99,7 +96,7 @@ describe('PO Parser', () => {
 
       const parsed = gettextParser.po.parse(po);
 
-      expect(parsed).to.deep.equal(JSON.parse(json));
+      assert.deepStrictEqual(parsed, JSON.parse(json));
     });
   });
 
@@ -116,7 +113,7 @@ describe('PO Parser', () => {
       }));
 
       stream.on('error', error => {
-        expect(error.message).to.match(invalidKeyError);
+        assert.match(error.message, invalidKeyError);
         done();
       });
     });
@@ -127,49 +124,49 @@ describe('PO Parser', () => {
       it('should throw (unescaped quote)', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/error-unescaped-quote.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.throw(invalidKeyError);
+        assert.throws(() => gettextParser.po.parse(po, options), invalidKeyError);
       });
 
       it('should throw (double-escaped quote)', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/error-double-escaped-quote.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.throw(invalidKeyError);
+        assert.throws(() => gettextParser.po.parse(po, options), invalidKeyError);
       });
 
       it('should not throw (an entry has too few plural forms)', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-too-few-plural-forms.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.not.throw();
+        assert.doesNotThrow(() => gettextParser.po.parse(po, options));
       });
 
       it('should not throw (an entry has too many plural forms)', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-too-many-plural-forms.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.not.throw();
+        assert.doesNotThrow(() => gettextParser.po.parse(po, options));
       });
 
       it('should not throw (an entry misses "msgid_plural")', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-missing-msgid-plural.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.not.throw();
+        assert.doesNotThrow(() => gettextParser.po.parse(po, options));
       });
 
       it('should not throw (an entry misses single "msgstr")', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-missing-msgstr.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.not.throw();
+        assert.doesNotThrow(() => gettextParser.po.parse(po, options));
       });
 
       it('should not throw (duplicate entries found in the same context)', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-context-duplicate-entries.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.not.throw();
+        assert.doesNotThrow(() => gettextParser.po.parse(po, options));
       });
 
       it('should not throw (an entry with multiple "msgid_plural")', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-redundant-msgid-plural.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.not.throw();
+        assert.doesNotThrow(() => gettextParser.po.parse(po, options));
       });
     });
 
@@ -179,49 +176,67 @@ describe('PO Parser', () => {
       it('should throw (unescaped quote)', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/error-unescaped-quote.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.throw(invalidKeyError);
+        assert.throws(() => gettextParser.po.parse(po, options), invalidKeyError);
       });
 
       it('should throw (double-escaped quote)', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/error-double-escaped-quote.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.throw(invalidKeyError);
+        assert.throws(() => gettextParser.po.parse(po, options), invalidKeyError);
       });
 
       it('should throw (an entry has too few plural forms)', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-too-few-plural-forms.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.throw('Plural forms range error: Expected to find 3 forms but got 2 for entry "o1-2" in "" context.');
+        assert.throws(
+          () => gettextParser.po.parse(po, options),
+          /Plural forms range error: Expected to find 3 forms but got 2 for entry "o1-2" in "" context\./
+        );
       });
 
       it('should throw (an entry has too many plural forms)', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-too-many-plural-forms.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.throw('Plural forms range error: Expected to find 2 forms but got 3 for entry "o1-2" in "" context.');
+        assert.throws(
+          () => gettextParser.po.parse(po, options),
+          /Plural forms range error: Expected to find 2 forms but got 3 for entry "o1-2" in "" context\./
+        );
       });
 
       it('should throw (an entry misses "msgid_plural")', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-missing-msgid-plural.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.throw('Translation string range error: Extected 1 msgstr definitions associated with "o1-1" in "" context, found 2.');
+        assert.throws(
+          () => gettextParser.po.parse(po, options),
+          /Translation string range error: Extected 1 msgstr definitions associated with "o1-1" in "" context, found 2\./
+        );
       });
 
       it('should throw (an entry misses single "msgstr")', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-missing-msgstr.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.throw('Translation string range error: Extected 1 msgstr definitions associated with "o1" in "" context, found 0.');
+        assert.throws(
+          () => gettextParser.po.parse(po, options),
+          /Translation string range error: Extected 1 msgstr definitions associated with "o1" in "" context, found 0\./
+        );
       });
 
       it('should throw (duplicate entries found in the same context)', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-context-duplicate-entries.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.throw('Duplicate msgid error: entry "o1-1" in "c2" context has already been declared.');
+        assert.throws(
+          () => gettextParser.po.parse(po, options),
+          /Duplicate msgid error: entry "o1-1" in "c2" context has already been declared\./
+        );
       });
 
       it('should throw (an entry with multiple "msgid_plural")', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-redundant-msgid-plural.po'));
 
-        expect(gettextParser.po.parse.bind(gettextParser.po, po, options)).to.throw('Multiple msgid_plural error: entry "o1-1" in "" context has multiple msgid_plural declarations.');
+        assert.throws(
+          () => gettextParser.po.parse(po, options),
+          /Multiple msgid_plural error: entry "o1-1" in "" context has multiple msgid_plural declarations\./
+        );
       });
     });
   });

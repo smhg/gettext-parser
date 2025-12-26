@@ -3,7 +3,7 @@ import { promisify } from 'util';
 import path from 'path';
 import { readFile as fsReadFile } from 'fs';
 import { describe, it } from 'node:test';
-import * as chai from 'chai';
+import assert from 'node:assert';
 import { po } from '../index.js';
 import { fileURLToPath } from 'url';
 
@@ -11,9 +11,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const readFile = promisify(fsReadFile);
-
-const expect = chai.expect;
-chai.config.includeStack = true;
 
 describe('PO Compiler', () => {
   describe('Headers', () => {
@@ -26,7 +23,7 @@ describe('PO Compiler', () => {
       const compiled = po.compile(JSON.parse(json), { eol: EOL })
         .toString('utf8');
 
-      expect(compiled).to.equal(poData);
+      assert.strictEqual(compiled, poData);
     });
   });
 
@@ -40,7 +37,7 @@ describe('PO Compiler', () => {
       const compiled = po.compile(JSON.parse(json), { eol: EOL })
         .toString('utf8');
 
-      expect(compiled).to.equal(poData);
+      assert.strictEqual(compiled, poData);
     });
   });
 
@@ -55,7 +52,7 @@ describe('PO Compiler', () => {
       const compiled = po.compile(JSON.parse(json), { eol: EOL })
         .toString('latin1');
 
-      expect(compiled).to.equal(poData);
+      assert.strictEqual(compiled, poData);
     });
   });
 
@@ -69,7 +66,7 @@ describe('PO Compiler', () => {
       const compiled = po.compile(JSON.parse(json), { eol: EOL })
         .toString('utf8');
 
-      expect(compiled).to.equal(pot);
+      assert.strictEqual(compiled, pot);
     });
   });
 
@@ -83,7 +80,7 @@ describe('PO Compiler', () => {
       const compiled = po.compile(JSON.parse(json), { foldLength: 0, eol: EOL })
         .toString('utf8');
 
-      expect(compiled).to.equal(poData);
+      assert.strictEqual(compiled, poData);
     });
 
     it('should compile with different folding', async () => {
@@ -95,7 +92,7 @@ describe('PO Compiler', () => {
       const compiled = po.compile(JSON.parse(json), { foldLength: 100, eol: EOL })
         .toString('utf8');
 
-      expect(compiled).to.equal(poData);
+      assert.strictEqual(compiled, poData);
     });
   });
 
@@ -109,7 +106,7 @@ describe('PO Compiler', () => {
       const compiled = po.compile(JSON.parse(json), { sort: true, eol: EOL })
         .toString('utf8');
 
-      expect(compiled).to.equal(pot);
+      assert.strictEqual(compiled, pot);
     });
 
     it('should sort entries using a custom `sort` function', async () => {
@@ -144,9 +141,9 @@ describe('PO Compiler', () => {
       const compiled2 = po.compile(JSON.parse(json2), { sort: compareMsgidAndMsgctxt, eol: EOL })
         .toString('utf8');
 
-      expect(compiled1).to.equal(compiled2);
-      expect(compiled1).to.equal(pot);
-      expect(compiled2).to.equal(pot);
+      assert.strictEqual(compiled1, compiled2);
+      assert.strictEqual(compiled1, pot);
+      assert.strictEqual(compiled2, pot);
     });
   });
 
@@ -160,7 +157,7 @@ describe('PO Compiler', () => {
       const compiled = po.compile(JSON.parse(json), { escapeCharacters: false, foldLength: 0, eol: EOL })
         .toString('utf8');
 
-      expect(compiled).to.equal(poData);
+      assert.strictEqual(compiled, poData);
     });
   });
 });
