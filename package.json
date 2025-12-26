@@ -28,8 +28,7 @@
   "license": "MIT",
   "dependencies": {
     "content-type": "^1.0.5",
-    "encoding": "^0.1.13",
-    "readable-stream": "^4.5.2"
+    "encoding": "^0.1.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
