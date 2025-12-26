@@ -32,11 +32,11 @@
     "readable-stream": "^4.5.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.35.0",
-    "@stylistic/eslint-plugin": "^5.3.1",
-    "chai": "^6.0.1",
-    "eslint": "^9.35.0",
-    "globals": "^16.4.0"
+    "@eslint/js": "^9.39.2",
+    "@stylistic/eslint-plugin": "^5.6.1",
+    "chai": "^6.2.2",
+    "eslint": "^9.39.2",
+    "globals": "^16.5.0"
   },
   "keywords": [
     "i18n",
