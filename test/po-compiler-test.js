@@ -2,6 +2,7 @@ import { EOL } from 'os';
 import { promisify } from 'util';
 import path from 'path';
 import { readFile as fsReadFile } from 'fs';
+import { describe, it } from 'node:test';
 import * as chai from 'chai';
 import { po } from '../index.js';
 import { fileURLToPath } from 'url';
