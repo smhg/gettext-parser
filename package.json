@@ -25,6 +25,11 @@
     "postversion": "git push && git push --tags"
   },
   "main": "./index.js",
+  "files": [
+    "lib",
+    "index.js",
+    "CHANGELOG.md"
+  ],
   "license": "MIT",
   "dependencies": {
     "content-type": "^1.0.5",
