@@ -240,4 +240,15 @@ describe('PO Parser', () => {
       });
     });
   });
+
+  describe('prototype pollution', () => {
+    it('should not pollute Object.prototype via msgctxt', () => {
+      const po = 'msgctxt "__proto__"\nmsgid "polluted"\nmsgstr "yes"\n';
+
+      gettextParser.po.parse(po);
+
+      assert.strictEqual({}.polluted, undefined, 'Object.prototype should not be polluted');
+      assert.strictEqual(({}).polluted, undefined, 'Object.prototype should not be polluted');
+    });
+  });
 });
