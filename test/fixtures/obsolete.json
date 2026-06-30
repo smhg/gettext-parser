@@ -38,6 +38,17 @@
                     "One",
                     "Two"
                 ]
+            },
+            "Obsolete message with previous translation": {
+                "msgid": "Obsolete message with previous translation",
+                "comments": {
+                    "flag": "fuzzy",
+                    "previous": "msgid \"Obsolete message with previous tr\"",
+                    "translator": "Obsolete message with previous"
+                },
+                "msgstr": [
+                    "Translation"
+                ]
             }
         },
         "Obsolete context": {
