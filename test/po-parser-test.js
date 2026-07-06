@@ -118,6 +118,18 @@ describe('PO Parser', () => {
       });
     });
 
+    it('rejects a "|" that does not belong to a "#|" or "#~|" previous comment', () => {
+      const po = [
+        'msgid "test"',
+        'msgstr "test"',
+        '',
+        '| no leading "#", so this is not a comment',
+        ''
+      ].join('\n');
+
+      assert.throws(() => gettextParser.po.parse(po), invalidKeyError);
+    });
+
     describe('when validation is disabled', () => {
       const options = { validation: false };
 
