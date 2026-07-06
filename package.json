@@ -11,7 +11,7 @@
   "homepage": "http://github.com/smhg/gettext-parser",
   "repository": {
     "type": "git",
-    "url": "http://github.com/smhg/gettext-parser.git"
+    "url": "git+ssh://git@github.com/smhg/gettext-parser.git"
   },
   "type": "module",
   "engines": {
