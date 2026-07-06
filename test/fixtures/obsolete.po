@@ -16,6 +16,12 @@ msgstr "Test msgstr"
 #~ msgstr[0] "One"
 #~ msgstr[1] "Two"
 
+# Obsolete message with previous
+#, fuzzy
+#~| msgid "Obsolete message with previous tr"
+#~ msgid "Obsolete message with previous translation"
+#~ msgstr "Translation"
+
 # Obsolete message with context
 #, fuzzy
 #~ msgctxt "Obsolete context"
