@@ -1,0 +1,7 @@
+#. no header entry, so no "nplurals" value is available
+
+# Plural string
+msgid "o1-1"
+msgid_plural "o1-2"
+msgstr[0] "t1-1"
+msgstr[1] "t1-2"

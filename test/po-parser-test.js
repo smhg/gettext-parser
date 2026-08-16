@@ -192,6 +192,24 @@ describe('PO Parser', () => {
         assert.doesNotThrow(() => gettextParser.po.parse(po, options));
       });
 
+      it('should not throw (plural forms without a header entry)', async () => {
+        const po = await readFile(path.join(__dirname, 'fixtures/validate-missing-header.po'));
+
+        assert.doesNotThrow(() => gettextParser.po.parse(po, options));
+      });
+
+      it('should not throw (plural forms without a "Plural-Forms" header)', async () => {
+        const po = await readFile(path.join(__dirname, 'fixtures/validate-missing-nplurals.po'));
+
+        assert.doesNotThrow(() => gettextParser.po.parse(po, options));
+      });
+
+      it('should not throw (plural forms with an invalid "nplurals" value)', async () => {
+        const po = await readFile(path.join(__dirname, 'fixtures/validate-invalid-nplurals.po'));
+
+        assert.doesNotThrow(() => gettextParser.po.parse(po, options));
+      });
+
       it('should not throw (end-of-line within string)', () => {
         const po = [
           'msgid "multi_line_text"',
@@ -230,7 +248,7 @@ describe('PO Parser', () => {
 
         assert.throws(
           () => gettextParser.po.parse(po, options),
-          /Plural forms range error: Expected to find 3 forms but got 2 for entry "o1-2" in "" context\./
+          /Plural forms range error: Expected to find 3 forms but got 2 for entry "o1-1" in "" context\./
         );
       });
 
@@ -239,8 +257,41 @@ describe('PO Parser', () => {
 
         assert.throws(
           () => gettextParser.po.parse(po, options),
-          /Plural forms range error: Expected to find 2 forms but got 3 for entry "o1-2" in "" context\./
+          /Plural forms range error: Expected to find 2 forms but got 3 for entry "o1-1" in "" context\./
         );
+      });
+
+      it('should throw (plural forms without a header entry)', async () => {
+        const po = await readFile(path.join(__dirname, 'fixtures/validate-missing-header.po'));
+
+        assert.throws(
+          () => gettextParser.po.parse(po, options),
+          /Plural forms error: entry "o1-1" in "" context has plural forms but no valid "nplurals" value was found in the "Plural-Forms" header\./
+        );
+      });
+
+      it('should throw (plural forms without a "Plural-Forms" header)', async () => {
+        const po = await readFile(path.join(__dirname, 'fixtures/validate-missing-nplurals.po'));
+
+        assert.throws(
+          () => gettextParser.po.parse(po, options),
+          /Plural forms error: entry "o1-1" in "" context has plural forms but no valid "nplurals" value was found in the "Plural-Forms" header\./
+        );
+      });
+
+      it('should throw (plural forms with an invalid "nplurals" value)', async () => {
+        const po = await readFile(path.join(__dirname, 'fixtures/validate-invalid-nplurals.po'));
+
+        assert.throws(
+          () => gettextParser.po.parse(po, options),
+          /Plural forms error: entry "o1-1" in "" context has plural forms but no valid "nplurals" value was found in the "Plural-Forms" header\./
+        );
+      });
+
+      it('should not throw (no plural forms and no header entry)', () => {
+        const po = 'msgid "o1"\nmsgstr "t1"\n';
+
+        assert.doesNotThrow(() => gettextParser.po.parse(po, options));
       });
 
       it('should throw (an entry misses "msgid_plural")', async () => {
@@ -248,7 +299,7 @@ describe('PO Parser', () => {
 
         assert.throws(
           () => gettextParser.po.parse(po, options),
-          /Translation string range error: Extected 1 msgstr definitions associated with "o1-1" in "" context, found 2\./
+          /Translation string range error: Expected 1 msgstr definitions associated with "o1-1" in "" context, found 2\./
         );
       });
 
@@ -257,7 +308,7 @@ describe('PO Parser', () => {
 
         assert.throws(
           () => gettextParser.po.parse(po, options),
-          /Translation string range error: Extected 1 msgstr definitions associated with "o1" in "" context, found 0\./
+          /Translation string range error: Expected 1 msgstr definitions associated with "o1" in "" context, found 0\./
         );
       });
 
