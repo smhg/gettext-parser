@@ -130,6 +130,17 @@ describe('PO Parser', () => {
       assert.throws(() => gettextParser.po.parse(po), invalidKeyError);
     });
 
+    it('continues a string on the next line after a trailing backslash, like GNU gettext', () => {
+      const po = [
+        'msgid "test"',
+        'msgstr "Hello\\',
+        'World"',
+        ''
+      ].join('\n');
+
+      assert.strictEqual(gettextParser.po.parse(po).translations[''].test.msgstr[0], 'HelloWorld');
+    });
+
     describe('when validation is disabled', () => {
       const options = { validation: false };
 
