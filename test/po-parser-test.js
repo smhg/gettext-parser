@@ -191,6 +191,23 @@ describe('PO Parser', () => {
 
         assert.doesNotThrow(() => gettextParser.po.parse(po, options));
       });
+
+      it('should not throw (end-of-line within string)', () => {
+        const po = [
+          'msgid "multi_line_text"',
+          'msgstr "Hello',
+          'World"',
+          ''
+        ].join('\n');
+
+        assert.strictEqual(gettextParser.po.parse(po, options).translations[''].multi_line_text.msgstr[0], 'Hello\nWorld');
+      });
+
+      it('should not throw (end-of-file within string)', () => {
+        const po = 'msgid "test"\nmsgstr "Hello';
+
+        assert.doesNotThrow(() => gettextParser.po.parse(po, options));
+      });
     });
 
     describe('when validation is enabled', () => {
@@ -260,6 +277,23 @@ describe('PO Parser', () => {
           () => gettextParser.po.parse(po, options),
           /Multiple msgid_plural error: entry "o1-1" in "" context has multiple msgid_plural declarations\./
         );
+      });
+
+      it('should throw (end-of-line within string)', () => {
+        const po = [
+          'msgid "multi_line_text"',
+          'msgstr "Hello',
+          'World"',
+          ''
+        ].join('\n');
+
+        assert.throws(() => gettextParser.po.parse(po, options), /End-of-line within string at line 3/);
+      });
+
+      it('should throw (end-of-file within string)', () => {
+        const po = 'msgid "test"\nmsgstr "Hello';
+
+        assert.throws(() => gettextParser.po.parse(po, options), /End-of-file within string at line 2/);
       });
     });
   });

@@ -28,6 +28,8 @@ Where
       * there are no duplicate entries with exact `msgid` values; a `Duplicate msgid error` error gets thrown otherwise.
       * the number of plural forms matches exactly the number from `nplurals` defined in `Plural-Forms` header for entries that have plural forms; a `Plural forms range error` error gets thrown otherwise.
       * the number of `msgstr` matches exacty the one (if `msgid_plural` is not defined) or the number from `nplurals` (if `msgid_plural` is defined); a `Translation string range error` error gets thrown otherwise.
+      * strings end on the same line they start on, with line breaks encoded as `\n` (matching GNU gettext, which rejects strings spanning multiple lines); an `End-of-line within string` error gets thrown otherwise.
+      * the file does not end in the middle of a string; an `End-of-file within string` error gets thrown otherwise.
 
 Method returns gettext-parser specific translation object (see below)
 
