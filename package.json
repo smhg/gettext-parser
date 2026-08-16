@@ -36,11 +36,11 @@
     "encoding": "^0.1.13"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^9.39.5",
     "@stylistic/eslint-plugin": "^5.6.1",
-    "eslint": "^9.39.2",
+    "eslint": "^9.39.5",
     "eslint-plugin-import": "^2.32.0",
-    "globals": "^17.7.0"
+    "globals": "^17.11.0"
   },
   "keywords": [
     "i18n",
