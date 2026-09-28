@@ -164,7 +164,9 @@ to a *mo* or *po* file.
 
 ### Headers
 
-Headers can be found from the `headers` object, all keys are lowercase and the value for a key is a string. This value will also be used when compiling.
+Headers can be found from the `headers` object and the value for a key is a string. This value will also be used when compiling.
+
+Key casing isn't lowercased: the ~10 standard gettext headers (`Language`, `Plural-Forms`, `Content-Type`, ...) are recognized case-insensitively and normalized to their canonical name, while any other header (e.g. a tool-specific `X-Poedit-*` header) keeps whatever casing the source file used, unchanged (see #52).
 
 ### Translations
 
