@@ -94,6 +94,28 @@ describe('PO Compiler', () => {
 
       assert.strictEqual(compiled, poData);
     });
+
+    it('should account for the key prefix width like GNU gettext', () => {
+      const data = {
+        charset: 'utf-8',
+        headers: { 'content-type': 'text/plain; charset=utf-8' },
+        translations: {
+          '': {
+            'sing': {
+              msgid: 'sing',
+              msgid_plural: '<b><em class="placeholder">@count</em> Members</b> are selected',
+              msgstr: ['x', 'y']
+            }
+          }
+        }
+      };
+
+      const compiled = po.compile(data, { eol: EOL }).toString('utf8');
+
+      // the 65-character plural fits on one line alone, but the whole
+      // `msgid_plural "..."` line is 82 columns wide so GNU gettext wraps it
+      assert.ok(compiled.includes(`msgid_plural ""${EOL}"<b><em class=\\"placeholder\\">@count</em> Members</b> are selected"`));
+    });
   });
 
   describe('Sorting', () => {
