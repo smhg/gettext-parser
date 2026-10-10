@@ -90,22 +90,23 @@ X-Poedit-SourceCharset: UTF-8`;
       const folded = foldLine(line);
 
       assert.strictEqual(line, folded.join(''));
-      assert.deepStrictEqual(folded, ['abc \\n', 'def \\n', 'ghi']);
-      assert.strictEqual(folded.length, 3);
+      assert.deepStrictEqual(folded, ['', 'abc \\n', 'def \\n', 'ghi']);
+      assert.strictEqual(folded.length, 4);
     });
 
     it('should fold at default length', () => {
-      const expected = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pretium ',
+      const expected = ['',
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pretium ',
         'a nunc ac fringilla. Nulla laoreet tincidunt tincidunt. Proin tristique ',
         'vestibulum mauris non aliquam. Vivamus volutpat odio nisl, sed placerat ',
         'turpis sodales a. Vestibulum quis lectus ac elit sagittis sodales ac a ',
-        'felis. Nulla iaculis, nisl ut mattis fringilla, tortor quam tincidunt ',
-        'lorem, quis feugiat purus felis ut velit. Donec euismod eros ut leo ',
-        'lobortis tristique.'
+        'felis. Nulla iaculis, nisl ut mattis fringilla, tortor quam tincidunt lorem, ',
+        'quis feugiat purus felis ut velit. Donec euismod eros ut leo lobortis ',
+        'tristique.'
       ];
       const folded = foldLine(expected.join(''));
       assert.deepStrictEqual(folded, expected);
-      assert.strictEqual(folded.length, 7);
+      assert.strictEqual(folded.length, 8);
     });
 
     it('should force fold white space', () => {
@@ -113,8 +114,8 @@ X-Poedit-SourceCharset: UTF-8`;
       const folded = foldLine(line, 5);
 
       assert.strictEqual(line, folded.join(''));
-      assert.deepStrictEqual(folded, ['abc ', 'def ', 'ghi']);
-      assert.strictEqual(folded.length, 3);
+      assert.deepStrictEqual(folded, ['', 'abc ', 'def ', 'ghi']);
+      assert.strictEqual(folded.length, 4);
     });
 
     it('should ignore leading spaces', () => {
@@ -122,7 +123,7 @@ X-Poedit-SourceCharset: UTF-8`;
       const folded = foldLine(line, 5);
 
       assert.strictEqual(line, folded.join(''));
-      assert.deepStrictEqual(folded, ['    a', 'bc ', 'def ', 'ghi']);
+      assert.deepStrictEqual(folded, ['', '    abc ', 'def ', 'ghi']);
       assert.strictEqual(folded.length, 4);
     });
 
@@ -131,7 +132,7 @@ X-Poedit-SourceCharset: UTF-8`;
       const folded = foldLine(line, 5);
 
       assert.strictEqual(line, folded.join(''));
-      assert.deepStrictEqual(folded, ['abcde', 'f--', 'ghi']);
+      assert.deepStrictEqual(folded, ['', 'abcdef--', 'ghi']);
       assert.strictEqual(folded.length, 3);
     });
 
@@ -140,8 +141,8 @@ X-Poedit-SourceCharset: UTF-8`;
       const folded = foldLine(line, 10);
 
       assert.strictEqual(line, folded.join(''));
-      assert.deepStrictEqual(folded, ['ab--cdef--', 'ghi']);
-      assert.strictEqual(folded.length, 2);
+      assert.deepStrictEqual(folded, ['', 'ab--', 'cdef--', 'ghi']);
+      assert.strictEqual(folded.length, 4);
     });
 
     it('should force fold only if at least one non-special character', () => {
@@ -149,7 +150,7 @@ X-Poedit-SourceCharset: UTF-8`;
       const folded = foldLine(line, 5);
 
       assert.strictEqual(line, folded.join(''));
-      assert.deepStrictEqual(folded, ['--abc', 'defgh', 'i']);
+      assert.deepStrictEqual(folded, ['', '--', 'abcdefghi']);
       assert.strictEqual(folded.length, 3);
     });
   });
