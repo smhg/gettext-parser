@@ -40,8 +40,8 @@ msgstr "t3-žš"
 # Long message
 msgid "o4"
 msgstr ""
-"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore "
-"et dolore magna aliqua."
+"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut "
+"labore et dolore magna aliqua."
 
 # Normal comment line 1
 # Normal comment line 2
