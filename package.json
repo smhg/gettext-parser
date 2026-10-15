@@ -20,6 +20,7 @@
   "scripts": {
     "lint": "eslint lib/*.js test/*.js index.js",
     "test-generate-mo": "msgfmt test/fixtures/latin13.po -o test/fixtures/latin13.mo & msgfmt test/fixtures/utf8.po -o test/fixtures/utf8.mo & msgfmt test/fixtures/obsolete.po -o test/fixtures/obsolete.mo",
+    "test-generate-po": "msgcat test/fixtures/wrapping.po -o test/fixtures/wrapping-msgcat.po",
     "test": "node --test",
     "preversion": "npm run lint && npm test",
     "postversion": "git push && git push --tags"
