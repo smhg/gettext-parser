@@ -102,7 +102,7 @@ describe('PO Compiler', () => {
         readFile(path.join(__dirname, 'fixtures/wrapping-msgcat.po'), 'utf8')
       ]);
 
-      const compiled = po.compile(po.parse(input), { eol: '\n' })
+      const compiled = po.compile(po.parse(input), { eol: EOL })
         .toString('utf8');
 
       assert.strictEqual(compiled, expected);
