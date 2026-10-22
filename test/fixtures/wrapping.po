@@ -1,0 +1,78 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "short"
+msgstr "A short translation that fits on a single line."
+
+msgid "ascii"
+msgstr "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+
+msgid "exact-fit"
+msgstr "This translation is padded so that the whole line is just about 79 cols"
+
+msgid "newlines"
+msgstr "First line of a multi-line message.\nSecond line, which is a bit longer than the first one and therefore needs to be wrapped by the compiler.\nThird line.\n"
+
+msgid "escapes"
+msgstr "Press \"Save\" to store C:\\Users\\name\\Documents\\file.txt, or press\t\"Cancel\" to discard all of the changes made so far."
+
+msgid "url"
+msgstr "See https://www.gnu.org/software/gettext/manual/html_node/PO-Files.html#PO-Files-for-more-information-about-the-format."
+
+msgid "punctuation"
+msgstr "Values (one/two/three), [four|five] and {six-seven-eight} -- plus 100% of $5.00 -- should break at sensible places..."
+
+msgid "html"
+msgstr "<b><em class=\"placeholder\">@count</em> Members</b> are selected, <a href=\"/admin/people\">manage them</a> here."
+
+msgid "latin"
+msgstr "Ça été une très belle journée à Zürich, où les émigrés ont dégusté des crêpes, des smørrebrød et des Käsespätzle."
+
+msgid "combining"
+msgstr "Decomposed accents such as é should not count as extra width: résumé café naïve résumé café naïve."
+
+msgid "cjk-ja"
+msgstr "これは日本語のテキストです。全角文字は半角文字の二倍の幅を持つため、行の折り返し位置が変わります。句読点の前では改行しないでください。"
+
+msgid "cjk-zh"
+msgstr "这是一段中文文本，用于测试换行算法。中文字符占用两个字符宽度，因此每行能容纳的字符数量大约是英文的一半左右。"
+
+msgid "cjk-ko"
+msgstr "이것은 한국어 텍스트입니다. 한글 음절은 전각 문자로 표시되며 줄 바꿈 위치를 결정할 때 너비가 두 배로 계산되어야 합니다."
+
+msgid "mixed"
+msgstr "Mixed content: English text, 日本語のテキスト, 中文文本 and some emoji 😀🎉👍 combined in one long message string."
+
+msgid "emoji"
+msgstr "😀😃😄😁😆😅😂🤣😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁"
+
+msgid "no-breaks"
+msgstr "Averyveryverylongwordwithoutanyspacesoranypunctuationthatcannotbebrokenanywhereatallreally"
+
+msgid "singular"
+msgid_plural "<b><em class=\"placeholder\">@count</em> Members</b> are selected"
+msgstr[0] "One member is selected, and this sentence is long enough to be wrapped by the compiler."
+msgstr[1] "Several members are selected, and this sentence is long enough to be wrapped as well."
+
+msgid "A long msgid that is also wrapped by the compiler because it does not fit within the page width."
+msgstr "Een lange msgid die ook door de compiler wordt afgebroken omdat hij niet binnen de paginabreedte past."
+
+# Examples from https://github.com/smhg/gettext-parser/issues/51
+msgid "issue-51-books"
+msgstr "<em>Books</em> have a built-in hierarchical navigation. Use for handbooks or tutorials."
+
+msgid "issue-51-branding"
+msgstr "Open Social Branding will be replaced by site name (and slogan if available). Upload a logo below."
+
+msgid "issue-51-mention"
+msgstr "You were mentioned in a post by <a href=\"\">[social_mentions:mentioned_user]</a> in the community."
+
+msgctxt "a fairly long context string that explains where this message is used in the application"
+msgid "context"
+msgstr "A translation with a long context, which also needs to be wrapped across several lines."
+
+#~ msgid "obsolete"
+#~ msgstr "An obsolete translation, which keeps the #~ prefix on every line and is long enough to be wrapped."
