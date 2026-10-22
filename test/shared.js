@@ -85,72 +85,73 @@ X-Poedit-SourceCharset: UTF-8`;
       assert.strictEqual(folded.length, 1);
     });
 
+    // Where exactly a line is folded is decided by GNU gettext's algorithm and
+    // covered by test/fixtures/wrapping-msgcat.po. The tests below only pin
+    // the invariants of foldLine itself. A leading empty piece (GNU's
+    // `msgid ""` first line) is allowed and ignored.
+
     it('should force fold with newline', () => {
       const line = 'abc \\ndef \\nghi';
       const folded = foldLine(line);
 
       assert.strictEqual(line, folded.join(''));
-      assert.deepStrictEqual(folded, ['abc \\n', 'def \\n', 'ghi']);
-      assert.strictEqual(folded.length, 3);
+      assert.deepStrictEqual(folded.filter(Boolean), ['abc \\n', 'def \\n', 'ghi']);
     });
 
-    it('should fold at default length', () => {
-      const expected = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pretium ',
-        'a nunc ac fringilla. Nulla laoreet tincidunt tincidunt. Proin tristique ',
-        'vestibulum mauris non aliquam. Vivamus volutpat odio nisl, sed placerat ',
-        'turpis sodales a. Vestibulum quis lectus ac elit sagittis sodales ac a ',
-        'felis. Nulla iaculis, nisl ut mattis fringilla, tortor quam tincidunt ',
-        'lorem, quis feugiat purus felis ut velit. Donec euismod eros ut leo ',
-        'lobortis tristique.'
-      ];
-      const folded = foldLine(expected.join(''));
-      assert.deepStrictEqual(folded, expected);
-      assert.strictEqual(folded.length, 7);
+    it('should end a piece at every escaped newline', () => {
+      const line = [
+        'First line of a multi-line message.',
+        'Second line, which is a bit longer than the first one and therefore needs to be wrapped.',
+        '',
+        'Fourth line.'
+      ].join('\\n') + '\\n';
+
+      for (const width of [5, 20, 79, 200]) {
+        const folded = foldLine(line, width);
+
+        assert.strictEqual(line, folded.join(''));
+        for (const piece of folded) {
+          const at = piece.indexOf('\\n');
+          if (at !== -1) {
+            assert.strictEqual(at, piece.length - 2, `width ${width}: "${piece}" continues after \\n`);
+          }
+        }
+      }
     });
 
-    it('should force fold white space', () => {
-      const line = 'abc def ghi';
-      const folded = foldLine(line, 5);
+    it('should never split an escape sequence', () => {
+      const line = 'Press \\"Save\\" to store C:\\\\Users\\\\name\\\\file.txt or press\\t\\"Cancel\\"; '.repeat(4);
 
-      assert.strictEqual(line, folded.join(''));
-      assert.deepStrictEqual(folded, ['abc ', 'def ', 'ghi']);
-      assert.strictEqual(folded.length, 3);
+      for (let width = 5; width <= 80; width++) {
+        const folded = foldLine(line, width);
+
+        assert.strictEqual(line, folded.join(''));
+        for (const piece of folded) {
+          const trailingBackslashes = (/\\+$/.exec(piece) || [''])[0].length;
+          assert.strictEqual(trailingBackslashes % 2, 0, `width ${width}: "${piece}" ends inside an escape sequence`);
+        }
+      }
     });
 
-    it('should ignore leading spaces', () => {
-      const line = '    abc def ghi';
-      const folded = foldLine(line, 5);
+    it('should count the key name towards the width', () => {
+      // `msgid "…"` is 75 columns, `msgid_plural "…"` would be 82
+      const line = `${'a'.repeat(33)} ${'b'.repeat(33)}`;
 
-      assert.strictEqual(line, folded.join(''));
-      assert.deepStrictEqual(folded, ['    a', 'bc ', 'def ', 'ghi']);
-      assert.strictEqual(folded.length, 4);
+      assert.strictEqual(foldLine(line, 79, { name: 'msgid' }).length, 1);
+      assert.ok(foldLine(line, 79, { name: 'msgid_plural' }).length > 1);
     });
 
-    it('should force fold special character', () => {
-      const line = 'abcdef--ghi';
-      const folded = foldLine(line, 5);
+    it('should count the obsolete prefix towards the width', () => {
+      const word = 'x'.repeat(37);
+      const line = [word, word, word, word].join(' ');
+      const regular = foldLine(line, 79, { name: 'msgid' });
+      const obsolete = foldLine(line, 79, { name: 'msgid', obsolete: true });
 
-      assert.strictEqual(line, folded.join(''));
-      assert.deepStrictEqual(folded, ['abcde', 'f--', 'ghi']);
-      assert.strictEqual(folded.length, 3);
-    });
-
-    it('should force fold last special character', () => {
-      const line = 'ab--cdef--ghi';
-      const folded = foldLine(line, 10);
-
-      assert.strictEqual(line, folded.join(''));
-      assert.deepStrictEqual(folded, ['ab--cdef--', 'ghi']);
-      assert.strictEqual(folded.length, 2);
-    });
-
-    it('should force fold only if at least one non-special character', () => {
-      const line = '--abcdefghi';
-      const folded = foldLine(line, 5);
-
-      assert.strictEqual(line, folded.join(''));
-      assert.deepStrictEqual(folded, ['--abc', 'defgh', 'i']);
-      assert.strictEqual(folded.length, 3);
+      assert.strictEqual(line, regular.join(''));
+      assert.strictEqual(line, obsolete.join(''));
+      // two words fit on a `"…"` line, but not on a `#~ "…"` line
+      assert.ok(regular.some(piece => piece.length > 79 - 2 - 3));
+      assert.ok(obsolete.every(piece => piece.length <= 79 - 2 - 3));
     });
   });
 
