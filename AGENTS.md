@@ -7,8 +7,10 @@ This file provides guidance to AI agents when working with code in this reposito
 - **Test**: `npm test` (uses the built-in `node --test` runner)
 - **Run a single test file**: `node --test test/po-parser-test.js`
 - **Run tests matching a name**: `node --test --test-name-pattern="charset" test/po-parser-test.js`
-- **Lint**: `npm run lint` (ESLint over `lib/`, `test/`, `index.js`)
+- **Lint**: `npm run lint` (ESLint over `lib/`, `test/`, `scripts/`, `index.js`)
 - **Regenerate MO fixtures**: `npm run test-generate-mo` (requires GNU `msgfmt` on PATH; compiles the `.po` fixtures back into `.mo`)
+- **Regenerate the wrapping fixture**: `npm run test-generate-po` (requires GNU `msgcat` on PATH, of the same gettext version as `lib/unicode-data.js`; rewrites `test/fixtures/wrapping-msgcat.po`)
+- **Regenerate the Unicode tables**: `npm run generate-unicode-data -- <extracted gettext source dir>` (rewrites `lib/unicode-data.js` from the gnulib tables in a gettext release; the file header records the gettext and Unicode versions)
 - **Release**: `npm version <patch|minor|major>` — `preversion` runs lint + tests, `postversion` pushes commits and tags. The package is ESM (`"type": "module"`).
 
 ## Architecture
@@ -31,3 +33,4 @@ The default (empty) context lives at `translations[""]`, and its `""` entry hold
 - **Charset**: parsing always yields unicode, but the original charset is preserved on `.charset` and drives compilation. Only `Buffer` input is transcoded (via the `encoding` dep, which prefers native `iconv` over `iconv-lite` if installed); string input is assumed UTF-8. Header values are re-normalized to match `.charset` on compile — mutate the `headers` object, not the `""` translation string, to change output headers.
 - **Header keys** are stored lowercase in the object but written with canonical casing from `HEADERS` in `lib/shared.js`.
 - **Prototype-pollution guard**: header parsing uses `Object.defineProperty` rather than plain assignment (see git history — this was a security fix). Preserve this when touching header/object construction.
+- **PO wrapping** (`foldLine` in `lib/shared.js`) is a port of GNU gettext's `wrap()` plus gnulib's UAX #14 line breaking and East Asian width code, so `po.compile` output matches `msgcat` line for line. `lib/unicode-data.js` is generated; never edit it by hand. Exact break positions are only asserted through the `wrapping-msgcat.po` fixture; unit tests pin invariants.

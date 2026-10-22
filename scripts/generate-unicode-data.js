@@ -28,23 +28,76 @@ for (const [, name, value] of read('unilbrk/lbrktables.h').matchAll(/^\s*LBP_(\w
   LBP[name] = Number(value);
 }
 
-// Evaluates a C initializer element such as `(LBP_AL1<<1)|0` or
-// `5 * sizeof (int) / sizeof (short) + 128`
-function evaluate (expr) {
-  const js = expr
-    .replace(/sizeof \(int\)/g, '4')
-    .replace(/sizeof \(short\)/g, '2')
-    .replace(/LBP_(\w+)/g, (_, name) => LBP[name])
-    .replace(/(0x[\da-f]+)U/gi, '$1');
+// Evaluates a C integer initializer element such as `-1`, `0x3fU`,
+// `(LBP_AL1<<1)|0` or `5 * sizeof (int) / sizeof (short) + 128`, using a
+// small precedence-climbing parser so that no source text is ever eval'ed
+const PRECEDENCE = { '|': 1, '<<': 2, '+': 3, '-': 3, '*': 4, '/': 4 };
+const OPERATORS = {
+  '|': (a, b) => a | b,
+  '<<': (a, b) => a << b,
+  '+': (a, b) => a + b,
+  '-': (a, b) => a - b,
+  '*': (a, b) => a * b,
+  '/': (a, b) => Math.trunc(a / b)
+};
 
-  if (!/^[\s\dxa-f()+\-*/<|]+$/i.test(js)) {
+function evaluate (expr) {
+  const tokens = expr.match(/0x[\da-f]+U?|\d+U?|sizeof \((?:int|short)\)|LBP_\w+|<<|[()+\-*/|]/gi) || [];
+
+  if (tokens.join('').replace(/\s/g, '') !== expr.replace(/\s/g, '')) {
     throw new Error(`Unexpected initializer: ${expr}`);
   }
 
-  const value = Function(`return (${js});`)();
+  let pos = 0;
 
-  if (!Number.isInteger(value)) {
-    throw new Error(`Non-integer initializer: ${expr}`);
+  function primary () {
+    const token = tokens[pos++];
+
+    if (token === '(') {
+      const value = expression();
+      if (tokens[pos++] !== ')') {
+        throw new Error(`Missing ')' in initializer: ${expr}`);
+      }
+      return value;
+    }
+    if (token === '-') {
+      return -primary();
+    }
+    if (token === 'sizeof (int)') {
+      return 4;
+    }
+    if (token === 'sizeof (short)') {
+      return 2;
+    }
+    if (token !== undefined && token.startsWith('LBP_')) {
+      const name = token.slice(4);
+      if (!Object.hasOwn(LBP, name)) {
+        throw new Error(`Unknown line break class in initializer: ${expr}`);
+      }
+      return LBP[name];
+    }
+    if (token !== undefined && /^(0x[\da-f]+|\d+)U?$/i.test(token)) {
+      return parseInt(token, token.toLowerCase().startsWith('0x') ? 16 : 10);
+    }
+
+    throw new Error(`Unexpected token '${token}' in initializer: ${expr}`);
+  }
+
+  function expression (minPrecedence = 1) {
+    let left = primary();
+
+    while (Object.hasOwn(PRECEDENCE, tokens[pos]) && PRECEDENCE[tokens[pos]] >= minPrecedence) {
+      const operator = tokens[pos++];
+      left = OPERATORS[operator](left, expression(PRECEDENCE[operator] + 1));
+    }
+
+    return left;
+  }
+
+  const value = expression();
+
+  if (pos !== tokens.length || !Number.isInteger(value)) {
+    throw new Error(`Unexpected initializer: ${expr}`);
   }
 
   return value;
@@ -152,8 +205,9 @@ function isWide (uc) {
   return false;
 }
 
-// Encodes code point ranges as `gap:length[:value]` hex tuples, where `gap`
-// is the distance from the end of the previous range. This is the format
+// Encodes code point ranges as `gap:span[:value]` hex tuples, where `gap` is
+// the distance from the end of the previous range to the start of this one
+// and `span` is its last code point minus its first. This is the format
 // decodeRanges() in lib/shared.js reads.
 function encodeRanges (valueOf, withValue) {
   const parts = [];

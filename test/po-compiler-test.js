@@ -129,6 +129,29 @@ describe('PO Compiler', () => {
       // `msgid_plural "..."` line is 82 columns wide so GNU gettext wraps it
       assert.ok(compiled.includes(`msgid_plural ""${EOL}"<b><em class=\\"placeholder\\">@count</em> Members</b> are selected"`));
     });
+
+    it('should only split at newlines when folding is disabled', () => {
+      const first = 'A first line that is clearly longer than the default page width of seventy-nine columns.';
+      const second = 'Second line.';
+      const data = {
+        charset: 'utf-8',
+        headers: { 'content-type': 'text/plain; charset=utf-8' },
+        translations: {
+          '': {
+            key: { msgid: 'key', msgstr: [`${first}\n${second}`] }
+          }
+        }
+      };
+
+      for (const foldLength of [undefined, null, false, 0]) {
+        const compiled = po.compile(data, { foldLength, eol: EOL }).toString('utf8');
+
+        assert.ok(
+          compiled.includes(`msgstr ""${EOL}"${first}\\n"${EOL}"${second}"`),
+          `foldLength ${foldLength} folded the message:${EOL}${compiled}`
+        );
+      }
+    });
   });
 
   describe('Sorting', () => {
