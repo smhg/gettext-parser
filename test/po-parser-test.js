@@ -261,6 +261,20 @@ describe('PO Parser', () => {
         );
       });
 
+      it('should accept entries named like a member of Object.prototype', () => {
+        for (const msgid of ['constructor', 'toString', '__proto__']) {
+          const po = `msgid ""\nmsgstr ""\n\nmsgid "${msgid}"\nmsgstr "x"\n`;
+          const { translations } = gettextParser.po.parse(po, options);
+
+          assert.deepEqual(Object.keys(translations['']), ['', msgid]);
+
+          assert.throws(
+            () => gettextParser.po.parse(`${po}\nmsgid "${msgid}"\nmsgstr "y"\n`, options),
+            new RegExp(`Duplicate msgid error: entry "${msgid}" in "" context has already been declared\\.`)
+          );
+        }
+      });
+
       it('should throw (duplicate entries found in the same context)', async () => {
         const po = await readFile(path.join(__dirname, 'fixtures/validate-context-duplicate-entries.po'));
 
