@@ -218,4 +218,28 @@ describe('PO Compiler', () => {
       assert.strictEqual(compiled, poData);
     });
   });
+
+  describe('Escaping characters', () => {
+    const table = {
+      charset: 'utf-8',
+      headers: {},
+      translations: {
+        '': {
+          test: { msgid: 'test', msgstr: ['a\x07b\bf\fv\v'] }
+        }
+      }
+    };
+
+    it('should escape \\a, \\b, \\f and \\v like msgcat', () => {
+      const compiled = po.compile(table, { eol: '\n' }).toString('utf8');
+
+      assert.ok(compiled.includes('\nmsgstr "a\\ab\\bf\\fv\\v"\n'));
+    });
+
+    it('should parse the escaped control characters back', () => {
+      const parsed = po.parse(po.compile(table));
+
+      assert.strictEqual(parsed.translations[''].test.msgstr[0], 'a\x07b\bf\fv\v');
+    });
+  });
 });

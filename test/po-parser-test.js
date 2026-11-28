@@ -141,6 +141,17 @@ describe('PO Parser', () => {
       assert.strictEqual(gettextParser.po.parse(po).translations[''].test.msgstr[0], 'HelloWorld');
     });
 
+    it('unescapes \\a, \\b, \\f and \\v, like GNU gettext', () => {
+      // msgcat writes these control characters as escape sequences
+      const po = [
+        'msgid "test"',
+        'msgstr "a\\ab\\bf\\fv\\v"',
+        ''
+      ].join('\n');
+
+      assert.strictEqual(gettextParser.po.parse(po).translations[''].test.msgstr[0], 'a\x07b\bf\fv\v');
+    });
+
     describe('when validation is disabled', () => {
       const options = { validation: false };
 
